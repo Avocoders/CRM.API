@@ -13,7 +13,7 @@ namespace CRM.API.Controllers
     [ApiController]
     [Route("[controller]")]
     public class LeadController : Controller
-    {       
+    {
         private readonly ILogger<LeadController> _logger;
 
         public LeadController(ILogger<LeadController> logger)
@@ -38,7 +38,7 @@ namespace CRM.API.Controllers
             if (string.IsNullOrWhiteSpace(leadModel.Address)) return BadRequest("Enter the address");
             if (string.IsNullOrWhiteSpace(leadModel.Email)) return BadRequest("Enter the email");
             if (string.IsNullOrWhiteSpace(leadModel.BirthDate)) return BadRequest("Enter the date of birth");
-            if (string.IsNullOrWhiteSpace(leadModel.RegistrationDate)) return BadRequest("Enter the registration date");            
+            if (string.IsNullOrWhiteSpace(leadModel.RegistrationDate)) return BadRequest("Enter the registration date");
             Mapper mapper = new Mapper();
             LeadDTO leadDTO = mapper.ConvertLeadInputModelToLeadDTO(leadModel);
             LeadCRUD lead = new LeadCRUD();
@@ -49,8 +49,8 @@ namespace CRM.API.Controllers
         //[Authorize()]
         [HttpPost("city")]
         public ActionResult<int> PostCity(CityInputModel cityModel)
-        {            
-            if (string.IsNullOrWhiteSpace(cityModel.Name)) return BadRequest("Enter the name of the city");            
+        {
+            if (string.IsNullOrWhiteSpace(cityModel.Name)) return BadRequest("Enter the name of the city");
             Mapper mapper = new Mapper();
             CityDTO cityDTO = mapper.ConvertCityInputModelToCityDTO(cityModel);
             CityCRUD lead = new CityCRUD();
@@ -59,7 +59,7 @@ namespace CRM.API.Controllers
 
 
         //[Authorize()]      
-        [HttpDelete]
+        [HttpDelete("{leadId}")]
         public ActionResult<int> DeleteLeadById(int leadId)
         {
             LeadCRUD lead = new LeadCRUD();           
