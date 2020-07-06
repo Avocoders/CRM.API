@@ -25,5 +25,36 @@ namespace CRM.Data.StoredProcedure
             connection.Execute(sqlExpression, new { id }, commandType: CommandType.StoredProcedure);
             return id;
         }
+
+        public List<LeadDTO> GetAll()
+        {
+            using IDbConnection connection = Connection.GetConnection();
+            {
+                string sqlExpression = "Lead_GetAll";
+                return connection.Query<LeadDTO>(sqlExpression, commandType: CommandType.StoredProcedure).ToList();
+            }
+        }
+
+        public LeadDTO GetById(Int64 leadid)
+        {
+            using IDbConnection connection = Connection.GetConnection();
+            {
+                string sqlExpression = "Lead_GetById";
+                return connection.Query<LeadDTO>(sqlExpression, new { leadid }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+            }
+        }
+
+        public LeadDTO Update(LeadDTO leadDTO)
+        {
+            using IDbConnection connection = Connection.GetConnection();
+            {
+                string sqlExpression = "Lead_Update";
+                return connection.Query<LeadDTO>(sqlExpression, leadDTO, commandType: CommandType.StoredProcedure).FirstOrDefault();
+            }
+        }
+
+
+
+
     }
 }

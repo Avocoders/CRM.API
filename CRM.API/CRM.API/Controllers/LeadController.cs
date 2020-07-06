@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CRM.API.Models.Input;
+using CRM.API.Models.Output;
 using CRM.Data.DTO;
 using CRM.Data.StoredProcedure;
 using Microsoft.AspNetCore.Mvc;
@@ -21,6 +22,21 @@ namespace CRM.API.Controllers
             _logger = logger;
         }
 
+        [HttpGet]
+        public ActionResult<List<LeadOutputModel>> GetLeadsAll()
+        {
+            Mapper mapper = new Mapper();
+            LeadCRUD lead = new LeadCRUD();
+            return Ok(mapper.ConvertListLeadOutputModelToListLeadDTO(lead.GetAll()));
+        }
+
+        [HttpGet("{leadId}")]
+        public ActionResult<LeadOutputModel> GetLeadById(Int64 leadId)
+        {
+            Mapper mapper = new Mapper();
+            LeadCRUD lead = new LeadCRUD();
+            return Ok(mapper.ConvertLeadOutputModelToLeadDTO(lead.GetById(leadId)));
+        }
 
         //[Authorize()]
         [HttpPost]
@@ -55,6 +71,15 @@ namespace CRM.API.Controllers
             CityDTO cityDTO = mapper.ConvertCityInputModelToCityDTO(cityModel);
             CityCRUD lead = new CityCRUD();
             return Ok(lead.Add(cityDTO));
+        }
+
+
+        [HttpPut("{leadId}")]
+        public ActionResult<LeadOutputModel> PutLeadById(LeadInputModel leadModel)
+        {
+            Mapper mapper = new Mapper();
+            LeadCRUD lead = new LeadCRUD();
+            return Ok(mapper.ConvertLeadOutputModelToLeadDTO(lead.Update(mapper.ConvertLeadInputModelToLeadDTO(leadModel))));
         }
 
 
