@@ -6,6 +6,9 @@ namespace CRM.Data.DTO
 {
     public class CityDTO
     {
+        public CityDTO() { }
+
+
         public CityDTO(int id, string name)
         {
             Id = id;
