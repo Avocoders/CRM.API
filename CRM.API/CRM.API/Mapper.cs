@@ -49,6 +49,7 @@ namespace CRM.API
                 FirstName = leadModel.FirstName,
                 LastName = leadModel.LastName,
                 Patronymic = leadModel.Patronymic,
+                Password=leadModel.Password,
                 Login = leadModel.Login,
                 Phone = leadModel.Phone,
                 Email = leadModel.Email,

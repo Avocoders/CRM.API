@@ -43,6 +43,14 @@ namespace CRM.Data.StoredProcedure
                 return connection.Query<LeadDTO>(sqlExpression, new { leadid }, commandType: CommandType.StoredProcedure).FirstOrDefault();
             }
         }
+        public LeadDTO GetByLogin(string login)
+        {
+            using IDbConnection connection = Connection.GetConnection();
+            {
+                string sqlExpression = "Lead_GetByLogin";
+                return connection.Query<LeadDTO>(sqlExpression, new { login }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+            }
+        }
 
         public LeadDTO Update(LeadDTO leadDTO)
         {
