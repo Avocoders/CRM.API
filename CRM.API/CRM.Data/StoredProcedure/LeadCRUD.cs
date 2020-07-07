@@ -48,8 +48,8 @@ namespace CRM.Data.StoredProcedure
         {
             using IDbConnection connection = Connection.GetConnection();
             {
-                string sqlExpression = "Lead_Update";
-                return connection.Query<LeadDTO>(sqlExpression, leadDTO, commandType: CommandType.StoredProcedure).FirstOrDefault();
+                string sqlExpression = "Lead_Update  @id, @roleId, @firstName, @lastName, @patronymic, @login, @phone, @email, @cityId, @address, @birthDate";
+                return connection.Query<LeadDTO>(sqlExpression, leadDTO).FirstOrDefault();
             }
         }
 

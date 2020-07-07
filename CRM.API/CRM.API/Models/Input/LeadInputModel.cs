@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 namespace CRM.API.Models.Input
 {
     public class LeadInputModel
-    {        
+    {
+        public Int64 Id { get; set; }
         public byte? RoleId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

@@ -13,7 +13,8 @@ namespace CRM.API
         public LeadDTO ConvertLeadInputModelToLeadDTO(LeadInputModel leadModel)
         {
             return new LeadDTO()
-            {                
+            {   
+                Id=leadModel.Id,
                 RoleId = leadModel.RoleId,
                 FirstName = leadModel.FirstName,
                 LastName = leadModel.LastName,

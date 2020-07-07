@@ -74,12 +74,27 @@ namespace CRM.API.Controllers
         }
 
 
-        [HttpPut("{leadId}")]
+        [HttpPut]
         public ActionResult<LeadOutputModel> PutLeadById(LeadInputModel leadModel)
         {
-            Mapper mapper = new Mapper();
             LeadCRUD lead = new LeadCRUD();
-            return Ok(mapper.ConvertLeadOutputModelToLeadDTO(lead.Update(mapper.ConvertLeadInputModelToLeadDTO(leadModel))));
+            var leadId = lead.GetById(leadModel.Id);
+            if (leadId == null) return BadRequest("Set a ID");
+
+            if (leadModel.RoleId == null) return BadRequest("Set a role");
+            if (string.IsNullOrWhiteSpace(leadModel.FirstName)) return BadRequest("Enter the name");
+            if (string.IsNullOrWhiteSpace(leadModel.LastName)) return BadRequest("Enter the surname");
+            if (string.IsNullOrWhiteSpace(leadModel.Patronymic)) return BadRequest("Enter the patronymic");
+            if (string.IsNullOrWhiteSpace(leadModel.Login)) return BadRequest("Enter a login");
+            if (string.IsNullOrWhiteSpace(leadModel.Phone)) return BadRequest("Enter the phone number");
+            if (string.IsNullOrWhiteSpace(leadModel.Email)) return BadRequest("Enter the email");
+            if (leadModel.CityId == null) return BadRequest("Add a city");
+            if (string.IsNullOrWhiteSpace(leadModel.Address)) return BadRequest("Enter the address");
+            if (string.IsNullOrWhiteSpace(leadModel.Email)) return BadRequest("Enter the email");
+            if (string.IsNullOrWhiteSpace(leadModel.BirthDate)) return BadRequest("Enter the date of birth");
+            Mapper mapper = new Mapper();
+            LeadDTO leadDTO = mapper.ConvertLeadInputModelToLeadDTO(leadModel);
+            return Ok(mapper.ConvertLeadOutputModelToLeadDTO(lead.Update(leadDTO)));
         }
 
 
