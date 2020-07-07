@@ -6,10 +6,11 @@ namespace CRM.Data.DTO
 {
     public class LeadDTO
     {
+        
         public LeadDTO() { }
 
 
-        public LeadDTO(Int64 id, byte roleId, string firstName, string lastName, string patronymic, DateTime birthDate, string login, string password, string email, string phone, int cityId, string address, DateTime registrationDate, DateTime changeDate)
+        public LeadDTO(Int64 id, byte roleId, string firstName, string lastName, string patronymic, DateTime birthDate, string login, string password, string email, string phone, int cityId, string address, DateTime registrationDate, DateTime changeDate, string role, string city)
         {
             Id = id;
             RoleId = roleId;
@@ -25,9 +26,9 @@ namespace CRM.Data.DTO
             Address = address;
             RegistrationDate = registrationDate;
             ChangeDate = changeDate;
+            Role = role;
+            City = city;
         }
-
-
         public Int64 Id { get; set; }
         public byte? RoleId { get; set; }
         public string FirstName { get; set; }
@@ -41,6 +42,9 @@ namespace CRM.Data.DTO
         public string Address { get; set; }
         public DateTime BirthDate { get; set; }
         public DateTime RegistrationDate { get; set; }
-        public DateTime ChangeDate { get; set; }          
+        public DateTime ChangeDate { get; set; }
+        public string Role { get; set; }
+        public string City { get; set; }
+
     }
 }

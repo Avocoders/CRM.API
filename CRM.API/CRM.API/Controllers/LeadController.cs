@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CRM.API.Models.Input;
+using CRM.API.Models.Output;
 using CRM.Data.DTO;
 using CRM.Data.StoredProcedure;
 using Microsoft.AspNetCore.Mvc;
@@ -21,6 +22,21 @@ namespace CRM.API.Controllers
             _logger = logger;
         }
 
+        [HttpGet]
+        public ActionResult<List<LeadOutputModel>> GetLeadsAll()
+        {
+            Mapper mapper = new Mapper();
+            LeadCRUD lead = new LeadCRUD();
+            return Ok(mapper.ConvertListLeadOutputModelToListLeadDTO(lead.GetAll()));
+        }
+
+        [HttpGet("{leadId}")]
+        public ActionResult<LeadOutputModel> GetLeadById(Int64 leadId)
+        {
+            Mapper mapper = new Mapper();
+            LeadCRUD lead = new LeadCRUD();
+            return Ok(mapper.ConvertLeadOutputModelToLeadDTO(lead.GetById(leadId)));
+        }
 
         //[Authorize()]
         [HttpPost]
@@ -55,6 +71,30 @@ namespace CRM.API.Controllers
             CityDTO cityDTO = mapper.ConvertCityInputModelToCityDTO(cityModel);
             CityCRUD lead = new CityCRUD();
             return Ok(lead.Add(cityDTO));
+        }
+
+
+        [HttpPut]
+        public ActionResult<LeadOutputModel> PutLeadById(LeadInputModel leadModel)
+        {
+            LeadCRUD lead = new LeadCRUD();
+            var leadId = lead.GetById(leadModel.Id);
+            if (leadId == null) return BadRequest("Set a ID");
+
+            if (leadModel.RoleId == null) return BadRequest("Set a role");
+            if (string.IsNullOrWhiteSpace(leadModel.FirstName)) return BadRequest("Enter the name");
+            if (string.IsNullOrWhiteSpace(leadModel.LastName)) return BadRequest("Enter the surname");
+            if (string.IsNullOrWhiteSpace(leadModel.Patronymic)) return BadRequest("Enter the patronymic");
+            if (string.IsNullOrWhiteSpace(leadModel.Login)) return BadRequest("Enter a login");
+            if (string.IsNullOrWhiteSpace(leadModel.Phone)) return BadRequest("Enter the phone number");
+            if (string.IsNullOrWhiteSpace(leadModel.Email)) return BadRequest("Enter the email");
+            if (leadModel.CityId == null) return BadRequest("Add a city");
+            if (string.IsNullOrWhiteSpace(leadModel.Address)) return BadRequest("Enter the address");
+            if (string.IsNullOrWhiteSpace(leadModel.Email)) return BadRequest("Enter the email");
+            if (string.IsNullOrWhiteSpace(leadModel.BirthDate)) return BadRequest("Enter the date of birth");
+            Mapper mapper = new Mapper();
+            LeadDTO leadDTO = mapper.ConvertLeadInputModelToLeadDTO(leadModel);
+            return Ok(mapper.ConvertLeadOutputModelToLeadDTO(lead.Update(leadDTO)));
         }
 
 
