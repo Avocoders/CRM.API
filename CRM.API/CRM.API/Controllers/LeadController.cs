@@ -42,18 +42,19 @@ namespace CRM.API.Controllers
         //[Authorize()]
         [HttpPost]
         public ActionResult<int> PostLead(LeadInputModel leadModel)
-        {
-            // сделать проверку на существование email в базе
+        {          
             // сделать проверку длины пароля (не менее 8 символов)
             if (string.IsNullOrWhiteSpace(leadModel.FirstName)) return BadRequest("Enter the name");
-            if (string.IsNullOrWhiteSpace(leadModel.LastName)) return BadRequest("Enter the surname");
-            if (string.IsNullOrWhiteSpace(leadModel.Login) && string.IsNullOrWhiteSpace(leadModel.Email)) return BadRequest("Enter a login or email");
+            if (string.IsNullOrWhiteSpace(leadModel.LastName)) return BadRequest("Enter the last name");            
+            if (string.IsNullOrWhiteSpace(leadModel.Login) && string.IsNullOrWhiteSpace(leadModel.Email)) return BadRequest("Enter a login or the email");
             if (string.IsNullOrWhiteSpace(leadModel.Password)) return BadRequest("Enter a password");
             if (string.IsNullOrWhiteSpace(leadModel.Phone)) return BadRequest("Enter the phone number");
             if (string.IsNullOrWhiteSpace(leadModel.Address)) return BadRequest("Enter the address");
             if (string.IsNullOrWhiteSpace(leadModel.BirthDate)) return BadRequest("Enter the date of birth");
             LeadDto leadDto = _mapper.ConvertLeadInputModelToLeadDTO(leadModel);
             LeadRepository lead = new LeadRepository();
+            if (!string.IsNullOrWhiteSpace(leadModel.Login) && lead.FindLeadByLogin(leadModel.Login) != 0) return BadRequest("User with this login is already exists");
+            if (!string.IsNullOrWhiteSpace(leadModel.Email) && lead.FindLeadByEmail(leadModel.Email) != 0) return BadRequest("User with this email is already exists");
             return Ok(lead.Add(leadDto));
         }
 
@@ -64,8 +65,7 @@ namespace CRM.API.Controllers
             if (!leadModel.Id.HasValue)
             {
                 return BadRequest("ID is empty");
-            }
-            // сделать проверку на существование email в базе
+            }           
             // сделать проверку длины пароля (не менее 8 символов)
             var leadId = repo.GetById(leadModel.Id.Value);
             if (leadId == null) return BadRequest("Lead was not found");
