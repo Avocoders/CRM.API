@@ -1,6 +1,7 @@
 ﻿using CRM.API.Models.Input;
 using CRM.API.Models.Output;
 using CRM.Data.DTO;
+using DocumentFormat.OpenXml.Bibliography;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,8 +15,7 @@ namespace CRM.API
         {
             return new LeadDto()
             {   
-                Id = leadModel.Id,
-                RoleId = leadModel.RoleId,
+                Id = leadModel.Id,                
                 FirstName = leadModel.FirstName,
                 LastName = leadModel.LastName,
                 Patronymic = leadModel.Patronymic,
@@ -25,9 +25,7 @@ namespace CRM.API
                 Email = leadModel.Email,
                 CityId = leadModel.CityId,
                 Address = leadModel.Address,
-                BirthDate = Convert.ToDateTime(leadModel.BirthDate),
-                RegistrationDate = Convert.ToDateTime(leadModel.RegistrationDate),
-                ChangeDate = Convert.ToDateTime(leadModel.ChangeDate),
+                BirthDate = Convert.ToDateTime(leadModel.BirthDate),                
             };
         }
 
@@ -35,16 +33,15 @@ namespace CRM.API
         {
             return new LeadOutputModel()
             {
-                Id=leadModel.Id,
-                Role = leadModel.Role,
+                Id= (long)leadModel.Id,
+                //Role = leadModel.Role,  пока закомментила
                 FirstName = leadModel.FirstName,
                 LastName = leadModel.LastName,
-                Patronymic = leadModel.Patronymic,
-                Password=leadModel.Password,
+                Patronymic = leadModel.Patronymic,                
                 Login = leadModel.Login,
                 Phone = leadModel.Phone,
                 Email = leadModel.Email,
-                City = leadModel.City,
+                //City = leadModel.City,  пока закомментила
                 Address = leadModel.Address,
                 BirthDate = Convert.ToDateTime(leadModel.BirthDate),
                 RegistrationDate = Convert.ToDateTime(leadModel.RegistrationDate),
@@ -62,15 +59,15 @@ namespace CRM.API
                     leads.Add(
                         new LeadOutputModel()
                         {
-                            Id = lead.Id,
-                            Role = lead.Role,
+                            Id = (long)lead.Id,
+                            //Role = lead.Role,
                             FirstName = lead.FirstName,
                             LastName = lead.LastName,
                             Patronymic = lead.Patronymic,
                             Login = lead.Login,
                             Phone = lead.Phone,
                             Email = lead.Email,
-                            City = lead.City,
+                            //City = lead.City,
                             Address = lead.Address,
                             BirthDate = Convert.ToDateTime(lead.BirthDate),
                             RegistrationDate = Convert.ToDateTime(lead.RegistrationDate),

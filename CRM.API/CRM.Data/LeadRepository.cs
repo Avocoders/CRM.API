@@ -10,15 +10,15 @@ namespace CRM.Data
 {
     public class LeadRepository
     {
-        public int Add(LeadDto leadDTO)
+        public int Add(LeadDto leadDto)
         {
             var connection = Connection.GetConnection();
             connection.Open();
-            string sqlExpression = "Lead_Add @roleId, @firstName, @lastName, @patronymic, @login, @password, @phone, @email, @cityId, @address, @birthDate, @registrationDate, @changeDate";
-            return connection.Query<int>(sqlExpression, leadDTO).FirstOrDefault();
+            string sqlExpression = "Lead_Add @roleId, @firstName, @lastName, @patronymic, @login, @password, @phone, @email, @cityId, @address, @birthDate";
+            return connection.Query<int>(sqlExpression, leadDto).FirstOrDefault();
         }
 
-        public void Delete(int id)
+        public void Delete(long id)
         {
             var connection = Connection.GetConnection();
             string sqlExpression = "Lead_Delete";
@@ -74,6 +74,14 @@ namespace CRM.Data
             connection.Open();
             string sqlExpression = "Lead_FindByLogin";
             return connection.Query<int>(sqlExpression, new { email }).FirstOrDefault();
+        }
+
+        public string UpdateEmailByLeadId(long? leadId, string email)
+        {
+            var connection = Connection.GetConnection();
+            connection.Open();
+            string sqlExpression = "Lead_UpdateEmail";
+            return connection.Query<string>(sqlExpression, new { leadId, email}, commandType: CommandType.StoredProcedure).FirstOrDefault();
         }
     }
 }

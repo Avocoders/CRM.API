@@ -19,6 +19,7 @@ namespace CRM.API.Controllers
         private readonly ILogger<LeadController> _logger;
         
         private Mapper _mapper;
+        string pattern = "^(?=.*[A-Z].*[A-Z])(?=.*[!@#$&*])(?=.*[0-9].*[0-9])(?=.*[a-z].*[a-z].*[a-z])";
 
         public LeadController(ILogger<LeadController> logger)
         {
@@ -26,45 +27,42 @@ namespace CRM.API.Controllers
             _mapper = new Mapper();
         }
 
-
+        //[Authorize()]
         [HttpGet]
         public ActionResult<List<LeadOutputModel>> GetLeadsAll()
         {
-            LeadRepository lead = new LeadRepository();
-            return Ok(_mapper.ConvertListLeadOutputModelToListLeadDTO(lead.GetAll()));
+            LeadRepository repo = new LeadRepository();
+            return Ok(_mapper.ConvertListLeadOutputModelToListLeadDTO(repo.GetAll()));
         }
 
-
+        //[Authorize()]
         [HttpGet("{leadId}")]
         public ActionResult<LeadOutputModel> GetLeadById(long leadId)
         {
-            LeadRepository lead = new LeadRepository();
-            return Ok(_mapper.ConvertLeadOutputModelToLeadDTO(lead.GetById(leadId)));
+            LeadRepository repo = new LeadRepository();
+            return Ok(_mapper.ConvertLeadOutputModelToLeadDTO(repo.GetById(leadId)));
         }
-
 
         //[Authorize()]
         [HttpPost]
         public ActionResult<int> PostLead(LeadInputModel leadModel)
         {
-            string pattern = "^[0-9]+$";
-            // сделать проверку длины пароля (не менее 8 символов)
             if (string.IsNullOrWhiteSpace(leadModel.FirstName)) return BadRequest("Enter the name");
             if (string.IsNullOrWhiteSpace(leadModel.LastName)) return BadRequest("Enter the last name");            
             if (string.IsNullOrWhiteSpace(leadModel.Login) && string.IsNullOrWhiteSpace(leadModel.Email)) return BadRequest("Enter a login or the email");
             if (string.IsNullOrWhiteSpace(leadModel.Password)) return BadRequest("Enter a password");
-            if (leadModel.Password.Length < 8 || !Regex.IsMatch(leadModel.Password, pattern)) return BadRequest("Password have to be at least 8 signs long and contain ")
+            if (leadModel.Password.Length <= 8 || !Regex.IsMatch(leadModel.Password, pattern)) return BadRequest("Password have to be at least 8 signs long and contain lowercase, uppercase and number");
             if (string.IsNullOrWhiteSpace(leadModel.Phone)) return BadRequest("Enter the phone number");
             if (string.IsNullOrWhiteSpace(leadModel.Address)) return BadRequest("Enter the address");
             if (string.IsNullOrWhiteSpace(leadModel.BirthDate)) return BadRequest("Enter the date of birth");
             LeadDto leadDto = _mapper.ConvertLeadInputModelToLeadDTO(leadModel);
-            LeadRepository lead = new LeadRepository();
-            if (!string.IsNullOrWhiteSpace(leadModel.Login) && lead.FindLeadByLogin(leadModel.Login) != 0) return BadRequest("User with this login is already exists");
-            if (!string.IsNullOrWhiteSpace(leadModel.Email) && lead.FindLeadByEmail(leadModel.Email) != 0) return BadRequest("User with this email is already exists");
-            return Ok(lead.Add(leadDto));
+            LeadRepository repo = new LeadRepository();
+            if (!string.IsNullOrWhiteSpace(leadModel.Login) && repo.FindLeadByLogin(leadModel.Login) != 0) return BadRequest("User with this login already exists");
+            if (!string.IsNullOrWhiteSpace(leadModel.Email) && repo.FindLeadByEmail(leadModel.Email) != 0) return BadRequest("User with this email already exists");
+            return Ok(repo.Add(leadDto));
         }
 
-
+        //[Authorize()]
         [HttpPut]
         public ActionResult<LeadOutputModel> UpdateLead(LeadInputModel leadModel)
         {
@@ -72,9 +70,7 @@ namespace CRM.API.Controllers
             if (!leadModel.Id.HasValue)
             {
                 return BadRequest("ID is empty");
-            }      
-            // email меняем отдельно, это надо менять хранимку что-ли?????
-            // сделать проверку длины пароля (не менее 8 символов)
+            }     
             var leadId = repo.GetById(leadModel.Id.Value);
             if (leadId == null) return BadRequest("Lead was not found");
             if (string.IsNullOrWhiteSpace(leadModel.FirstName)) return BadRequest("Enter the name");
@@ -82,26 +78,30 @@ namespace CRM.API.Controllers
             if (string.IsNullOrWhiteSpace(leadModel.Phone)) return BadRequest("Enter the phone number");
             if (string.IsNullOrWhiteSpace(leadModel.Address)) return BadRequest("Enter the address");
             if (string.IsNullOrWhiteSpace(leadModel.BirthDate)) return BadRequest("Enter the date of birth");
+            if (string.IsNullOrWhiteSpace(leadModel.Password)) return BadRequest("Enter a password");
+            if (leadModel.Password.Length <= 8 || !Regex.IsMatch(leadModel.Password, pattern)) return BadRequest("Password have to be at least 8 signs long and contain lowercase, uppercase and number");
             LeadDto leadDTO = _mapper.ConvertLeadInputModelToLeadDTO(leadModel);
             return Ok(_mapper.ConvertLeadOutputModelToLeadDTO(repo.Update(leadDTO)));
         }
 
-
         //[Authorize()]      
         [HttpDelete("{leadId}")]
-        public ActionResult DeleteLeadById(int leadId) // поменять тип данных на long
+        public ActionResult DeleteLeadById(long leadId) 
         {
-            LeadRepository repo = new LeadRepository();
-            // сделать проверку на наличие Lead с передаваемым Id
+            LeadRepository repo = new LeadRepository();            
+            if (repo.GetById(leadId).Id == null) return BadRequest("Lead was not found");
             repo.Delete(leadId);
             return Ok();
         }
 
-
-        //[HttpPatch]
-        //public ActionResult<int> UpdateEmailByLeadId(string email)
-        //{
-           
-        //}
+        //[Authorize()]
+        [HttpPatch]
+        public ActionResult<string> UpdateEmailByLeadId(EmailInputModel emailModel)
+        {
+            LeadRepository repo = new LeadRepository();  
+            if (emailModel.Id == null) return BadRequest("Lead was not found");
+            if (!string.IsNullOrWhiteSpace(emailModel.Email) && repo.FindLeadByEmail(emailModel.Email) != 0) return BadRequest("User with this email already exists");
+            return Ok(repo.UpdateEmailByLeadId(emailModel.Id, emailModel.Email));
+        }
     }
 }

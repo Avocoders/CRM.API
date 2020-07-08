@@ -48,7 +48,7 @@ namespace CRM.API.Controllers
             }
             else
             {
-                return BadRequest("Введена неверная пара логин-пароль"); // English
+                return BadRequest("Invalid login-password pair entered"); 
             }
         }
 
