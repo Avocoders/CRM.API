@@ -15,7 +15,7 @@ using CRM.API;
 using CRM.API.Models.Output;
 using CRM.API.Models.Input;
 using CRM.Data.DTO;
-using CRM.Data.StoredProcedure;
+using CRM.Data;
 
 namespace CRM.API.Controllers
 {
@@ -48,25 +48,23 @@ namespace CRM.API.Controllers
             }
             else
             {
-                return BadRequest("Введена неверная пара логин-пароль");
+                return BadRequest("Введена неверная пара логин-пароль"); // English
             }
         }
 
         private ClaimsIdentity GetIdentity(string login, string password)
         {
-            Mapper mapper = new Mapper();
-            LeadCRUD leadCRUD = new LeadCRUD();
-            LeadDTO leadDTO = leadCRUD.GetByLogin(login);
-            LeadOutputModel lead = mapper.ConvertLeadOutputModelToLeadDTO(leadDTO);
+            LeadRepository leadRepository = new LeadRepository();
+            LeadDto leadDto = leadRepository.GetByLogin(login);
 
-            if (lead != null)
+            if (leadDto != null)
             {
-                if (lead.Password == password)
+                if (leadDto.Password == password)
                 {
                     List<Claim> claims = new List<Claim>()
                     {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType,lead.Login),
-                    new Claim(ClaimsIdentity.DefaultRoleClaimType,lead.Role)
+                    new Claim(ClaimsIdentity.DefaultNameClaimType,leadDto.Login),
+                    new Claim(ClaimsIdentity.DefaultRoleClaimType,leadDto.Role)
                     };
 
                     ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
@@ -75,11 +73,9 @@ namespace CRM.API.Controllers
                 else
                 {
                     return null;
-
                 }
             }
             return null;
         }
-
     }
 }

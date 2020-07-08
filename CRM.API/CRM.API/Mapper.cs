@@ -10,11 +10,11 @@ namespace CRM.API
 {
     public class Mapper
     {
-        public LeadDTO ConvertLeadInputModelToLeadDTO(LeadInputModel leadModel)
+        public LeadDto ConvertLeadInputModelToLeadDTO(LeadInputModel leadModel)
         {
-            return new LeadDTO()
+            return new LeadDto()
             {   
-                Id=leadModel.Id,
+                Id = leadModel.Id,
                 RoleId = leadModel.RoleId,
                 FirstName = leadModel.FirstName,
                 LastName = leadModel.LastName,
@@ -31,16 +31,7 @@ namespace CRM.API
             };
         }
 
-
-        public CityDTO ConvertCityInputModelToCityDTO(CityInputModel cityModel)
-        {
-            return new CityDTO()
-            {
-                Name = cityModel.Name,                
-            };
-        }
-
-        public LeadOutputModel ConvertLeadOutputModelToLeadDTO(LeadDTO leadModel)
+        public LeadOutputModel ConvertLeadOutputModelToLeadDTO(LeadDto leadModel)
         {
             return new LeadOutputModel()
             {
@@ -61,7 +52,7 @@ namespace CRM.API
             };
         }
 
-        public List<LeadOutputModel> ConvertListLeadOutputModelToListLeadDTO(List<LeadDTO> leadModel)
+        public List<LeadOutputModel> ConvertListLeadOutputModelToListLeadDTO(List<LeadDto> leadModel)
         {
             List<LeadOutputModel> leads = new List<LeadOutputModel>();
             foreach (var lead in leadModel)

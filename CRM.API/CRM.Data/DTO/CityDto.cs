@@ -4,18 +4,8 @@ using System.Text;
 
 namespace CRM.Data.DTO
 {
-    public class CityDTO
+    public class CityDto
     {
-        public CityDTO() { }
-
-
-        public CityDTO(int id, string name)
-        {
-            Id = id;
-            Name = name;
-        }
-
-
         public int Id { get; set; }
         public string Name { get; set; }        
     }
