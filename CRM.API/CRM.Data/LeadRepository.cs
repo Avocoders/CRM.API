@@ -64,15 +64,15 @@ namespace CRM.Data
         {
             var connection = Connection.GetConnection();
             connection.Open();
-            string sqlExpression = "Lead_FindByLogin";
-            return connection.Query<int>(sqlExpression, new { login}).FirstOrDefault();
+            string sqlExpression = "Lead_FindByLogin @login";
+            return connection.Query<int>(sqlExpression, new { login }).FirstOrDefault();
         }
 
         public int FindLeadByEmail(string email)
         {
             var connection = Connection.GetConnection();
             connection.Open();
-            string sqlExpression = "Lead_FindByLogin";
+            string sqlExpression = "Lead_FindByEmail @email";
             return connection.Query<int>(sqlExpression, new { email }).FirstOrDefault();
         }
 
