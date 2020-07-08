@@ -8,6 +8,7 @@ using CRM.Data.DTO;
 using CRM.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Text.RegularExpressions;
 
 namespace CRM.API.Controllers
 {
@@ -25,12 +26,14 @@ namespace CRM.API.Controllers
             _mapper = new Mapper();
         }
 
+
         [HttpGet]
         public ActionResult<List<LeadOutputModel>> GetLeadsAll()
         {
             LeadRepository lead = new LeadRepository();
             return Ok(_mapper.ConvertListLeadOutputModelToListLeadDTO(lead.GetAll()));
         }
+
 
         [HttpGet("{leadId}")]
         public ActionResult<LeadOutputModel> GetLeadById(long leadId)
@@ -39,15 +42,18 @@ namespace CRM.API.Controllers
             return Ok(_mapper.ConvertLeadOutputModelToLeadDTO(lead.GetById(leadId)));
         }
 
+
         //[Authorize()]
         [HttpPost]
         public ActionResult<int> PostLead(LeadInputModel leadModel)
-        {          
+        {
+            string pattern = "^[0-9]+$";
             // сделать проверку длины пароля (не менее 8 символов)
             if (string.IsNullOrWhiteSpace(leadModel.FirstName)) return BadRequest("Enter the name");
             if (string.IsNullOrWhiteSpace(leadModel.LastName)) return BadRequest("Enter the last name");            
             if (string.IsNullOrWhiteSpace(leadModel.Login) && string.IsNullOrWhiteSpace(leadModel.Email)) return BadRequest("Enter a login or the email");
             if (string.IsNullOrWhiteSpace(leadModel.Password)) return BadRequest("Enter a password");
+            if (leadModel.Password.Length < 8 || !Regex.IsMatch(leadModel.Password, pattern)) return BadRequest("Password have to be at least 8 signs long and contain ")
             if (string.IsNullOrWhiteSpace(leadModel.Phone)) return BadRequest("Enter the phone number");
             if (string.IsNullOrWhiteSpace(leadModel.Address)) return BadRequest("Enter the address");
             if (string.IsNullOrWhiteSpace(leadModel.BirthDate)) return BadRequest("Enter the date of birth");
@@ -58,6 +64,7 @@ namespace CRM.API.Controllers
             return Ok(lead.Add(leadDto));
         }
 
+
         [HttpPut]
         public ActionResult<LeadOutputModel> UpdateLead(LeadInputModel leadModel)
         {
@@ -65,7 +72,8 @@ namespace CRM.API.Controllers
             if (!leadModel.Id.HasValue)
             {
                 return BadRequest("ID is empty");
-            }           
+            }      
+            // email меняем отдельно, это надо менять хранимку что-ли?????
             // сделать проверку длины пароля (не менее 8 символов)
             var leadId = repo.GetById(leadModel.Id.Value);
             if (leadId == null) return BadRequest("Lead was not found");
@@ -88,5 +96,12 @@ namespace CRM.API.Controllers
             repo.Delete(leadId);
             return Ok();
         }
+
+
+        //[HttpPatch]
+        //public ActionResult<int> UpdateEmailByLeadId(string email)
+        //{
+           
+        //}
     }
 }
