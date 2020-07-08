@@ -76,12 +76,12 @@ namespace CRM.Data
             return connection.Query<int>(sqlExpression, new { email }).FirstOrDefault();
         }
 
-        public string UpdateEmailByLeadId(long? leadId, string email)
+        public string UpdateEmailByLeadId(long? id, string email)
         {
             var connection = Connection.GetConnection();
             connection.Open();
             string sqlExpression = "Lead_UpdateEmail";
-            return connection.Query<string>(sqlExpression, new { leadId, email}, commandType: CommandType.StoredProcedure).FirstOrDefault();
+            return connection.Query<string>(sqlExpression, new { id, email }, commandType: CommandType.StoredProcedure).FirstOrDefault();
         }
     }
 }
