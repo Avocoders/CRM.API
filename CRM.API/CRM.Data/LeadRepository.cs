@@ -55,7 +55,7 @@ namespace CRM.Data
         {
             using IDbConnection connection = Connection.GetConnection();
             {
-                string sqlExpression = "Lead_Update  @id, @roleId, @firstName, @lastName, @patronymic, @login, @phone, @email, @cityId, @address, @birthDate"; // Убрать лишние поля
+                string sqlExpression = "Lead_Update  @id, @firstName, @lastName, @patronymic, @password, @phone, @cityId, @address, @birthDate";
                 return connection.Query<LeadDto>(sqlExpression, leadDto).FirstOrDefault();
             }
         }

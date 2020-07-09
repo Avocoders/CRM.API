@@ -22,7 +22,7 @@ namespace CRM.Data.DTO
         //public RoleDto Role { get; set; }
 
         public string Role { get; set; }
-        //public string City { get; set; }
+        public string City { get; set; }
         public byte? RoleId { get; set; }
         public int? CityId { get; set; }
         // объеденить параметры Role и City в DTO
