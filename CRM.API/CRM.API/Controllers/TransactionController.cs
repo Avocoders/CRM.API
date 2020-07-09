@@ -28,8 +28,7 @@ namespace CRM.API.Controllers
             var jsonContent = new StringContent(JsonConvert.SerializeObject(transactionModel), Encoding.UTF8, "application/json");
             var response = await httpClient.PostAsync("https://localhost:44388/transaction/transfer", jsonContent);
             string content = await response.Content.ReadAsStringAsync();
-            List<long> list = JsonConvert.DeserializeObject<List<long>>(content);
-            return Ok(list);
+            return Ok(content);
         }
     }
 }
