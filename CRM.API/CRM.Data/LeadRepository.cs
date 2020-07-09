@@ -14,7 +14,7 @@ namespace CRM.Data
         {
             var connection = Connection.GetConnection();
             connection.Open();
-            string sqlExpression = "Lead_Add @roleId, @firstName, @lastName, @patronymic, @login, @password, @phone, @email, @cityId, @address, @birthDate";
+            string sqlExpression = "Lead_Add @firstName, @lastName, @patronymic, @login, @password, @phone, @email, @cityId, @address, @birthDate";
             return connection.Query<int>(sqlExpression, leadDto).FirstOrDefault();
         }
 
