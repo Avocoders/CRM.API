@@ -1,11 +1,8 @@
 ﻿using CRM.API.Models.Input;
 using CRM.API.Models.Output;
 using CRM.Data.DTO;
-using DocumentFormat.OpenXml.Bibliography;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CRM.API
 {
