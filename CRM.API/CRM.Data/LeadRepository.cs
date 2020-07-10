@@ -18,7 +18,7 @@ namespace CRM.Data
         public int Add(LeadDto leadDto)
         {            
             string sqlExpression = "Lead_Add @firstName, @lastName, @patronymic, @login, @password, @phone, @email, @cityId, @address, @birthDate";
-            return connection.Query<int>(sqlExpression, new
+            return _connection.Query<int>(sqlExpression, new
             {
                 leadDto.FirstName,
                 leadDto.LastName,

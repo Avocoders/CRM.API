@@ -1,8 +1,11 @@
 ﻿using CRM.API.Models.Input;
 using CRM.API.Models.Output;
 using CRM.Data.DTO;
+using DocumentFormat.OpenXml.Bibliography;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CRM.API
 {
@@ -44,9 +47,9 @@ namespace CRM.API
                 Email = leadModel.Email,
                 City = leadModel.City.Name,  //пока закомментила
                 Address = leadModel.Address,
-                BirthDate = Convert.ToDateTime(leadModel.BirthDate),
-                RegistrationDate = Convert.ToDateTime(leadModel.RegistrationDate),
-                ChangeDate = Convert.ToDateTime(leadModel.ChangeDate),
+                BirthDate = leadModel.BirthDate.ToString("dd.MM.yyyy"),
+                RegistrationDate = leadModel.RegistrationDate.ToString("dd.MM.yyyy HH:mm:ss"),
+                ChangeDate = leadModel.ChangeDate.ToString("dd.MM.yyyy HH:mm:ss")
             };
         }
 
