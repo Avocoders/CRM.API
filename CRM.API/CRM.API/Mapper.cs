@@ -33,7 +33,7 @@ namespace CRM.API
             };
         }
 
-        public LeadOutputModel ConvertLeadDTOToLeadOutputModel(LeadDto leadModel)
+        public LeadOutputModel ConvertLeadDtoToLeadOutputModel(LeadDto leadModel)
         {
             return new LeadOutputModel()
             {
@@ -60,7 +60,7 @@ namespace CRM.API
             {
                 if (lead != null)
                 {
-                    leads.Add(new Mapper().ConvertLeadDTOToLeadOutputModel(lead));
+                    leads.Add(new Mapper().ConvertLeadDtoToLeadOutputModel(lead));
                 }
             }
             return leads;
