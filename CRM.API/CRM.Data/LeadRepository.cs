@@ -48,7 +48,7 @@ namespace CRM.Data
 
 
                 connection.Query<LeadDto, RoleDto, CityDto, LeadDto>(
-                    "Lead_GetAll1",
+                    "Lead_GetAll",
                     (lead, role, city) =>
                     {
                         LeadDto leadEntry;
@@ -75,7 +75,7 @@ namespace CRM.Data
             {
 
                 var lead = connection.Query<LeadDto, RoleDto, CityDto, LeadDto>(
-                    "Lead_GetById1",
+                    "Lead_GetById",
                     (lead, role, city) =>
                     {
                         LeadDto leadEntry;
