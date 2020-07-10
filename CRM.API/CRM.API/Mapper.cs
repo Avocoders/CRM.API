@@ -60,8 +60,7 @@ namespace CRM.API
             {
                 if (lead != null)
                 {
-                    leads.Add(new Mapper().ConvertLeadDTOToLeadOutputModel(lead)
-                        );
+                    leads.Add(new Mapper().ConvertLeadDTOToLeadOutputModel(lead));
                 }
             }
             return leads;

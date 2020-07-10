@@ -53,7 +53,7 @@ namespace CRM.API.Controllers
             if (string.IsNullOrWhiteSpace(leadModel.LastName)) return BadRequest("Enter the last name");            
             if (string.IsNullOrWhiteSpace(leadModel.Login) && string.IsNullOrWhiteSpace(leadModel.Email)) return BadRequest("Enter a login or the email");
             if (string.IsNullOrWhiteSpace(leadModel.Password)) return BadRequest("Enter a password");
-            //if (!Regex.IsMatch(leadModel.Password, pattern)) return BadRequest("Password have to be at least 8 signs long and contain lowercase, uppercase and number");
+            if (!Regex.IsMatch(leadModel.Password, pattern)) return BadRequest("Password have to be at least 8 signs long and contain lowercase, uppercase and number");
             if (string.IsNullOrWhiteSpace(leadModel.Phone)) return BadRequest("Enter the phone number");
             if (string.IsNullOrWhiteSpace(leadModel.Address)) return BadRequest("Enter the address");
             if (string.IsNullOrWhiteSpace(leadModel.BirthDate)) return BadRequest("Enter the date of birth");

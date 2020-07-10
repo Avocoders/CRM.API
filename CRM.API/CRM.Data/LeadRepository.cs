@@ -14,8 +14,21 @@ namespace CRM.Data
         {
             var connection = Connection.GetConnection();
             connection.Open();
-            string sqlExpression = "Lead_Add @firstName, @lastName, @patronymic, @login, @password, @phone, @email, @city.Id, @address, @birthDate";
-            return connection.Query<int>(sqlExpression, leadDto).FirstOrDefault();
+            string sqlExpression = "Lead_Add @firstName, @lastName, @patronymic, @login, @password, @phone, @email, @cityId, @address, @birthDate";
+            return connection.Query<int>(sqlExpression, new
+            {
+                leadDto.FirstName,
+                leadDto.LastName,
+                leadDto.Patronymic,
+                leadDto.Login,
+                leadDto.Password,
+                leadDto.Phone,
+                leadDto.Email,
+                CityId = leadDto.City.Id,
+                leadDto.Address,
+                leadDto.BirthDate
+
+            }).FirstOrDefault();
         }
 
         public void Delete(long id)
@@ -55,11 +68,6 @@ namespace CRM.Data
 
         public LeadDto GetById(long leadId)
         {
-            //using IDbConnection connection = Connection.GetConnection();
-            //{
-            //    string sqlExpression = "Lead_GetById";
-            //    return connection.Query<LeadDto>(sqlExpression, new { leadId }, commandType: CommandType.StoredProcedure).FirstOrDefault();
-            //}
 
             using IDbConnection connection = Connection.GetConnection();
             {
@@ -98,7 +106,19 @@ namespace CRM.Data
             using IDbConnection connection = Connection.GetConnection();
             {
                 string sqlExpression = "Lead_Update  @id, @firstName, @lastName, @patronymic, @password, @phone, @cityId, @address, @birthDate";
-                return connection.Query<LeadDto>(sqlExpression, leadDto).FirstOrDefault();
+                return connection.Query<LeadDto>(sqlExpression, new
+                {
+                    leadDto.Id,
+                    leadDto.FirstName,
+                    leadDto.LastName,
+                    leadDto.Patronymic,
+                    leadDto.Password,
+                    leadDto.Phone,
+                    CityId = leadDto.City.Id,
+                    leadDto.Address,
+                    leadDto.BirthDate
+
+                }).FirstOrDefault();
             }
         }
 
