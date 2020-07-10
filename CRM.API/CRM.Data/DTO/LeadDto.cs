@@ -16,14 +16,7 @@ namespace CRM.Data.DTO
         public DateTime BirthDate { get; set; }
         public DateTime RegistrationDate { get; set; }
         public DateTime ChangeDate { get; set; }
-
         public RoleDto Role { get; set; }
-        public CityDto City { get; set; }
-        //public string Role { get; set; }
-        //public string City { get; set; }
-        //public byte? RoleId { get; set; }
-        //public int? CityId { get; set; }
-        // объеденить параметры Role и City в DTO
-        // модифицировать методы 
+        public CityDto City { get; set; }        
     }
 }
