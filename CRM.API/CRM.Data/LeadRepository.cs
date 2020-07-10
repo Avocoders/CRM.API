@@ -16,9 +16,8 @@ namespace CRM.Data
         }
 
         public int Add(LeadDto leadDto)
-        {            
-            string sqlExpression = "Lead_Add @firstName, @lastName, @patronymic, @login, @password, @phone, @email, @cityId, @address, @birthDate";
-            return _connection.Query<int>(sqlExpression, new
+        {                        
+            return _connection.Query<int>("Lead_Add", new
             {
                 leadDto.FirstName,
                 leadDto.LastName,
@@ -31,112 +30,88 @@ namespace CRM.Data
                 leadDto.Address,
                 leadDto.BirthDate
 
-            }).FirstOrDefault();
+            }, commandType: CommandType.StoredProcedure).FirstOrDefault();
         }
 
         public void Delete(long id)
-        {            
-            string sqlExpression = "Lead_Delete";
-            _connection.Execute(sqlExpression, new { id }, commandType: CommandType.StoredProcedure);
+        {                        
+            _connection.Execute("Lead_Delete", new { id }, commandType: CommandType.StoredProcedure);
         }
 
         public List<LeadDto> GetAll()
-        { 
-            using IDbConnection connection = Connection.GetConnection();
-            {
-                var leads = new List<LeadDto>();
+        {
+            var leads = new List<LeadDto>();
 
+            _connection.Query<LeadDto, RoleDto, CityDto, LeadDto>(
+                "Lead_GetAll",
+                (lead, role, city) =>
+                {
+                    LeadDto leadEntry;
 
-                connection.Query<LeadDto, RoleDto, CityDto, LeadDto>(
-                    "Lead_GetAll",
-                    (lead, role, city) =>
-                    {
-                        LeadDto leadEntry;
+                    leadEntry = lead;
+                    leadEntry.Role = role;
+                    leadEntry.City = city;
+                    leads.Add(leadEntry);
 
-                        leadEntry = lead;
-                        leadEntry.Role = role;
-                        leadEntry.City = city;
-                        leads.Add(leadEntry);
-
-                        return leadEntry;
-                    },
-                    splitOn: "Id")
-                .ToList();
-
-                return leads;
-            }
-
+                    return leadEntry;
+                },
+                splitOn: "Id").ToList();
+            return leads;           
         }
 
         public LeadDto GetById(long leadId)
         {
-
-            using IDbConnection connection = Connection.GetConnection();
-            {
-
-                var lead = connection.Query<LeadDto, RoleDto, CityDto, LeadDto>(
-                    "Lead_GetById",
-                    (lead, role, city) =>
-                    {
-                        LeadDto leadEntry;
-
-                        leadEntry = lead;
-                        leadEntry.Role = role;
-                        leadEntry.City = city;
-
-                        return leadEntry;
-                    },
-                    new {leadId},
-                    splitOn: "Id",
-                    commandType: CommandType.StoredProcedure)
-                .FirstOrDefault();
-
-                return lead;
-            }
-        }
-        public LeadDto GetByLogin(string login)
-        {
-            string sqlExpression = "Lead_GetByLogin";
-            return _connection.Query<LeadDto>(sqlExpression, new { login }, commandType: CommandType.StoredProcedure).FirstOrDefault();            
-        }
-
-        public LeadDto Update(LeadDto leadDto)
-        {
-            using IDbConnection connection = Connection.GetConnection();
-            {
-                string sqlExpression = "Lead_Update  @id, @firstName, @lastName, @patronymic, @password, @phone, @cityId, @address, @birthDate";
-                return connection.Query<LeadDto>(sqlExpression, new
+            return _connection.Query<LeadDto, RoleDto, CityDto, LeadDto>(
+                "Lead_GetById",
+                (lead, role, city) =>
                 {
-                    leadDto.Id,
-                    leadDto.FirstName,
-                    leadDto.LastName,
-                    leadDto.Patronymic,
-                    leadDto.Password,
-                    leadDto.Phone,
-                    CityId = leadDto.City.Id,
-                    leadDto.Address,
-                    leadDto.BirthDate
+                    LeadDto leadEntry;
 
-                }).FirstOrDefault();
-            }
+                    leadEntry = lead;
+                    leadEntry.Role = role;
+                    leadEntry.City = city;
+
+                    return leadEntry;
+                },
+                new { leadId },
+                splitOn: "Id",
+                commandType: CommandType.StoredProcedure).FirstOrDefault();                      
+        }
+
+        public LeadDto GetByLogin(string login)
+        {           
+            return _connection.Query<LeadDto>("Lead_GetByLogin", new { login }, commandType: CommandType.StoredProcedure).FirstOrDefault();            
+        }
+
+        public int Update(LeadDto leadDto)  
+        {
+            return _connection.Query<int>("Lead_Update", new
+            {
+                leadDto.Id,
+                leadDto.FirstName,
+                leadDto.LastName,
+                leadDto.Patronymic,
+                leadDto.Password,
+                leadDto.Phone,
+                CityId = leadDto.City.Id,
+                leadDto.Address,
+                leadDto.BirthDate
+            }, commandType: CommandType.StoredProcedure).FirstOrDefault();            
         }
 
         public int FindLeadByLogin(string login)
-        {            
-            string sqlExpression = "Lead_FindByLogin @login";
-            return _connection.Query<int>(sqlExpression, new { login }).FirstOrDefault();
+        {   
+            return _connection.Query<int>("Lead_FindByLogin", new { login }, commandType: CommandType.StoredProcedure).FirstOrDefault();
         }
 
         public int FindLeadByEmail(string email)
-        {            
-            string sqlExpression = "Lead_FindByEmail @email";
-            return _connection.Query<int>(sqlExpression, new { email }).FirstOrDefault();
+        {  
+            return _connection.Query<int>("Lead_FindByEmail", new { email }, commandType: CommandType.StoredProcedure).FirstOrDefault();
         }
 
         public string UpdateEmailByLeadId(long? id, string email)
-        {            
-            string sqlExpression = "Lead_UpdateEmail";
-            return _connection.Query<string>(sqlExpression, new { id, email }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+        {  
+            return _connection.Query<string>("Lead_UpdateEmail", new { id, email }, commandType: CommandType.StoredProcedure).FirstOrDefault();
         }
     }
 }

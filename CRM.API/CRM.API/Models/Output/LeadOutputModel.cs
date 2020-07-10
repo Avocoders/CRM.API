@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace CRM.API.Models.Output
+﻿namespace CRM.API.Models.Output
 {
     public class LeadOutputModel
     {
@@ -18,7 +13,6 @@ namespace CRM.API.Models.Output
         public string BirthDate { get; set; }
         public string RegistrationDate { get; set; }
         public string ChangeDate { get; set; }
-
         public string Role { get; set; }
         public string City { get; set; }
     }

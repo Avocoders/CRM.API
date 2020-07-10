@@ -24,7 +24,6 @@ namespace CRM.API.Controllers
         string patternEmail = @"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
                 @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-0-9a-z]*[0-9a-z]*\.)+[a-z0-9][\-a-z0-9]{0,22}[a-z0-9]))$";
 
-
         public LeadController(ILogger<LeadController> logger)
         {
             _logger = logger;
@@ -74,7 +73,7 @@ namespace CRM.API.Controllers
 
         //[Authorize()]
         [HttpPut]
-        public ActionResult<LeadOutputModel> UpdateLead(LeadInputModel leadModel)
+        public ActionResult<int> UpdateLead(LeadInputModel leadModel)
         {
             if (!leadModel.Id.HasValue)
             {
@@ -90,7 +89,7 @@ namespace CRM.API.Controllers
             if (string.IsNullOrWhiteSpace(leadModel.Password)) return BadRequest("Enter a password");
             if (!Regex.IsMatch(leadModel.Password, patternPassword)) return BadRequest("Password have to be between 8 and 20 characters long and contain lowercase, uppercase and number, possible characters: @#$%^&+=*.-_");
             LeadDto leadDTO = _mapper.ConvertLeadInputModelToLeadDTO(leadModel);
-            return Ok(_mapper.ConvertLeadDtoToLeadOutputModel(_repo.Update(leadDTO)));
+            return Ok(_repo.Update(leadDTO));
         }
 
         //[Authorize()]      

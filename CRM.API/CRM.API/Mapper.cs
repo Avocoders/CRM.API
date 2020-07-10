@@ -1,11 +1,8 @@
 ﻿using CRM.API.Models.Input;
 using CRM.API.Models.Output;
 using CRM.Data.DTO;
-using DocumentFormat.OpenXml.Bibliography;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CRM.API
 {
@@ -38,14 +35,14 @@ namespace CRM.API
             return new LeadOutputModel()
             {
                 Id= (long)leadModel.Id,
-                Role = leadModel.Role.Name,  //пока закомментила
+                Role = leadModel.Role.Name,  
                 FirstName = leadModel.FirstName,
                 LastName = leadModel.LastName,
                 Patronymic = leadModel.Patronymic,                
                 Login = leadModel.Login,
                 Phone = leadModel.Phone,
                 Email = leadModel.Email,
-                City = leadModel.City.Name,  //пока закомментила
+                City = leadModel.City.Name, 
                 Address = leadModel.Address,
                 BirthDate = leadModel.BirthDate.ToString("dd.MM.yyyy"),
                 RegistrationDate = leadModel.RegistrationDate.ToString("dd.MM.yyyy HH:mm:ss"),
