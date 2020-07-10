@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using CRM.API.Models.Input;
 using CRM.API.Models.Output;
 using CRM.Data.DTO;
-using CRM.Data.StoredProcedure;
+using CRM.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Text.RegularExpressions;
 
 namespace CRM.API.Controllers
 {
@@ -16,94 +14,89 @@ namespace CRM.API.Controllers
     public class LeadController : Controller
     {
         private readonly ILogger<LeadController> _logger;
+        
+        private readonly Mapper _mapper;
+        
+        private readonly LeadRepository _repo;
+
+        string pattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9])\S{8,20}$";
 
         public LeadController(ILogger<LeadController> logger)
         {
             _logger = logger;
+            _mapper = new Mapper();
+            _repo = new LeadRepository();
         }
 
+        //[Authorize()]
         [HttpGet]
         public ActionResult<List<LeadOutputModel>> GetLeadsAll()
         {
-            Mapper mapper = new Mapper();
-            LeadCRUD lead = new LeadCRUD();
-            return Ok(mapper.ConvertListLeadOutputModelToListLeadDTO(lead.GetAll()));
+            return Ok(_mapper.ConvertLeadDtosToLeadOutputModels(_repo.GetAll()));
         }
 
+        //[Authorize()]
         [HttpGet("{leadId}")]
-        public ActionResult<LeadOutputModel> GetLeadById(Int64 leadId)
+        public ActionResult<LeadOutputModel> GetLeadById(long leadId)
         {
-            Mapper mapper = new Mapper();
-            LeadCRUD lead = new LeadCRUD();
-            return Ok(mapper.ConvertLeadOutputModelToLeadDTO(lead.GetById(leadId)));
+            return Ok(_mapper.ConvertLeadDtoToLeadOutputModel(_repo.GetById(leadId)));
         }
 
         //[Authorize()]
         [HttpPost]
         public ActionResult<int> PostLead(LeadInputModel leadModel)
         {
-            if (leadModel.RoleId == null) return BadRequest("Set a role");
             if (string.IsNullOrWhiteSpace(leadModel.FirstName)) return BadRequest("Enter the name");
-            if (string.IsNullOrWhiteSpace(leadModel.LastName)) return BadRequest("Enter the surname");
-            if (string.IsNullOrWhiteSpace(leadModel.Patronymic)) return BadRequest("Enter the patronymic");
-            if (string.IsNullOrWhiteSpace(leadModel.Login)) return BadRequest("Enter a login");
+            if (string.IsNullOrWhiteSpace(leadModel.LastName)) return BadRequest("Enter the last name");            
+            if (string.IsNullOrWhiteSpace(leadModel.Login) && string.IsNullOrWhiteSpace(leadModel.Email)) return BadRequest("Enter a login or the email");
             if (string.IsNullOrWhiteSpace(leadModel.Password)) return BadRequest("Enter a password");
+            if (!Regex.IsMatch(leadModel.Password, pattern)) return BadRequest("Password have to be at least 8 signs long and contain lowercase, uppercase and number");
             if (string.IsNullOrWhiteSpace(leadModel.Phone)) return BadRequest("Enter the phone number");
-            if (string.IsNullOrWhiteSpace(leadModel.Email)) return BadRequest("Enter the email");
-            if (leadModel.CityId == null) return BadRequest("Add a city");
             if (string.IsNullOrWhiteSpace(leadModel.Address)) return BadRequest("Enter the address");
-            if (string.IsNullOrWhiteSpace(leadModel.Email)) return BadRequest("Enter the email");
             if (string.IsNullOrWhiteSpace(leadModel.BirthDate)) return BadRequest("Enter the date of birth");
-            if (string.IsNullOrWhiteSpace(leadModel.RegistrationDate)) return BadRequest("Enter the registration date");
-            Mapper mapper = new Mapper();
-            LeadDTO leadDTO = mapper.ConvertLeadInputModelToLeadDTO(leadModel);
-            LeadCRUD lead = new LeadCRUD();
-            return Ok(lead.Add(leadDTO));
+            LeadDto leadDto = _mapper.ConvertLeadInputModelToLeadDTO(leadModel);
+            if (!string.IsNullOrWhiteSpace(leadModel.Login) && _repo.FindLeadByLogin(leadModel.Login) != 0) return BadRequest("User with this login already exists");
+            if (!string.IsNullOrWhiteSpace(leadModel.Email) && _repo.FindLeadByEmail(leadModel.Email) != 0) return BadRequest("User with this email already exists");
+            return Ok(_repo.Add(leadDto));
         }
-
 
         //[Authorize()]
-        [HttpPost("city")]
-        public ActionResult<int> PostCity(CityInputModel cityModel)
-        {
-            if (string.IsNullOrWhiteSpace(cityModel.Name)) return BadRequest("Enter the name of the city");
-            Mapper mapper = new Mapper();
-            CityDTO cityDTO = mapper.ConvertCityInputModelToCityDTO(cityModel);
-            CityCRUD lead = new CityCRUD();
-            return Ok(lead.Add(cityDTO));
-        }
-
-
         [HttpPut]
-        public ActionResult<LeadOutputModel> PutLeadById(LeadInputModel leadModel)
+        public ActionResult<LeadOutputModel> UpdateLead(LeadInputModel leadModel)
         {
-            LeadCRUD lead = new LeadCRUD();
-            var leadId = lead.GetById(leadModel.Id);
-            if (leadId == null) return BadRequest("Set a ID");
-
-            if (leadModel.RoleId == null) return BadRequest("Set a role");
+            if (!leadModel.Id.HasValue)
+            {
+                return BadRequest("ID is empty");
+            }     
+            var leadId = _repo.GetById(leadModel.Id.Value);
+            if (leadId == null) return BadRequest("Lead was not found");
             if (string.IsNullOrWhiteSpace(leadModel.FirstName)) return BadRequest("Enter the name");
-            if (string.IsNullOrWhiteSpace(leadModel.LastName)) return BadRequest("Enter the surname");
-            if (string.IsNullOrWhiteSpace(leadModel.Patronymic)) return BadRequest("Enter the patronymic");
-            if (string.IsNullOrWhiteSpace(leadModel.Login)) return BadRequest("Enter a login");
+            if (string.IsNullOrWhiteSpace(leadModel.LastName)) return BadRequest("Enter the last name");
             if (string.IsNullOrWhiteSpace(leadModel.Phone)) return BadRequest("Enter the phone number");
-            if (string.IsNullOrWhiteSpace(leadModel.Email)) return BadRequest("Enter the email");
-            if (leadModel.CityId == null) return BadRequest("Add a city");
             if (string.IsNullOrWhiteSpace(leadModel.Address)) return BadRequest("Enter the address");
-            if (string.IsNullOrWhiteSpace(leadModel.Email)) return BadRequest("Enter the email");
             if (string.IsNullOrWhiteSpace(leadModel.BirthDate)) return BadRequest("Enter the date of birth");
-            Mapper mapper = new Mapper();
-            LeadDTO leadDTO = mapper.ConvertLeadInputModelToLeadDTO(leadModel);
-            return Ok(mapper.ConvertLeadOutputModelToLeadDTO(lead.Update(leadDTO)));
+            if (string.IsNullOrWhiteSpace(leadModel.Password)) return BadRequest("Enter a password");
+            if (leadModel.Password.Length <= 8 || !Regex.IsMatch(leadModel.Password, pattern)) return BadRequest("Password have to be at least 8 signs long and contain lowercase, uppercase and number");
+            LeadDto leadDTO = _mapper.ConvertLeadInputModelToLeadDTO(leadModel);
+            return Ok(_mapper.ConvertLeadDtoToLeadOutputModel(_repo.Update(leadDTO)));
         }
-
 
         //[Authorize()]      
         [HttpDelete("{leadId}")]
-        public ActionResult<int> DeleteLeadById(int leadId)
+        public ActionResult DeleteLeadById(long leadId) 
         {
-            LeadCRUD lead = new LeadCRUD();           
-            return Ok(lead.Delete(leadId));
+            if (_repo.GetById(leadId).Id == null) return BadRequest("Lead was not found");
+            _repo.Delete(leadId);
+            return Ok();
+        }
+
+        //[Authorize()]
+        [HttpPatch]
+        public ActionResult<string> UpdateEmailByLeadId(EmailInputModel emailModel)
+        {
+            if (emailModel.Id == null) return BadRequest("Lead was not found");
+            if (!string.IsNullOrWhiteSpace(emailModel.Email) && _repo.FindLeadByEmail(emailModel.Email) != 0) return BadRequest("User with this email already exists");
+            return Ok(_repo.UpdateEmailByLeadId(emailModel.Id, emailModel.Email));
         }
     }
 }

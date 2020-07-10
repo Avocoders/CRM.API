@@ -1,6 +1,7 @@
 ﻿using CRM.API.Models.Input;
 using CRM.API.Models.Output;
 using CRM.Data.DTO;
+using DocumentFormat.OpenXml.Bibliography;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +11,11 @@ namespace CRM.API
 {
     public class Mapper
     {
-        public LeadDTO ConvertLeadInputModelToLeadDTO(LeadInputModel leadModel)
+        public LeadDto ConvertLeadInputModelToLeadDTO(LeadInputModel leadModel)
         {
-            return new LeadDTO()
+            return new LeadDto()
             {   
-                Id=leadModel.Id,
-                RoleId = leadModel.RoleId,
+                Id = leadModel.Id,                
                 FirstName = leadModel.FirstName,
                 LastName = leadModel.LastName,
                 Patronymic = leadModel.Patronymic,
@@ -23,69 +23,44 @@ namespace CRM.API
                 Password = leadModel.Password,
                 Phone = leadModel.Phone,
                 Email = leadModel.Email,
-                CityId = leadModel.CityId,
+                City = new CityDto()
+                {
+                    Id = leadModel.CityId
+                },
+                Role = new RoleDto(),
                 Address = leadModel.Address,
-                BirthDate = Convert.ToDateTime(leadModel.BirthDate),
-                RegistrationDate = Convert.ToDateTime(leadModel.RegistrationDate),
-                ChangeDate = Convert.ToDateTime(leadModel.ChangeDate),
+                BirthDate = Convert.ToDateTime(leadModel.BirthDate),                
             };
         }
 
-
-        public CityDTO ConvertCityInputModelToCityDTO(CityInputModel cityModel)
-        {
-            return new CityDTO()
-            {
-                Name = cityModel.Name,                
-            };
-        }
-
-        public LeadOutputModel ConvertLeadOutputModelToLeadDTO(LeadDTO leadModel)
+        public LeadOutputModel ConvertLeadDtoToLeadOutputModel(LeadDto leadModel)
         {
             return new LeadOutputModel()
             {
-                Id=leadModel.Id,
-                Role = leadModel.Role,
+                Id= (long)leadModel.Id,
+                Role = leadModel.Role.Name,  //пока закомментила
                 FirstName = leadModel.FirstName,
                 LastName = leadModel.LastName,
-                Patronymic = leadModel.Patronymic,
-                Password=leadModel.Password,
+                Patronymic = leadModel.Patronymic,                
                 Login = leadModel.Login,
                 Phone = leadModel.Phone,
                 Email = leadModel.Email,
-                City = leadModel.City,
+                City = leadModel.City.Name,  //пока закомментила
                 Address = leadModel.Address,
-                BirthDate = Convert.ToDateTime(leadModel.BirthDate),
-                RegistrationDate = Convert.ToDateTime(leadModel.RegistrationDate),
-                ChangeDate = Convert.ToDateTime(leadModel.ChangeDate),
+                BirthDate = leadModel.BirthDate.ToString("dd.MM.yyyy"),
+                RegistrationDate = leadModel.RegistrationDate.ToString("dd.MM.yyyy HH:mm:ss"),
+                ChangeDate = leadModel.ChangeDate.ToString("dd.MM.yyyy HH:mm:ss")
             };
         }
 
-        public List<LeadOutputModel> ConvertListLeadOutputModelToListLeadDTO(List<LeadDTO> leadModel)
+        public List<LeadOutputModel> ConvertLeadDtosToLeadOutputModels(List<LeadDto> leadModels)
         {
             List<LeadOutputModel> leads = new List<LeadOutputModel>();
-            foreach (var lead in leadModel)
+            foreach (var lead in leadModels)
             {
                 if (lead != null)
                 {
-                    leads.Add(
-                        new LeadOutputModel()
-                        {
-                            Id = lead.Id,
-                            Role = lead.Role,
-                            FirstName = lead.FirstName,
-                            LastName = lead.LastName,
-                            Patronymic = lead.Patronymic,
-                            Login = lead.Login,
-                            Phone = lead.Phone,
-                            Email = lead.Email,
-                            City = lead.City,
-                            Address = lead.Address,
-                            BirthDate = Convert.ToDateTime(lead.BirthDate),
-                            RegistrationDate = Convert.ToDateTime(lead.RegistrationDate),
-                            ChangeDate = Convert.ToDateTime(lead.ChangeDate),
-                        }
-                        );
+                    leads.Add(new Mapper().ConvertLeadDtoToLeadOutputModel(lead));
                 }
             }
             return leads;
