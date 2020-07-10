@@ -34,7 +34,7 @@ namespace CRM.API.Controllers
         public ActionResult<List<LeadOutputModel>> GetLeadsAll()
         {
             LeadRepository repo = new LeadRepository();
-            return Ok(_mapper.ConvertListLeadOutputModelToListLeadDTO(repo.GetAll()));
+            return Ok(_mapper.ConvertLeadDtosToLeadOutputModels(repo.GetAll()));
         }
 
         //[Authorize()]
@@ -42,7 +42,7 @@ namespace CRM.API.Controllers
         public ActionResult<LeadOutputModel> GetLeadById(long leadId)
         {
             LeadRepository repo = new LeadRepository();
-            return Ok(_mapper.ConvertLeadOutputModelToLeadDTO(repo.GetById(leadId)));
+            return Ok(_mapper.ConvertLeadDTOToLeadOutputModel(repo.GetById(leadId)));
         }
 
         //[Authorize()]
@@ -53,7 +53,7 @@ namespace CRM.API.Controllers
             if (string.IsNullOrWhiteSpace(leadModel.LastName)) return BadRequest("Enter the last name");            
             if (string.IsNullOrWhiteSpace(leadModel.Login) && string.IsNullOrWhiteSpace(leadModel.Email)) return BadRequest("Enter a login or the email");
             if (string.IsNullOrWhiteSpace(leadModel.Password)) return BadRequest("Enter a password");
-            if (!Regex.IsMatch(leadModel.Password, pattern)) return BadRequest("Password have to be at least 8 signs long and contain lowercase, uppercase and number");
+            //if (!Regex.IsMatch(leadModel.Password, pattern)) return BadRequest("Password have to be at least 8 signs long and contain lowercase, uppercase and number");
             if (string.IsNullOrWhiteSpace(leadModel.Phone)) return BadRequest("Enter the phone number");
             if (string.IsNullOrWhiteSpace(leadModel.Address)) return BadRequest("Enter the address");
             if (string.IsNullOrWhiteSpace(leadModel.BirthDate)) return BadRequest("Enter the date of birth");
@@ -72,7 +72,7 @@ namespace CRM.API.Controllers
             if (!leadModel.Id.HasValue)
             {
                 return BadRequest("ID is empty");
-            }     
+            }
             var leadId = repo.GetById(leadModel.Id.Value);
             if (leadId == null) return BadRequest("Lead was not found");
             if (string.IsNullOrWhiteSpace(leadModel.FirstName)) return BadRequest("Enter the name");
@@ -83,7 +83,7 @@ namespace CRM.API.Controllers
             if (string.IsNullOrWhiteSpace(leadModel.Password)) return BadRequest("Enter a password");
             if (leadModel.Password.Length <= 8 || !Regex.IsMatch(leadModel.Password, pattern)) return BadRequest("Password have to be at least 8 signs long and contain lowercase, uppercase and number");
             LeadDto leadDTO = _mapper.ConvertLeadInputModelToLeadDTO(leadModel);
-            return Ok(_mapper.ConvertLeadOutputModelToLeadDTO(repo.Update(leadDTO)));
+            return Ok(_mapper.ConvertLeadDTOToLeadOutputModel(repo.Update(leadDTO)));
         }
 
         //[Authorize()]      

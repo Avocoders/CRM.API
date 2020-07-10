@@ -64,7 +64,7 @@ namespace CRM.API.Controllers
                     List<Claim> claims = new List<Claim>()
                     {
                     new Claim(ClaimsIdentity.DefaultNameClaimType,leadDto.Login),
-                    new Claim(ClaimsIdentity.DefaultRoleClaimType,leadDto.Role)
+                    new Claim(ClaimsIdentity.DefaultRoleClaimType,leadDto.Role.Name)
                     };
 
                     ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);

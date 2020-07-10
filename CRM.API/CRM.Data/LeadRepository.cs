@@ -14,7 +14,7 @@ namespace CRM.Data
         {
             var connection = Connection.GetConnection();
             connection.Open();
-            string sqlExpression = "Lead_Add @firstName, @lastName, @patronymic, @login, @password, @phone, @email, @cityId, @address, @birthDate";
+            string sqlExpression = "Lead_Add @firstName, @lastName, @patronymic, @login, @password, @phone, @email, @city.Id, @address, @birthDate";
             return connection.Query<int>(sqlExpression, leadDto).FirstOrDefault();
         }
 
@@ -26,20 +26,60 @@ namespace CRM.Data
         }
 
         public List<LeadDto> GetAll()
-        {
+        { 
             using IDbConnection connection = Connection.GetConnection();
             {
-                string sqlExpression = "Lead_GetAll";
-                return connection.Query<LeadDto>(sqlExpression, commandType: CommandType.StoredProcedure).ToList();
+                var leads = new List<LeadDto>();
+
+
+                connection.Query<LeadDto, RoleDto, CityDto, LeadDto>(
+                    "Lead_GetAll1",
+                    (lead, role, city) =>
+                    {
+                        LeadDto leadEntry;
+
+                        leadEntry = lead;
+                        leadEntry.Role = role;
+                        leadEntry.City = city;
+                        leads.Add(leadEntry);
+
+                        return leadEntry;
+                    },
+                    splitOn: "Id")
+                .ToList();
+
+                return leads;
             }
+
         }
 
         public LeadDto GetById(long leadId)
         {
+            //using IDbConnection connection = Connection.GetConnection();
+            //{
+            //    string sqlExpression = "Lead_GetById";
+            //    return connection.Query<LeadDto>(sqlExpression, new { leadId }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+            //}
+
             using IDbConnection connection = Connection.GetConnection();
             {
-                string sqlExpression = "Lead_GetById";
-                return connection.Query<LeadDto>(sqlExpression, new { leadId }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+
+                var lead = connection.Query<LeadDto, RoleDto, CityDto, LeadDto>(
+                    "Lead_GetById1",
+                    (lead, role, city) =>
+                    {
+                        LeadDto leadEntry;
+
+                        leadEntry = lead;
+                        leadEntry.Role = role;
+                        leadEntry.City = city;
+
+                        return leadEntry;
+                    },
+                    splitOn: "Id")
+                .FirstOrDefault();
+
+                return lead;
             }
         }
         public LeadDto GetByLogin(string login)
