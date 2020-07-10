@@ -76,7 +76,9 @@ namespace CRM.Data
 
                         return leadEntry;
                     },
-                    splitOn: "Id")
+                    new {leadId},
+                    splitOn: "Id",
+                    commandType: CommandType.StoredProcedure)
                 .FirstOrDefault();
 
                 return lead;
