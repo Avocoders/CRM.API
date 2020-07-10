@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CRM.Data.DTO
+﻿namespace CRM.Data.DTO
 {
     public class CityDto
     {
