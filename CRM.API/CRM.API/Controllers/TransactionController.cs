@@ -35,7 +35,7 @@ namespace CRM.API.Controllers
         }
 
         [HttpPost("withdraw")]
-        public async Task<ActionResult<List<long>>> CreateWithdrawTransaction([FromBody] TransactionInputModel transactionModel)
+        public async Task<ActionResult<long>> CreateWithdrawTransaction([FromBody] TransactionInputModel transactionModel)
         {
             var jsonContent = new StringContent(JsonConvert.SerializeObject(transactionModel), Encoding.UTF8, "application/json");
             var response = await _httpClient.PostAsync("https://localhost:44388/transaction/withdraw", jsonContent);
@@ -44,7 +44,7 @@ namespace CRM.API.Controllers
         }
 
         [HttpPost("deposit")]
-        public async Task<ActionResult<List<long>>> CreateDepositTransaction([FromBody] TransactionInputModel transactionModel)
+        public async Task<ActionResult<long>> CreateDepositTransaction([FromBody] TransactionInputModel transactionModel)
         {
             var jsonContent = new StringContent(JsonConvert.SerializeObject(transactionModel), Encoding.UTF8, "application/json");
             var response = await _httpClient.PostAsync("https://localhost:44388/transaction/deposit", jsonContent);
