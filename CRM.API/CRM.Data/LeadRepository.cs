@@ -83,10 +83,20 @@ namespace CRM.Data
             return _connection.Query<LeadDto>("Lead_GetByLogin", new { login }, commandType: CommandType.StoredProcedure).FirstOrDefault();            
         }
 
-        public int Update(LeadDto leadDto)  
+        public LeadDto Update(LeadDto leadDto)  
         {
-            return _connection.Query<int>("Lead_Update", new
-            {
+            return _connection.Query<LeadDto, RoleDto, CityDto, LeadDto>("Lead_Update",
+                (lead, role, city) =>
+                {
+                    LeadDto leadEntry;
+
+                    leadEntry = lead;
+                    leadEntry.Role = role;
+                    leadEntry.City = city;
+
+                    return leadEntry;
+                },
+                new{
                 leadDto.Id,
                 leadDto.FirstName,
                 leadDto.LastName,
@@ -95,8 +105,9 @@ namespace CRM.Data
                 leadDto.Phone,
                 CityId = leadDto.City.Id,
                 leadDto.Address,
-                leadDto.BirthDate
-            }, commandType: CommandType.StoredProcedure).FirstOrDefault();            
+                leadDto.BirthDate},
+                splitOn: "Id",
+                commandType: CommandType.StoredProcedure).FirstOrDefault();            
         }
 
         public int FindLeadByLogin(string login)
