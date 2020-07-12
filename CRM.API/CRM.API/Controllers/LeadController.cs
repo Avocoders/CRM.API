@@ -73,7 +73,7 @@ namespace CRM.API.Controllers
 
         //[Authorize()]
         [HttpPut]
-        public ActionResult<int> UpdateLead(LeadInputModel leadModel)
+        public ActionResult<LeadOutputModel> UpdateLead(LeadInputModel leadModel)
         {
             if (!leadModel.Id.HasValue)
             {
