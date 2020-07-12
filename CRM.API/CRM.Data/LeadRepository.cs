@@ -16,7 +16,7 @@ namespace CRM.Data
         }
 
         public int Add(LeadDto leadDto)
-        {                        
+        {
             return _connection.Query<int>("Lead_Add", new
             {
                 leadDto.FirstName,
@@ -34,7 +34,7 @@ namespace CRM.Data
         }
 
         public void Delete(long id)
-        {                        
+        {
             _connection.Execute("Lead_Delete", new { id }, commandType: CommandType.StoredProcedure);
         }
 
@@ -56,7 +56,7 @@ namespace CRM.Data
                     return leadEntry;
                 },
                 splitOn: "Id").ToList();
-            return leads;           
+            return leads;
         }
 
         public LeadDto GetById(long leadId)
@@ -75,15 +75,29 @@ namespace CRM.Data
                 },
                 new { leadId },
                 splitOn: "Id",
-                commandType: CommandType.StoredProcedure).FirstOrDefault();                      
+                commandType: CommandType.StoredProcedure).FirstOrDefault();
         }
 
         public LeadDto GetByLogin(string login)
-        {           
-            return _connection.Query<LeadDto>("Lead_GetByLogin", new { login }, commandType: CommandType.StoredProcedure).FirstOrDefault();            
+        {
+            return _connection.Query<LeadDto, RoleDto, CityDto, LeadDto>(
+                "Lead_GetByLogin",
+                (lead, role, city) =>
+                {
+                    LeadDto leadEntry;
+
+                    leadEntry = lead;
+                    leadEntry.Role = role;
+                    leadEntry.City = city;
+                    return leadEntry;
+                },
+                new { login },
+                splitOn: "Id",
+                commandType: CommandType.StoredProcedure).FirstOrDefault();
+            //return _connection.Query<LeadDto>("Lead_GetByLogin", new { login }, commandType: CommandType.StoredProcedure).FirstOrDefault();            
         }
 
-        public LeadDto Update(LeadDto leadDto)  
+        public LeadDto Update(LeadDto leadDto)
         {
             return _connection.Query<LeadDto, RoleDto, CityDto, LeadDto>("Lead_Update",
                 (lead, role, city) =>
@@ -96,32 +110,34 @@ namespace CRM.Data
 
                     return leadEntry;
                 },
-                new{
-                leadDto.Id,
-                leadDto.FirstName,
-                leadDto.LastName,
-                leadDto.Patronymic,
-                leadDto.Password,
-                leadDto.Phone,
-                CityId = leadDto.City.Id,
-                leadDto.Address,
-                leadDto.BirthDate},
+                new
+                {
+                    leadDto.Id,
+                    leadDto.FirstName,
+                    leadDto.LastName,
+                    leadDto.Patronymic,
+                    leadDto.Password,
+                    leadDto.Phone,
+                    CityId = leadDto.City.Id,
+                    leadDto.Address,
+                    leadDto.BirthDate
+                },
                 splitOn: "Id",
-                commandType: CommandType.StoredProcedure).FirstOrDefault();            
+                commandType: CommandType.StoredProcedure).FirstOrDefault();
         }
 
         public int FindLeadByLogin(string login)
-        {   
+        {
             return _connection.Query<int>("Lead_FindByLogin", new { login }, commandType: CommandType.StoredProcedure).FirstOrDefault();
         }
 
         public int FindLeadByEmail(string email)
-        {  
+        {
             return _connection.Query<int>("Lead_FindByEmail", new { email }, commandType: CommandType.StoredProcedure).FirstOrDefault();
         }
 
         public string UpdateEmailByLeadId(long? id, string email)
-        {  
+        {
             return _connection.Query<string>("Lead_UpdateEmail", new { id, email }, commandType: CommandType.StoredProcedure).FirstOrDefault();
         }
     }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using CRM.API.Models.Input;
 using CRM.API.Models.Output;
+using CRM.API.Sha256;
 using CRM.Data.DTO;
 using CRM.Data;
 using Microsoft.AspNetCore.Mvc;
@@ -67,6 +68,7 @@ namespace CRM.API.Controllers
             if (string.IsNullOrWhiteSpace(leadModel.Phone)) return BadRequest("Enter the phone number");
             if (string.IsNullOrWhiteSpace(leadModel.Address)) return BadRequest("Enter the address");
             if (string.IsNullOrWhiteSpace(leadModel.BirthDate)) return BadRequest("Enter the date of birth");
+            leadModel.Password = new PasswordEncryptor().EncryptPassword(leadModel.Password);
             LeadDto leadDto = _mapper.ConvertLeadInputModelToLeadDTO(leadModel);            
             return Ok(_repo.Add(leadDto));
         }
