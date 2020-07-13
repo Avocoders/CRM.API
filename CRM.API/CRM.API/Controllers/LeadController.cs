@@ -48,7 +48,7 @@ namespace CRM.API.Controllers
 
         //[Authorize()]
         [HttpPost]
-        public ActionResult<int> PostLead(LeadInputModel leadModel)
+        public ActionResult<LeadOutputModel> PostLead(LeadInputModel leadModel)
         {
             if (string.IsNullOrWhiteSpace(leadModel.FirstName)) return BadRequest("Enter the name");
             if (string.IsNullOrWhiteSpace(leadModel.LastName)) return BadRequest("Enter the last name");            
@@ -69,8 +69,9 @@ namespace CRM.API.Controllers
             if (string.IsNullOrWhiteSpace(leadModel.Address)) return BadRequest("Enter the address");
             if (string.IsNullOrWhiteSpace(leadModel.BirthDate)) return BadRequest("Enter the date of birth");
             leadModel.Password = new PasswordEncryptor().EncryptPassword(leadModel.Password);
-            LeadDto leadDto = _mapper.ConvertLeadInputModelToLeadDTO(leadModel);            
-            return Ok(_repo.Add(leadDto));
+            LeadDto leadDto = _mapper.ConvertLeadInputModelToLeadDTO(leadModel);
+            var lead = _repo.Add(leadDto);
+            return Ok(lead);
         }
 
         //[Authorize()]

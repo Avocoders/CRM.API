@@ -15,10 +15,22 @@ namespace CRM.Data
             _connection = Connection.GetConnection();
         }
 
-        public int Add(LeadDto leadDto)
+        public LeadDto Add(LeadDto leadDto)
         {
-            return _connection.Query<int>("Lead_Add", new
-            {
+            return _connection.Query<LeadDto, RoleDto, CityDto, LeadDto>("Lead_Add_Or_Update",
+                (lead, role, city) =>
+                {
+                    LeadDto leadEntry;
+
+                    leadEntry = lead;
+                    leadEntry.Role = role;
+                    leadEntry.City = city;
+
+                    return leadEntry;
+                },
+                new
+                {
+                    leadDto.Id,
                 leadDto.FirstName,
                 leadDto.LastName,
                 leadDto.Patronymic,
@@ -30,7 +42,9 @@ namespace CRM.Data
                 leadDto.Address,
                 leadDto.BirthDate
 
-            }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+            }, splitOn: "Id",
+                commandType: CommandType.StoredProcedure).FirstOrDefault();
+
         }
 
         public void Delete(long id)
@@ -99,7 +113,7 @@ namespace CRM.Data
 
         public LeadDto Update(LeadDto leadDto)
         {
-            return _connection.Query<LeadDto, RoleDto, CityDto, LeadDto>("Lead_Update",
+            return _connection.Query<LeadDto, RoleDto, CityDto, LeadDto>("Lead_Add_Or_Update",
                 (lead, role, city) =>
                 {
                     LeadDto leadEntry;
@@ -116,8 +130,10 @@ namespace CRM.Data
                     leadDto.FirstName,
                     leadDto.LastName,
                     leadDto.Patronymic,
+                    leadDto.Login,
                     leadDto.Password,
                     leadDto.Phone,
+                    leadDto.Email,
                     CityId = leadDto.City.Id,
                     leadDto.Address,
                     leadDto.BirthDate
