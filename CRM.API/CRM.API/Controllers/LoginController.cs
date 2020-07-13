@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using CRM.API.Models.Input;
+using CRM.API.Sha256;
 using CRM.Data.DTO;
 using CRM.Data;
 
@@ -47,17 +48,17 @@ namespace CRM.API.Controllers
         {
             LeadRepository leadRepository = new LeadRepository();
             LeadDto leadDto = leadRepository.GetByLogin(login);
+            PasswordEncryptor encryptor = new PasswordEncryptor();
 
             if (leadDto != null)
             {
-                if (leadDto.Password == password)
+                if (encryptor.CheckPassword(leadDto.Password,password))
                 {
                     List<Claim> claims = new List<Claim>()
                     {
                     new Claim(ClaimsIdentity.DefaultNameClaimType,leadDto.Login),
                     new Claim(ClaimsIdentity.DefaultRoleClaimType,leadDto.Role.Name)
                     };
-
                     ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
                     return claimsIdentity;
                 }
