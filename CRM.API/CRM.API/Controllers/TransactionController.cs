@@ -64,7 +64,7 @@ namespace CRM.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<TransactionOutputModel>> GetTransactionById(long id)
         {
-            var response = await _httpClient.GetAsync($"https://localhost:44388/transaction/by-lead-id/{id}");
+            var response = await _httpClient.GetAsync($"https://localhost:44388/transaction/{id}");
             string content = await response.Content.ReadAsStringAsync();
             return StatusCode((int)response.StatusCode, content);
         }
