@@ -1,5 +1,6 @@
 ﻿using CRM.Data.DTO;
 using Dapper;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -15,36 +16,45 @@ namespace CRM.Data
             _connection = Connection.GetConnection();
         }
 
-        public LeadDto Add(LeadDto leadDto)
+        public DataWrapper<LeadDto> Add(LeadDto leadDto)
         {
-            return _connection.Query<LeadDto, RoleDto, CityDto, LeadDto>("Lead_Add_Or_Update",
-                (lead, role, city) =>
-                {
-                    LeadDto leadEntry;
+            var result = new DataWrapper<LeadDto>();
+            try
+            {
+                result.Data = _connection.Query<LeadDto, RoleDto, CityDto, LeadDto>("Lead_Add_Or_Update",
+                    (lead, role, city) =>
+                    {
+                        LeadDto leadEntry;
 
-                    leadEntry = lead;
-                    leadEntry.Role = role;
-                    leadEntry.City = city;
+                        leadEntry = lead;
+                        leadEntry.Role = role;
+                        leadEntry.City = city;
 
-                    return leadEntry;
-                },
-                new
-                {
-                    leadDto.Id,
-                leadDto.FirstName,
-                leadDto.LastName,
-                leadDto.Patronymic,
-                leadDto.Login,
-                leadDto.Password,
-                leadDto.Phone,
-                leadDto.Email,
-                CityId = leadDto.City.Id,
-                leadDto.Address,
-                leadDto.BirthDate
+                        return leadEntry;
+                    },
+                    new
+                    {
+                        leadDto.Id,
+                    leadDto.FirstName,
+                    leadDto.LastName,
+                    leadDto.Patronymic,
+                    leadDto.Login,
+                    leadDto.Password,
+                    leadDto.Phone,
+                    leadDto.Email,
+                    CityId = leadDto.City.Id,
+                    leadDto.Address,
+                    leadDto.BirthDate
 
-            }, splitOn: "Id",
-                commandType: CommandType.StoredProcedure).FirstOrDefault();
-
+                }, splitOn: "Id",
+                    commandType: CommandType.StoredProcedure).FirstOrDefault();
+                result.IsOk = true;
+            }
+            catch(Exception e)
+            {
+                result.ExceptionMessage = e.Message;
+            }
+            return result;
         }
 
         public void Delete(long id)
@@ -52,30 +62,41 @@ namespace CRM.Data
             _connection.Execute("Lead_Delete", new { id }, commandType: CommandType.StoredProcedure);
         }
 
-        public List<LeadDto> GetAll()
+        public DataWrapper<List<LeadDto>> GetAll()
         {
-            var leads = new List<LeadDto>();
+            var results = new DataWrapper<List<LeadDto>>();
+            try
+            {
+                _connection.Query<LeadDto, RoleDto, CityDto, LeadDto>(
+                    "Lead_GetAll",
+                    (lead, role, city) =>
+                    {
+                        LeadDto leadEntry;
 
-            _connection.Query<LeadDto, RoleDto, CityDto, LeadDto>(
-                "Lead_GetAll",
-                (lead, role, city) =>
-                {
-                    LeadDto leadEntry;
+                        leadEntry = lead;
+                        leadEntry.Role = role;
+                        leadEntry.City = city;
+                        results.Data.Add(leadEntry);
 
-                    leadEntry = lead;
-                    leadEntry.Role = role;
-                    leadEntry.City = city;
-                    leads.Add(leadEntry);
-
-                    return leadEntry;
-                },
-                splitOn: "Id").ToList();
-            return leads;
+                        return leadEntry;
+                    },
+                    splitOn: "Id").ToList();
+                results.IsOk = true;
+            }
+            catch(Exception e)
+            {
+                results.ExceptionMessage = e.Message;
+            }
+            
+            return results;
         }
 
-        public LeadDto GetById(long leadId)
+        public DataWrapper<LeadDto> GetById(long leadId)
         {
-            return _connection.Query<LeadDto, RoleDto, CityDto, LeadDto>(
+            var result = new DataWrapper<LeadDto>();
+            try
+            {
+                result.Data = _connection.Query<LeadDto, RoleDto, CityDto, LeadDto>(
                 "Lead_GetById",
                 (lead, role, city) =>
                 {
@@ -90,11 +111,20 @@ namespace CRM.Data
                 new { leadId },
                 splitOn: "Id",
                 commandType: CommandType.StoredProcedure).FirstOrDefault();
+            }
+            catch(Exception e)
+            {
+                result.ExceptionMessage = e.Message;
+            }
+            return result;
         }
 
-        public LeadDto GetByLogin(string login)
+        public DataWrapper<LeadDto> GetByLogin(string login)
         {
-            return _connection.Query<LeadDto, RoleDto, CityDto, LeadDto>(
+            var result = new DataWrapper<LeadDto>();
+            try
+            {
+                result.Data = _connection.Query<LeadDto, RoleDto, CityDto, LeadDto>(
                 "Lead_GetByLogin",
                 (lead, role, city) =>
                 {
@@ -108,12 +138,21 @@ namespace CRM.Data
                 new { login },
                 splitOn: "Id",
                 commandType: CommandType.StoredProcedure).FirstOrDefault();
+            }
+            catch(Exception e)
+            {
+                result.ExceptionMessage = e.Message;
+            }
+            return result;
             //return _connection.Query<LeadDto>("Lead_GetByLogin", new { login }, commandType: CommandType.StoredProcedure).FirstOrDefault();            
         }
 
-        public LeadDto Update(LeadDto leadDto)
+        public DataWrapper<LeadDto> Update(LeadDto leadDto)
         {
-            return _connection.Query<LeadDto, RoleDto, CityDto, LeadDto>("Lead_Add_Or_Update",
+            var result = new DataWrapper<LeadDto>();
+            try
+            {
+                result.Data = _connection.Query<LeadDto, RoleDto, CityDto, LeadDto>("Lead_Add_Or_Update",
                 (lead, role, city) =>
                 {
                     LeadDto leadEntry;
@@ -140,21 +179,54 @@ namespace CRM.Data
                 },
                 splitOn: "Id",
                 commandType: CommandType.StoredProcedure).FirstOrDefault();
+            }
+            catch(Exception e)
+            {
+                result.ExceptionMessage = e.Message;
+            }
+            return result;
         }
 
-        public int FindLeadByLogin(string login)
+        public DataWrapper<int> FindLeadByLogin(string login)
         {
-            return _connection.Query<int>("Lead_FindByLogin", new { login }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+            var result = new DataWrapper<int>();
+            try
+            {
+                result.Data = _connection.Query<int>("Lead_FindByLogin", new { login }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+            }
+            catch(Exception e)
+            {
+                result.ExceptionMessage = e.Message;
+            }
+            return result;
         }
 
-        public int FindLeadByEmail(string email)
+        public DataWrapper<int> FindLeadByEmail(string email)
         {
-            return _connection.Query<int>("Lead_FindByEmail", new { email }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+            var result = new DataWrapper<int>();
+            try
+            {
+                result.Data = _connection.Query<int>("Lead_FindByEmail", new { email }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+            }
+            catch(Exception e)
+            {
+                result.ExceptionMessage = e.Message;
+            }
+            return result;
         }
 
-        public string UpdateEmailByLeadId(long? id, string email)
+        public DataWrapper<string> UpdateEmailByLeadId(long? id, string email)
         {
-            return _connection.Query<string>("Lead_UpdateEmail", new { id, email }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+            var result = new DataWrapper<string>();
+            try
+            {
+                result.Data = _connection.Query<string>("Lead_UpdateEmail", new { id, email }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+            }
+            catch(Exception e)
+            {
+                result.ExceptionMessage = e.Message;
+            }
+            return result;
         }
     }
 }
