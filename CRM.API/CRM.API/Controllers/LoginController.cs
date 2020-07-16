@@ -47,17 +47,17 @@ namespace CRM.API.Controllers
         private ClaimsIdentity GetIdentity(string login, string password)
         {
             LeadRepository leadRepository = new LeadRepository();
-            LeadDto leadDto = leadRepository.GetByLogin(login);
+            DataWrapper<LeadDto> leadDto = leadRepository.GetByLogin(login);
             PasswordEncryptor encryptor = new PasswordEncryptor();
 
             if (leadDto != null)
             {
-                if (encryptor.CheckPassword(leadDto.Password,password))
+                if (encryptor.CheckPassword(leadDto.Data.Password,password))
                 {
                     List<Claim> claims = new List<Claim>()
                     {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType,leadDto.Login),
-                    new Claim(ClaimsIdentity.DefaultRoleClaimType,leadDto.Role.Name)
+                    new Claim(ClaimsIdentity.DefaultNameClaimType,leadDto.Data.Login),
+                    new Claim(ClaimsIdentity.DefaultRoleClaimType,leadDto.Data.Role.Name)
                     };
                     ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
                     return claimsIdentity;
