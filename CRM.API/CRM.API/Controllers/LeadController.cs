@@ -36,31 +36,36 @@ namespace CRM.API.Controllers
         [HttpGet]
         public ActionResult<List<LeadOutputModel>> GetLeadsAll()
         {
-            return Ok(_mapper.ConvertLeadDtosToLeadOutputModels(_repo.GetAll()));
+            DataWrapper<List<LeadDto>> dataWrapper = _repo.GetAll();
+            return Ok(_mapper.ConvertLeadDtosToLeadOutputModels(dataWrapper.Data));
         }
 
         //[Authorize()]
         [HttpGet("{leadId}")]
         public ActionResult<LeadOutputModel> GetLeadById(long leadId)
         {
-            return Ok(_mapper.ConvertLeadDtoToLeadOutputModel(_repo.GetById(leadId)));
+            DataWrapper<LeadDto> dataWrapper = _repo.GetById(leadId);
+            return Ok(_mapper.ConvertLeadDtoToLeadOutputModel(dataWrapper.Data));
         }
 
         //[Authorize()]
         [HttpPost]
         public ActionResult<LeadOutputModel> PostLead(LeadInputModel leadModel)
         {
+            DataWrapper<int> dataWrapper = new DataWrapper<int>();
             if (string.IsNullOrWhiteSpace(leadModel.FirstName)) return BadRequest("Enter the name");
             if (string.IsNullOrWhiteSpace(leadModel.LastName)) return BadRequest("Enter the last name");            
             if (string.IsNullOrWhiteSpace(leadModel.Login) && string.IsNullOrWhiteSpace(leadModel.Email)) return BadRequest("Enter a login or the email");
             if (!string.IsNullOrWhiteSpace(leadModel.Login))
             {
-                if(_repo.FindLeadByLogin(leadModel.Login) != 0) return BadRequest("User with this login already exists");
+                dataWrapper = _repo.FindLeadByLogin(leadModel.Login);
+                if (dataWrapper.Data != 0) return BadRequest("User with this login already exists");
                 if (!Regex.IsMatch(leadModel.Login, patternLogin)) return BadRequest("The Login is incorrect");
             }
             if (!string.IsNullOrWhiteSpace(leadModel.Email))
             {
-                if(_repo.FindLeadByEmail(leadModel.Email) != 0) return BadRequest("User with this email already exists");
+                dataWrapper = _repo.FindLeadByEmail(leadModel.Email);
+                if (dataWrapper.Data != 0) return BadRequest("User with this email already exists");
                 if((!Regex.IsMatch(leadModel.Email, patternEmail))) return BadRequest("The Email is incorrect");
             }
             if (string.IsNullOrWhiteSpace(leadModel.Password)) return BadRequest("Enter a password");
@@ -99,7 +104,8 @@ namespace CRM.API.Controllers
         [HttpDelete("{leadId}")]
         public ActionResult DeleteLeadById(long leadId) 
         {
-            if (_repo.GetById(leadId).Id == null) return BadRequest("Lead was not found");
+            DataWrapper<LeadDto> dataWrapper = _repo.GetById(leadId);
+            if (dataWrapper.Data.Id == null) return BadRequest("Lead was not found");
             _repo.Delete(leadId);
             return Ok();
         }
@@ -115,7 +121,8 @@ namespace CRM.API.Controllers
             }
             else            
             {
-                if (_repo.FindLeadByEmail(emailModel.Email) != 0) return BadRequest("User with this email already exists");
+                DataWrapper<int> dataWrapper = _repo.FindLeadByEmail(emailModel.Email);
+                if (dataWrapper.Data != 0) return BadRequest("User with this email already exists");
                 if ((!Regex.IsMatch(emailModel.Email, patternEmail))) return BadRequest("The Email is incorrect");
             }
             return Ok(_repo.UpdateEmailByLeadId(emailModel.Id, emailModel.Email));
