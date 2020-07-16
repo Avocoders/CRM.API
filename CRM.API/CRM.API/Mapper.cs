@@ -48,7 +48,7 @@ namespace CRM.API
                 //BirthDate = Convert.ToDateTime(searchParameters.BirthDate),
                 RegistrationDate = searchParameters.RegistrationDate,
                 //RegistrationDate = Convert.ToDateTime(searchParameters.RegistrationDate),
-                IsDeleted = searchParameters.IsDeleted
+                IncludeDeleted = searchParameters.IsDeleted
             };
         }
 

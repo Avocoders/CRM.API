@@ -172,7 +172,7 @@ namespace CRM.Data
               address = searchParameters.Address,
               birthDate = searchParameters.BirthDate,
               registrationDate = searchParameters.RegistrationDate,
-              isDeleted = searchParameters.IsDeleted
+              includeDeleted = searchParameters.IncludeDeleted
             }, commandType: CommandType.StoredProcedure).ToList();
             //var leads = new List<LeadDto>();
             //_connection.Query<LeadDto, RoleDto, CityDto, LeadDto>("Lead_Search",

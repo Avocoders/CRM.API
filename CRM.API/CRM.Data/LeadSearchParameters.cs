@@ -19,6 +19,6 @@ namespace CRM.Data
         public string BirthDate { get; set; }
         public string RegistrationDate { get; set; }
         public DateTime ChangeDate { get; set; }
-        public byte IsDeleted { get; set; }
+        public byte IncludeDeleted { get; set; }
     }
 }
