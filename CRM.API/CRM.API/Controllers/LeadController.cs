@@ -120,5 +120,16 @@ namespace CRM.API.Controllers
             }
             return Ok(_repo.UpdateEmailByLeadId(emailModel.Id, emailModel.Email));
         }
+
+        //[Authorize()]
+        [HttpGet("search")]
+        public ActionResult<List<LeadOutputModel>> SearchLead(SearchParametersInputModel searchparameters)
+        {
+            LeadDto leadDto = _mapper.ConvertSearchParametersInputModelToLeadDTO(searchparameters);
+            List <LeadDto> leadsDto = _repo.SearchLeads(leadDto);
+            List<LeadOutputModel> model = _mapper.ConvertLeadDtosToLeadOutputModels(leadsDto);
+            return Ok(model);         
+        }
+
     }
 }

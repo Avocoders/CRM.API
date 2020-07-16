@@ -121,7 +121,7 @@ namespace CRM.Data
                     leadEntry = lead;
                     leadEntry.Role = role;
                     leadEntry.City = city;
-
+                    
                     return leadEntry;
                 },
                 new
@@ -133,7 +133,7 @@ namespace CRM.Data
                     leadDto.Login,
                     leadDto.Password,
                     leadDto.Phone,
-                    leadDto.Email,
+                    leadDto.Email,  
                     CityId = leadDto.City.Id,
                     leadDto.Address,
                     leadDto.BirthDate
@@ -155,6 +155,55 @@ namespace CRM.Data
         public string UpdateEmailByLeadId(long? id, string email)
         {
             return _connection.Query<string>("Lead_UpdateEmail", new { id, email }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+        }
+
+        public List<LeadDto> SearchLeads(LeadDto searchParameters)
+        {
+            //return _connection.Query<LeadSearchParameters>("Lead_Search", new 
+            //{ 
+            //  searchParameters.Role, 
+            //  searchParameters.FirstName, 
+            //  searchParameters.LastName, 
+            //  searchParameters.Patronymic,
+            //  searchParameters.Login,
+            //  searchParameters.Phone,
+            //  searchParameters.Email,
+            //  searchParameters.City,
+            //  searchParameters.Address,
+            //  searchParameters.BirthDate,
+            //  searchParameters.RegistrationDate,
+            //  searchParameters.IsDeleted
+            //}, commandType: CommandType.StoredProcedure).ToList();
+            var leads = new List<LeadDto>();
+            _connection.Query<LeadDto, RoleDto, CityDto, LeadDto>("Lead_Search",
+                (lead, role, city) =>
+                {
+                    LeadDto leadEntry;
+
+                    leadEntry = lead;
+                    leadEntry.Role = role;
+                    leadEntry.City = city;
+                    leads.Add(leadEntry);
+
+                    return leadEntry;
+                },
+                new
+                {
+                    Role = searchParameters.Role.Name,
+                    searchParameters.FirstName,
+                    searchParameters.LastName,
+                    searchParameters.Patronymic,
+                    searchParameters.Login,
+                    searchParameters.Phone,
+                    searchParameters.Email,
+                    City = searchParameters.City.Name,
+                    searchParameters.Address,
+                    searchParameters.BirthDate,
+                    searchParameters.RegistrationDate,
+                    searchParameters.IsDeleted
+                }, splitOn: "Id",
+                commandType: CommandType.StoredProcedure).ToList();
+            return leads;
         }
     }
 }

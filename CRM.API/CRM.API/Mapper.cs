@@ -30,6 +30,31 @@ namespace CRM.API
             };
         }
 
+        public LeadDto ConvertSearchParametersInputModelToLeadDTO(SearchParametersInputModel searchParameters)
+        {
+            return new LeadDto()
+            {
+                FirstName = searchParameters.FirstName,
+                LastName = searchParameters.LastName,
+                Patronymic = searchParameters.Patronymic,
+                Login = searchParameters.Login,
+                Phone = searchParameters.Phone,
+                Email = searchParameters.Email,
+                City = new CityDto()
+                {
+                    Name = searchParameters.City
+                },
+                Role = new RoleDto()
+                { 
+                    Name = searchParameters.Role
+                },
+                Address = searchParameters.Address,
+                BirthDate = Convert.ToDateTime(searchParameters.BirthDate),
+                RegistrationDate = Convert.ToDateTime(searchParameters.RegistrationDate),
+                IsDeleted = searchParameters.IsDeleted
+            };
+        }
+
         public LeadOutputModel ConvertLeadDtoToLeadOutputModel(LeadDto leadModel)
         {
             return new LeadOutputModel()
@@ -61,6 +86,6 @@ namespace CRM.API
                 }
             }
             return leads;
-        }
+        }        
     }
 }
