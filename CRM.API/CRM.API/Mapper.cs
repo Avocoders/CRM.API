@@ -50,30 +50,28 @@ namespace CRM.API
                 },
                 Address = searchParameters.Address,
                 BirthDate = Convert.ToDateTime(searchParameters.BirthDate),
-                RegistrationDate = Convert.ToDateTime(searchParameters.RegistrationDate),
+                RegistrationDate = TimeSpan.Parse(searchParameters.RegistrationDate),
                 IsDeleted = searchParameters.IsDeleted
             };
         }
 
-        public LeadOutputModel ConvertLeadDtoToLeadOutputModel(LeadDto leadModel)
+        public LeadOutputModel ConvertLeadDtoToLeadOutputModel(LeadDto leadModel) => new LeadOutputModel()
         {
-            return new LeadOutputModel()
-            {
-                Id= (long)leadModel.Id,
-                Role = leadModel.Role.Name,  
-                FirstName = leadModel.FirstName,
-                LastName = leadModel.LastName,
-                Patronymic = leadModel.Patronymic,                
-                Login = leadModel.Login,
-                Phone = leadModel.Phone,
-                Email = leadModel.Email,
-                City = leadModel.City.Name, 
-                Address = leadModel.Address,
-                BirthDate = leadModel.BirthDate.ToString("dd.MM.yyyy"),
-                RegistrationDate = leadModel.RegistrationDate.ToString("dd.MM.yyyy HH:mm:ss"),
-                ChangeDate = leadModel.ChangeDate.ToString("dd.MM.yyyy HH:mm:ss")
-            };
-        }
+            Id = (long)leadModel.Id,
+            Role = leadModel.Role.Name,
+            FirstName = leadModel.FirstName,
+            LastName = leadModel.LastName,
+            Patronymic = leadModel.Patronymic,
+            Login = leadModel.Login,
+            Phone = leadModel.Phone,
+            Email = leadModel.Email,
+            City = leadModel.City.Name,
+            Address = leadModel.Address,
+            BirthDate = ((DateTime)leadModel.BirthDate).ToString("dd.MM.yyyy"),
+            RegistrationDate = ((TimeSpan)leadModel.RegistrationDate).ToString("dd.MM.yyyy HH:mm:ss"),
+            ChangeDate = leadModel.ChangeDate.ToString("dd.MM.yyyy HH:mm:ss")
+            //string sqlFormattedDate = ((DateTime)myDate).ToString("yyyy-MM-dd HH:mm:ss")
+        };
 
         public List<LeadOutputModel> ConvertLeadDtosToLeadOutputModels(List<LeadDto> leadModels)
         {

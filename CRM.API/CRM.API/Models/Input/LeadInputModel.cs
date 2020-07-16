@@ -13,5 +13,6 @@
         public int CityId { get; set; }
         public string Address { get; set; }
         public string BirthDate { get; set; }
+
     }
 }
