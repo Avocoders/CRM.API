@@ -16,8 +16,8 @@ namespace CRM.Data
         public string Email { get; set; }
         public string City { get; set; }
         public string Address { get; set; }
-        public DateTime BirthDate { get; set; }
-        public DateTime RegistrationDate { get; set; }
+        public string BirthDate { get; set; }
+        public string RegistrationDate { get; set; }
         public DateTime ChangeDate { get; set; }
         public byte IsDeleted { get; set; }
     }
