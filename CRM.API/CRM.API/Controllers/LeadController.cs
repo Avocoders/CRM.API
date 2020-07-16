@@ -7,6 +7,7 @@ using CRM.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Text.RegularExpressions;
+using CRM.API.Encryptor;
 
 namespace CRM.API.Controllers
 {
@@ -54,8 +55,12 @@ namespace CRM.API.Controllers
         {
             DataWrapper<int> dataWrapper = new DataWrapper<int>();
             if (string.IsNullOrWhiteSpace(leadModel.FirstName)) return BadRequest("Enter the name");
-            if (string.IsNullOrWhiteSpace(leadModel.LastName)) return BadRequest("Enter the last name");            
-            if (string.IsNullOrWhiteSpace(leadModel.Login) && string.IsNullOrWhiteSpace(leadModel.Email)) return BadRequest("Enter a login or the email");
+            if (string.IsNullOrWhiteSpace(leadModel.LastName)) return BadRequest("Enter the last name");
+            if (string.IsNullOrWhiteSpace(leadModel.Login)) 
+            {
+                leadModel.Login = new LoginEncryptor().EncryptorLogin();
+            } 
+                if(string.IsNullOrWhiteSpace(leadModel.Email)) return BadRequest("Enter a login or the email");
             if (!string.IsNullOrWhiteSpace(leadModel.Login))
             {
                 dataWrapper = _repo.FindLeadByLogin(leadModel.Login);
@@ -96,6 +101,7 @@ namespace CRM.API.Controllers
             if (string.IsNullOrWhiteSpace(leadModel.BirthDate)) return BadRequest("Enter the date of birth");
             if (string.IsNullOrWhiteSpace(leadModel.Password)) return BadRequest("Enter a password");
             if (!Regex.IsMatch(leadModel.Password, patternPassword)) return BadRequest("Password have to be between 8 and 20 characters long and contain lowercase, uppercase and number, possible characters: @#$%^&+=*.-_");
+            leadModel.Password = new PasswordEncryptor().EncryptPassword(leadModel.Password);
             LeadDto leadDTO = _mapper.ConvertLeadInputModelToLeadDTO(leadModel);
             return Ok(_repo.Update(leadDTO));
         }
