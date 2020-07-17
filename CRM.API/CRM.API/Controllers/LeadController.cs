@@ -108,7 +108,8 @@ namespace CRM.API.Controllers
         [HttpPatch]
         public ActionResult<string> UpdateEmailByLeadId(EmailInputModel emailModel)
         {
-            if (emailModel.Id == null) return BadRequest("Lead was not found");
+            var leadId = _repo.GetById(emailModel.Id.Value);
+            if (leadId == null) return BadRequest("Lead was not found");
             if (string.IsNullOrWhiteSpace(emailModel.Email))
             {
                 return BadRequest("Enter the email");
@@ -125,11 +126,8 @@ namespace CRM.API.Controllers
         [HttpGet("search")]
         public ActionResult<List<LeadOutputModel>> SearchLead(SearchParametersInputModel searchparameters)
         {
-            LeadDto leadDto = _mapper.ConvertSearchParametersInputModelToLeadDTO(searchparameters);
-            List <LeadDto> leadsDto = _repo.SearchLeads(leadDto);
-            List<LeadOutputModel> model = _mapper.ConvertLeadDtosToLeadOutputModels(leadsDto);
-            return Ok(model);         
+            LeadSearchParameters searchParams = _mapper.ConvertSearchParametersInputModelToLeadDTO(searchparameters);  
+            return Ok(_mapper.ConvertLeadDtosToLeadOutputModels(_repo.SearchLeads(searchParams)));         
         }
-
     }
 }

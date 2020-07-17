@@ -18,6 +18,8 @@ namespace CRM.Data.DTO
         public DateTime ChangeDate { get; set; }
         public RoleDto Role { get; set; }
         public CityDto City { get; set; }
+        public byte IsDeleted { get; set; }
+        public int? IncludeDeleted { get; set; }
         public byte? IsDeleted { get; set; }
     }
 }

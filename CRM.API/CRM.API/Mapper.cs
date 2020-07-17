@@ -1,8 +1,10 @@
 ﻿using CRM.API.Models.Input;
 using CRM.API.Models.Output;
+using CRM.Data;
 using CRM.Data.DTO;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace CRM.API
 {
@@ -30,28 +32,22 @@ namespace CRM.API
             };
         }
 
-        public LeadDto ConvertSearchParametersInputModelToLeadDTO(SearchParametersInputModel searchParameters)
+        public LeadSearchParameters ConvertSearchParametersInputModelToLeadDTO(SearchParametersInputModel searchParameters)
         {
-            return new LeadDto()
+            return new LeadSearchParameters()
             {
+                RoleId = searchParameters.RoleId,
                 FirstName = searchParameters.FirstName,
                 LastName = searchParameters.LastName,
                 Patronymic = searchParameters.Patronymic,
                 Login = searchParameters.Login,
                 Phone = searchParameters.Phone,
                 Email = searchParameters.Email,
-                City = new CityDto()
-                {
-                    Name = searchParameters.City
-                },
-                Role = new RoleDto()
-                { 
-                    Name = searchParameters.Role
-                },
-                Address = searchParameters.Address,
-                BirthDate = Convert.ToDateTime(searchParameters.BirthDate),
-                RegistrationDate = TimeSpan.Parse(searchParameters.RegistrationDate),
-                IsDeleted = searchParameters.IsDeleted
+                CityId = searchParameters.CityId,
+                Address = searchParameters.Address,                
+                BirthDate = string.IsNullOrEmpty(searchParameters.BirthDate) ? null : (DateTime?)DateTime.ParseExact(searchParameters.BirthDate, "dd.MM.yyyy", CultureInfo.InvariantCulture),                
+                RegistrationDate = string.IsNullOrEmpty(searchParameters.RegistrationDate) ? null : (DateTime?)DateTime.ParseExact(searchParameters.RegistrationDate, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture),
+                IncludeDeleted = searchParameters.IncludeDeleted
             };
         }
 
@@ -84,6 +80,8 @@ namespace CRM.API
                 }
             }
             return leads;
-        }        
+        }
+
+        
     }
 }

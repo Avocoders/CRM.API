@@ -157,53 +157,20 @@ namespace CRM.Data
             return _connection.Query<string>("Lead_UpdateEmail", new { id, email }, commandType: CommandType.StoredProcedure).FirstOrDefault();
         }
 
-        public List<LeadDto> SearchLeads(LeadDto searchParameters)
+        public List<LeadDto> SearchLeads(LeadSearchParameters searchParameters)
         {
-            //return _connection.Query<LeadSearchParameters>("Lead_Search", new 
-            //{ 
-            //  searchParameters.Role, 
-            //  searchParameters.FirstName, 
-            //  searchParameters.LastName, 
-            //  searchParameters.Patronymic,
-            //  searchParameters.Login,
-            //  searchParameters.Phone,
-            //  searchParameters.Email,
-            //  searchParameters.City,
-            //  searchParameters.Address,
-            //  searchParameters.BirthDate,
-            //  searchParameters.RegistrationDate,
-            //  searchParameters.IsDeleted
-            //}, commandType: CommandType.StoredProcedure).ToList();
-            var leads = new List<LeadDto>();
-            _connection.Query<LeadDto, RoleDto, CityDto, LeadDto>("Lead_Search",
+            return _connection.Query<LeadDto, RoleDto, CityDto, LeadDto>("Lead_Search", 
                 (lead, role, city) =>
-                {
+                 {
                     LeadDto leadEntry;
 
                     leadEntry = lead;
                     leadEntry.Role = role;
                     leadEntry.City = city;
-                    leads.Add(leadEntry);
-
                     return leadEntry;
                 },
-                new
-                {
-                    Role = searchParameters.Role.Name,
-                    searchParameters.FirstName,
-                    searchParameters.LastName,
-                    searchParameters.Patronymic,
-                    searchParameters.Login,
-                    searchParameters.Phone,
-                    searchParameters.Email,
-                    City = searchParameters.City.Name,
-                    searchParameters.Address,
-                    searchParameters.BirthDate,
-                    searchParameters.RegistrationDate,
-                    searchParameters.IsDeleted
-                }, splitOn: "Id",
-                commandType: CommandType.StoredProcedure).ToList();
-            return leads;
+                searchParameters, splitOn: "Id",
+                commandType: CommandType.StoredProcedure).ToList();           
         }
     }
 }
