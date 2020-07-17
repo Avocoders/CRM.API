@@ -13,13 +13,11 @@ namespace CRM.Data.DTO
         public string Phone { get; set; }
         public string Email { get; set; }        
         public string Address { get; set; }
-        public DateTime? BirthDate { get; set; }
-        public TimeSpan? RegistrationDate { get; set; }
+        public DateTime BirthDate { get; set; }
+        public DateTime RegistrationDate { get; set; }
         public DateTime ChangeDate { get; set; }
         public RoleDto Role { get; set; }
-        public CityDto City { get; set; }
-        public byte IsDeleted { get; set; }
-        public int? IncludeDeleted { get; set; }
-        public byte? IsDeleted { get; set; }
+        public CityDto City { get; set; }                
+        public bool IsDeleted { get; set; }
     }
 }

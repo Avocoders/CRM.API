@@ -30,7 +30,6 @@ namespace CRM.API.Controllers
                     expires: now.Add(TimeSpan.FromMinutes(Models.TokenOptions.LIFETIME)),
                     signingCredentials: new SigningCredentials(Models.TokenOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256)
                     );
-
                 var response = new
                 {
                     access_token = new JwtSecurityTokenHandler().WriteToken(jwt),

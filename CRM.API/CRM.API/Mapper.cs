@@ -32,47 +32,46 @@ namespace CRM.API
             };
         }
 
-        public LeadSearchParameters ConvertSearchParametersInputModelToLeadDTO(SearchParametersInputModel searchParameters)
+        public LeadSearchParameters ConvertSearchParametersInputModelToLeadSearchParameters(SearchParametersInputModel InputSearchParams)
         {
             return new LeadSearchParameters()
             {
-                RoleId = searchParameters.RoleId,
-                FirstName = searchParameters.FirstName,
-                LastName = searchParameters.LastName,
-                Patronymic = searchParameters.Patronymic,
-                Login = searchParameters.Login,
-                Phone = searchParameters.Phone,
-                Email = searchParameters.Email,
-                CityId = searchParameters.CityId,
-                Address = searchParameters.Address,                
-                BirthDate = string.IsNullOrEmpty(searchParameters.BirthDate) ? null : (DateTime?)DateTime.ParseExact(searchParameters.BirthDate, "dd.MM.yyyy", CultureInfo.InvariantCulture),                
-                RegistrationDate = string.IsNullOrEmpty(searchParameters.RegistrationDate) ? null : (DateTime?)DateTime.ParseExact(searchParameters.RegistrationDate, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture),
-                IncludeDeleted = searchParameters.IncludeDeleted
+                RoleId = InputSearchParams.RoleId,
+                FirstName = InputSearchParams.FirstName,
+                LastName = InputSearchParams.LastName,
+                Patronymic = InputSearchParams.Patronymic,
+                Login = InputSearchParams.Login,
+                Phone = InputSearchParams.Phone,
+                Email = InputSearchParams.Email,
+                CityId = InputSearchParams.CityId,
+                Address = InputSearchParams.Address,                
+                BirthDate = string.IsNullOrEmpty(InputSearchParams.BirthDate) ? null : (DateTime?)DateTime.ParseExact(InputSearchParams.BirthDate, "dd.MM.yyyy", CultureInfo.InvariantCulture),                
+                RegistrationDate = string.IsNullOrEmpty(InputSearchParams.RegistrationDate) ? null : (DateTime?)DateTime.ParseExact(InputSearchParams.RegistrationDate, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture),
+                IncludeDeleted = InputSearchParams.IncludeDeleted
             };
         }
 
-        public LeadOutputModel ConvertLeadDtoToLeadOutputModel(LeadDto leadModel) => new LeadOutputModel()
+        public LeadOutputModel ConvertLeadDtoToLeadOutputModel(LeadDto leadDto) => new LeadOutputModel()
         {
-            Id = (long)leadModel.Id,
-            Role = leadModel.Role.Name,
-            FirstName = leadModel.FirstName,
-            LastName = leadModel.LastName,
-            Patronymic = leadModel.Patronymic,
-            Login = leadModel.Login,
-            Phone = leadModel.Phone,
-            Email = leadModel.Email,
-            City = leadModel.City.Name,
-            Address = leadModel.Address,
-            BirthDate = ((DateTime)leadModel.BirthDate).ToString("dd.MM.yyyy"),
-            RegistrationDate = ((TimeSpan)leadModel.RegistrationDate).ToString("dd.MM.yyyy HH:mm:ss"),
-            ChangeDate = leadModel.ChangeDate.ToString("dd.MM.yyyy HH:mm:ss")
-            //string sqlFormattedDate = ((DateTime)myDate).ToString("yyyy-MM-dd HH:mm:ss")
+            Id = (long)leadDto.Id,
+            Role = leadDto.Role.Name,
+            FirstName = leadDto.FirstName,
+            LastName = leadDto.LastName,
+            Patronymic = leadDto.Patronymic,
+            Login = leadDto.Login,
+            Phone = leadDto.Phone,
+            Email = leadDto.Email,
+            City = leadDto.City.Name,
+            Address = leadDto.Address,
+            BirthDate = ((DateTime)leadDto.BirthDate).ToString("dd.MM.yyyy"),
+            RegistrationDate = ((DateTime)leadDto.RegistrationDate).ToString("dd.MM.yyyy HH:mm:ss"),
+            ChangeDate = leadDto.ChangeDate.ToString("dd.MM.yyyy HH:mm:ss")            
         };
 
-        public List<LeadOutputModel> ConvertLeadDtosToLeadOutputModels(List<LeadDto> leadModels)
+        public List<LeadOutputModel> ConvertLeadDtosToLeadOutputModels(List<LeadDto> leadDtos)
         {
             List<LeadOutputModel> leads = new List<LeadOutputModel>();
-            foreach (var lead in leadModels)
+            foreach (var lead in leadDtos)
             {
                 if (lead != null)
                 {
@@ -80,8 +79,6 @@ namespace CRM.API
                 }
             }
             return leads;
-        }
-
-        
+        }        
     }
 }

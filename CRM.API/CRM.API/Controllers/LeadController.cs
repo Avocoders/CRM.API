@@ -78,10 +78,8 @@ namespace CRM.API.Controllers
             if (string.IsNullOrWhiteSpace(leadModel.Phone)) return BadRequest("Enter the phone number");
             if (string.IsNullOrWhiteSpace(leadModel.Address)) return BadRequest("Enter the address");
             if (string.IsNullOrWhiteSpace(leadModel.BirthDate)) return BadRequest("Enter the date of birth");
-            leadModel.Password = new PasswordEncryptor().EncryptPassword(leadModel.Password);
-            LeadDto leadDto = _mapper.ConvertLeadInputModelToLeadDTO(leadModel);
-            var lead = _repo.Add(leadDto);
-            return Ok(lead);
+            leadModel.Password = new PasswordEncryptor().EncryptPassword(leadModel.Password);          
+            return Ok(_repo.Add(_mapper.ConvertLeadInputModelToLeadDTO(leadModel)));
         }
 
         //[Authorize()]
@@ -101,9 +99,8 @@ namespace CRM.API.Controllers
             if (string.IsNullOrWhiteSpace(leadModel.BirthDate)) return BadRequest("Enter the date of birth");
             if (string.IsNullOrWhiteSpace(leadModel.Password)) return BadRequest("Enter a password");
             if (!Regex.IsMatch(leadModel.Password, patternPassword)) return BadRequest("Password have to be between 8 and 20 characters long and contain lowercase, uppercase and number, possible characters: @#$%^&+=*.-_");
-            leadModel.Password = new PasswordEncryptor().EncryptPassword(leadModel.Password);
-            LeadDto leadDTO = _mapper.ConvertLeadInputModelToLeadDTO(leadModel);
-            return Ok(_repo.Update(leadDTO));
+            leadModel.Password = new PasswordEncryptor().EncryptPassword(leadModel.Password);           
+            return Ok(_repo.Update(_mapper.ConvertLeadInputModelToLeadDTO(leadModel)));
         }
 
         //[Authorize()]      
@@ -113,7 +110,7 @@ namespace CRM.API.Controllers
             DataWrapper<LeadDto> dataWrapper = _repo.GetById(leadId);
             if (dataWrapper.Data.Id == null) return BadRequest("Lead was not found");
             _repo.Delete(leadId);
-            return Ok();
+            return Ok("Successfully deleted");
         }
 
         //[Authorize()]
@@ -136,10 +133,10 @@ namespace CRM.API.Controllers
         }
 
         //[Authorize()]
-        [HttpGet("search")]
+        [HttpPost("search")]
         public ActionResult<List<LeadOutputModel>> SearchLead(SearchParametersInputModel searchparameters)
         {
-            LeadSearchParameters searchParams = _mapper.ConvertSearchParametersInputModelToLeadDTO(searchparameters);  
+            LeadSearchParameters searchParams = _mapper.ConvertSearchParametersInputModelToLeadSearchParameters(searchparameters);  
             return Ok(_mapper.ConvertLeadDtosToLeadOutputModels(_repo.SearchLeads(searchParams)));         
         }
     }

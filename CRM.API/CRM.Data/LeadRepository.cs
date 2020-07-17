@@ -35,18 +35,17 @@ namespace CRM.Data
                     new
                     {
                         leadDto.Id,
-                    leadDto.FirstName,
-                    leadDto.LastName,
-                    leadDto.Patronymic,
-                    leadDto.Login,
-                    leadDto.Password,
-                    leadDto.Phone,
-                    leadDto.Email,
-                    CityId = leadDto.City.Id,
-                    leadDto.Address,
-                    leadDto.BirthDate
-
-                }, splitOn: "Id",
+                        leadDto.FirstName,
+                        leadDto.LastName,
+                        leadDto.Patronymic,
+                        leadDto.Login,
+                        leadDto.Password,
+                        leadDto.Phone,
+                        leadDto.Email,
+                        CityId = leadDto.City.Id,
+                        leadDto.Address,
+                        leadDto.BirthDate
+                    }, splitOn: "Id",
                     commandType: CommandType.StoredProcedure).FirstOrDefault();
                 result.IsOk = true;
             }
@@ -86,8 +85,7 @@ namespace CRM.Data
             catch(Exception e)
             {
                 results.ExceptionMessage = e.Message;
-            }
-            
+            }            
             return results;
         }
 
@@ -143,8 +141,7 @@ namespace CRM.Data
             {
                 result.ExceptionMessage = e.Message;
             }
-            return result;
-            //return _connection.Query<LeadDto>("Lead_GetByLogin", new { login }, commandType: CommandType.StoredProcedure).FirstOrDefault();            
+            return result;                       
         }
 
         public DataWrapper<LeadDto> Update(LeadDto leadDto)
@@ -233,7 +230,7 @@ namespace CRM.Data
         {
             return _connection.Query<LeadDto, RoleDto, CityDto, LeadDto>("Lead_Search", 
                 (lead, role, city) =>
-                 {
+                {
                     LeadDto leadEntry;
 
                     leadEntry = lead;
@@ -241,7 +238,8 @@ namespace CRM.Data
                     leadEntry.City = city;
                     return leadEntry;
                 },
-                searchParameters, splitOn: "Id",
+                searchParameters, 
+                splitOn: "Id",
                 commandType: CommandType.StoredProcedure).ToList();           
         }
     }

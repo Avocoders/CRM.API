@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace CRM.API.Sha256
 {
     public class PasswordEncryptor
     {
         private readonly string secretCode = "dQ7BDI967C7uSyX7";
+
         private readonly List<string> salts = new List<string>()
         {
             "sL45tY0g",
@@ -23,6 +22,7 @@ namespace CRM.API.Sha256
             "Xc3XDu72",
             "gK52BSH6"
         };
+
         public string EncryptPassword(string password)
         {
             Random random = new Random();
@@ -33,6 +33,7 @@ namespace CRM.API.Sha256
             result = converter.ComputeHash(data);
             return BitConverter.ToString(result).Replace("-", "").ToLower();
         }
+
         public bool CheckPassword(string passwordDb,string password)
         {
             for(int i=0; i < salts.Count; i++)
@@ -49,7 +50,5 @@ namespace CRM.API.Sha256
             }
             return false;
         }
-
-
     }
 }
