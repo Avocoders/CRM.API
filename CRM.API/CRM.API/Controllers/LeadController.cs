@@ -38,7 +38,7 @@ namespace CRM.API.Controllers
         public ActionResult<List<LeadOutputModel>> GetLeadsAll()
         {
             DataWrapper<List<LeadDto>> dataWrapper = _repo.GetAll();
-            return Ok(_mapper.ConvertLeadDtosToLeadOutputModels(dataWrapper.Data));
+            return MakeResponse(dataWrapper, _mapper.ConvertLeadDtosToLeadOutputModels);
         }
 
         //[Authorize()]
@@ -46,7 +46,7 @@ namespace CRM.API.Controllers
         public ActionResult<LeadOutputModel> GetLeadById(long leadId)
         {
             DataWrapper<LeadDto> dataWrapper = _repo.GetById(leadId);
-            return Ok(_mapper.ConvertLeadDtoToLeadOutputModel(dataWrapper.Data));
+            return MakeResponse(dataWrapper, _mapper.ConvertLeadDtoToLeadOutputModel);
         }
 
         //[Authorize()]
@@ -129,15 +129,36 @@ namespace CRM.API.Controllers
                 if (dataWrapper.Data != 0) return BadRequest("User with this email already exists");
                 if ((!Regex.IsMatch(emailModel.Email, patternEmail))) return BadRequest("The Email is incorrect");
             }
-            return Ok(_repo.UpdateEmailByLeadId(emailModel.Id, emailModel.Email));
+            return OK(_repo.UpdateEmailByLeadId(emailModel.Id, emailModel.Email));
         }
 
         //[Authorize()]
         [HttpPost("search")]
         public ActionResult<List<LeadOutputModel>> SearchLead(SearchParametersInputModel searchparameters)
         {
-            LeadSearchParameters searchParams = _mapper.ConvertSearchParametersInputModelToLeadSearchParameters(searchparameters);  
-            return Ok(_mapper.ConvertLeadDtosToLeadOutputModels(_repo.SearchLeads(searchParams)));         
+            LeadSearchParameters searchParams = _mapper.ConvertSearchParametersInputModelToLeadSearchParameters(searchparameters);
+            DataWrapper<List<LeadDto>> dataWrapper = _repo.SearchLeads(searchParams);
+            return MakeResponse(dataWrapper, _mapper.ConvertLeadDtosToLeadOutputModels);         
+        }
+
+        private delegate T DtoConverter<T,K>(K dto);
+
+        private ActionResult<T> MakeResponse<T>(DataWrapper<T> dataWrapper)
+        {
+            if (!dataWrapper.IsOk)
+            {
+                return BadRequest(dataWrapper.ExceptionMessage);
+            }
+            return Ok(dataWrapper.Data);
+        }
+
+        private ActionResult<T> MakeResponse<T, K>(DataWrapper<K> dataWrapper, DtoConverter<T, K> dtoConverter)
+        {
+            if (!dataWrapper.IsOk)
+            {
+                return BadRequest(dataWrapper.ExceptionMessage);
+            }
+            return Ok(dtoConverter(dataWrapper.Data));
         }
     }
 }
