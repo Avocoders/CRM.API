@@ -43,9 +43,9 @@ namespace CRM.API.Controllers
 
         //[Authorize()]
         [HttpGet("{leadId}")]
-        public ActionResult<LeadOutputModel> GetLeadById(long leadId)
+        public ActionResult<LeadOutputModel> GetLeadById(long leadId) 
         {
-            DataWrapper<LeadDto> dataWrapper = _repo.GetById(leadId);
+            DataWrapper<LeadDto> dataWrapper = _repo.GetById(leadId);                           
             return MakeResponse(dataWrapper, _mapper.ConvertLeadDtoToLeadOutputModel);
         }
 
@@ -78,8 +78,9 @@ namespace CRM.API.Controllers
             if (string.IsNullOrWhiteSpace(leadModel.Phone)) return BadRequest("Enter the phone number");
             if (string.IsNullOrWhiteSpace(leadModel.Address)) return BadRequest("Enter the address");
             if (string.IsNullOrWhiteSpace(leadModel.BirthDate)) return BadRequest("Enter the date of birth");
-            leadModel.Password = new PasswordEncryptor().EncryptPassword(leadModel.Password);          
-            return Ok(_repo.Add(_mapper.ConvertLeadInputModelToLeadDTO(leadModel)));
+            leadModel.Password = new PasswordEncryptor().EncryptPassword(leadModel.Password);
+            DataWrapper<LeadDto> newDataWrapper = _repo.Add(_mapper.ConvertLeadInputModelToLeadDTO(leadModel));
+            return MakeResponse(newDataWrapper, _mapper.ConvertLeadDtoToLeadOutputModel);
         }
 
         //[Authorize()]
@@ -99,8 +100,9 @@ namespace CRM.API.Controllers
             if (string.IsNullOrWhiteSpace(leadModel.BirthDate)) return BadRequest("Enter the date of birth");
             if (string.IsNullOrWhiteSpace(leadModel.Password)) return BadRequest("Enter a password");
             if (!Regex.IsMatch(leadModel.Password, patternPassword)) return BadRequest("Password have to be between 8 and 20 characters long and contain lowercase, uppercase and number, possible characters: @#$%^&+=*.-_");
-            leadModel.Password = new PasswordEncryptor().EncryptPassword(leadModel.Password);           
-            return Ok(_repo.Update(_mapper.ConvertLeadInputModelToLeadDTO(leadModel)));
+            leadModel.Password = new PasswordEncryptor().EncryptPassword(leadModel.Password);
+            DataWrapper<LeadDto> newDataWrapper = _repo.Update(_mapper.ConvertLeadInputModelToLeadDTO(leadModel));
+            return MakeResponse(newDataWrapper, _mapper.ConvertLeadDtoToLeadOutputModel);
         }
 
         //[Authorize()]      
@@ -129,7 +131,8 @@ namespace CRM.API.Controllers
                 if (dataWrapper.Data != 0) return BadRequest("User with this email already exists");
                 if ((!Regex.IsMatch(emailModel.Email, patternEmail))) return BadRequest("The Email is incorrect");
             }
-            return OK(_repo.UpdateEmailByLeadId(emailModel.Id, emailModel.Email));
+            DataWrapper<string> newDataWrapper = _repo.UpdateEmailByLeadId(emailModel.Id, emailModel.Email);
+            return MakeResponse(newDataWrapper);
         }
 
         //[Authorize()]

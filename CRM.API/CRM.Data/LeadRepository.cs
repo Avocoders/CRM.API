@@ -105,8 +105,7 @@ namespace CRM.Data
 
                         return leadEntry;
                     },
-                    new { leadId },
-                    splitOn: "Id",
+                    new { leadId },                    
                     commandType: CommandType.StoredProcedure).FirstOrDefault();
                 result.IsOk = true;
             }
@@ -222,7 +221,7 @@ namespace CRM.Data
             try
             {
                 result.Data = _connection.Query<string>("Lead_UpdateEmail", new { id, email }, commandType: CommandType.StoredProcedure).FirstOrDefault();
-                //result.IsOk = true;
+                result.IsOk = true;
             }
             catch(Exception e)
             {
