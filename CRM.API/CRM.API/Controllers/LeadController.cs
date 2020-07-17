@@ -38,15 +38,15 @@ namespace CRM.API.Controllers
         public ActionResult<List<LeadOutputModel>> GetLeadsAll()
         {
             DataWrapper<List<LeadDto>> dataWrapper = _repo.GetAll();
-            return Ok(_mapper.ConvertLeadDtosToLeadOutputModels(dataWrapper.Data));
+            return MakeResponse(dataWrapper, _mapper.ConvertLeadDtosToLeadOutputModels);
         }
 
         //[Authorize()]
         [HttpGet("{leadId}")]
-        public ActionResult<LeadOutputModel> GetLeadById(long leadId)
+        public ActionResult<LeadOutputModel> GetLeadById(long leadId) 
         {
-            DataWrapper<LeadDto> dataWrapper = _repo.GetById(leadId);
-            return Ok(_mapper.ConvertLeadDtoToLeadOutputModel(dataWrapper.Data));
+            DataWrapper<LeadDto> dataWrapper = _repo.GetById(leadId);                           
+            return MakeResponse(dataWrapper, _mapper.ConvertLeadDtoToLeadOutputModel);
         }
 
         //[Authorize()]
@@ -78,8 +78,9 @@ namespace CRM.API.Controllers
             if (string.IsNullOrWhiteSpace(leadModel.Phone)) return BadRequest("Enter the phone number");
             if (string.IsNullOrWhiteSpace(leadModel.Address)) return BadRequest("Enter the address");
             if (string.IsNullOrWhiteSpace(leadModel.BirthDate)) return BadRequest("Enter the date of birth");
-            leadModel.Password = new PasswordEncryptor().EncryptPassword(leadModel.Password);          
-            return Ok(_repo.Add(_mapper.ConvertLeadInputModelToLeadDTO(leadModel)));
+            leadModel.Password = new PasswordEncryptor().EncryptPassword(leadModel.Password);
+            DataWrapper<LeadDto> newDataWrapper = _repo.Add(_mapper.ConvertLeadInputModelToLeadDTO(leadModel));
+            return MakeResponse(newDataWrapper, _mapper.ConvertLeadDtoToLeadOutputModel);
         }
 
         //[Authorize()]
@@ -99,8 +100,9 @@ namespace CRM.API.Controllers
             if (string.IsNullOrWhiteSpace(leadModel.BirthDate)) return BadRequest("Enter the date of birth");
             if (string.IsNullOrWhiteSpace(leadModel.Password)) return BadRequest("Enter a password");
             if (!Regex.IsMatch(leadModel.Password, patternPassword)) return BadRequest("Password have to be between 8 and 20 characters long and contain lowercase, uppercase and number, possible characters: @#$%^&+=*.-_");
-            leadModel.Password = new PasswordEncryptor().EncryptPassword(leadModel.Password);           
-            return Ok(_repo.Update(_mapper.ConvertLeadInputModelToLeadDTO(leadModel)));
+            leadModel.Password = new PasswordEncryptor().EncryptPassword(leadModel.Password);
+            DataWrapper<LeadDto> newDataWrapper = _repo.Update(_mapper.ConvertLeadInputModelToLeadDTO(leadModel));
+            return MakeResponse(newDataWrapper, _mapper.ConvertLeadDtoToLeadOutputModel);
         }
 
         //[Authorize()]      
@@ -129,15 +131,37 @@ namespace CRM.API.Controllers
                 if (dataWrapper.Data != 0) return BadRequest("User with this email already exists");
                 if ((!Regex.IsMatch(emailModel.Email, patternEmail))) return BadRequest("The Email is incorrect");
             }
-            return Ok(_repo.UpdateEmailByLeadId(emailModel.Id, emailModel.Email));
+            DataWrapper<string> newDataWrapper = _repo.UpdateEmailByLeadId(emailModel.Id, emailModel.Email);
+            return MakeResponse(newDataWrapper);
         }
 
         //[Authorize()]
         [HttpPost("search")]
         public ActionResult<List<LeadOutputModel>> SearchLead(SearchParametersInputModel searchparameters)
         {
-            LeadSearchParameters searchParams = _mapper.ConvertSearchParametersInputModelToLeadSearchParameters(searchparameters);  
-            return Ok(_mapper.ConvertLeadDtosToLeadOutputModels(_repo.SearchLeads(searchParams)));         
+            LeadSearchParameters searchParams = _mapper.ConvertSearchParametersInputModelToLeadSearchParameters(searchparameters);
+            DataWrapper<List<LeadDto>> dataWrapper = _repo.SearchLeads(searchParams);
+            return MakeResponse(dataWrapper, _mapper.ConvertLeadDtosToLeadOutputModels);         
+        }
+
+        private delegate T DtoConverter<T,K>(K dto);
+
+        private ActionResult<T> MakeResponse<T>(DataWrapper<T> dataWrapper)
+        {
+            if (!dataWrapper.IsOk)
+            {
+                return BadRequest(dataWrapper.ExceptionMessage);
+            }
+            return Ok(dataWrapper.Data);
+        }
+
+        private ActionResult<T> MakeResponse<T, K>(DataWrapper<K> dataWrapper, DtoConverter<T, K> dtoConverter)
+        {
+            if (!dataWrapper.IsOk)
+            {
+                return BadRequest(dataWrapper.ExceptionMessage);
+            }
+            return Ok(dtoConverter(dataWrapper.Data));
         }
     }
 }

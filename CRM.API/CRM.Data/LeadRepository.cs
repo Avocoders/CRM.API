@@ -94,20 +94,20 @@ namespace CRM.Data
             try
             {
                 result.Data = _connection.Query<LeadDto, RoleDto, CityDto, LeadDto>(
-                "Lead_GetById",
-                (lead, role, city) =>
-                {
-                    LeadDto leadEntry;
+                    "Lead_GetById",
+                    (lead, role, city) =>
+                    {
+                        LeadDto leadEntry;
 
-                    leadEntry = lead;
-                    leadEntry.Role = role;
-                    leadEntry.City = city;
+                        leadEntry = lead;
+                        leadEntry.Role = role;
+                        leadEntry.City = city;
 
-                    return leadEntry;
-                },
-                new { leadId },
-                splitOn: "Id",
-                commandType: CommandType.StoredProcedure).FirstOrDefault();
+                        return leadEntry;
+                    },
+                    new { leadId },                    
+                    commandType: CommandType.StoredProcedure).FirstOrDefault();
+                result.IsOk = true;
             }
             catch(Exception e)
             {
@@ -122,19 +122,20 @@ namespace CRM.Data
             try
             {
                 result.Data = _connection.Query<LeadDto, RoleDto, CityDto, LeadDto>(
-                "Lead_GetByLogin",
-                (lead, role, city) =>
-                {
-                    LeadDto leadEntry;
+                    "Lead_GetByLogin",
+                    (lead, role, city) =>
+                    {
+                         LeadDto leadEntry;
 
-                    leadEntry = lead;
-                    leadEntry.Role = role;
-                    leadEntry.City = city;
-                    return leadEntry;
-                },
-                new { login },
-                splitOn: "Id",
-                commandType: CommandType.StoredProcedure).FirstOrDefault();
+                         leadEntry = lead;
+                         leadEntry.Role = role;
+                         leadEntry.City = city;
+                         return leadEntry;
+                    },
+                    new { login },
+                    splitOn: "Id",
+                    commandType: CommandType.StoredProcedure).FirstOrDefault();
+                result.IsOk = true;
             }
             catch(Exception e)
             {
@@ -149,32 +150,33 @@ namespace CRM.Data
             try
             {
                 result.Data = _connection.Query<LeadDto, RoleDto, CityDto, LeadDto>("Lead_Add_Or_Update",
-                (lead, role, city) =>
-                {
-                    LeadDto leadEntry;
+                    (lead, role, city) =>
+                    {
+                         LeadDto leadEntry;
 
-                    leadEntry = lead;
-                    leadEntry.Role = role;
-                    leadEntry.City = city;
+                         leadEntry = lead;
+                         leadEntry.Role = role;
+                         leadEntry.City = city;
                     
-                    return leadEntry;
-                },
-                new
-                {
-                    leadDto.Id,
-                    leadDto.FirstName,
-                    leadDto.LastName,
-                    leadDto.Patronymic,
-                    leadDto.Login,
-                    leadDto.Password,
-                    leadDto.Phone,
-                    leadDto.Email,  
-                    CityId = leadDto.City.Id,
-                    leadDto.Address,
-                    leadDto.BirthDate
-                },
-                splitOn: "Id",
-                commandType: CommandType.StoredProcedure).FirstOrDefault();
+                         return leadEntry;
+                    },
+                    new
+                    {
+                         leadDto.Id,
+                         leadDto.FirstName,
+                         leadDto.LastName,
+                         leadDto.Patronymic,
+                         leadDto.Login,
+                         leadDto.Password,
+                         leadDto.Phone,
+                         leadDto.Email,  
+                         CityId = leadDto.City.Id,
+                         leadDto.Address,
+                         leadDto.BirthDate
+                    },
+                    splitOn: "Id",
+                    commandType: CommandType.StoredProcedure).FirstOrDefault();
+                result.IsOk = true;
             }
             catch(Exception e)
             {
@@ -189,6 +191,7 @@ namespace CRM.Data
             try
             {
                 result.Data = _connection.Query<int>("Lead_FindByLogin", new { login }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+                result.IsOk = true;
             }
             catch(Exception e)
             {
@@ -203,6 +206,7 @@ namespace CRM.Data
             try
             {
                 result.Data = _connection.Query<int>("Lead_FindByEmail", new { email }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+                result.IsOk = true;
             }
             catch(Exception e)
             {
@@ -217,6 +221,7 @@ namespace CRM.Data
             try
             {
                 result.Data = _connection.Query<string>("Lead_UpdateEmail", new { id, email }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+                result.IsOk = true;
             }
             catch(Exception e)
             {
@@ -225,21 +230,31 @@ namespace CRM.Data
             return result;
         }
 
-        public List<LeadDto> SearchLeads(LeadSearchParameters searchParameters)
+        public DataWrapper<List<LeadDto>> SearchLeads(LeadSearchParameters searchParameters)
         {
-            return _connection.Query<LeadDto, RoleDto, CityDto, LeadDto>("Lead_Search", 
-                (lead, role, city) =>
-                {
-                    LeadDto leadEntry;
+            var results = new DataWrapper<List<LeadDto>>();
+            try
+            {
+                results.Data = _connection.Query<LeadDto, RoleDto, CityDto, LeadDto>("Lead_Search",
+                    (lead, role, city) =>
+                    {
+                        LeadDto leadEntry;
 
-                    leadEntry = lead;
-                    leadEntry.Role = role;
-                    leadEntry.City = city;
-                    return leadEntry;
-                },
-                searchParameters, 
-                splitOn: "Id",
-                commandType: CommandType.StoredProcedure).ToList();           
+                        leadEntry = lead;
+                        leadEntry.Role = role;
+                        leadEntry.City = city;
+                        return leadEntry;
+                    },
+                    searchParameters,
+                    splitOn: "Id",
+                    commandType: CommandType.StoredProcedure).ToList();
+                results.IsOk = true;
+            }
+            catch (Exception e)
+            {
+                results.ExceptionMessage = e.Message;
+            }
+            return results;
         }
     }
 }
