@@ -66,7 +66,7 @@ namespace CRM.Data
             var results = new DataWrapper<List<LeadDto>>();
             try
             {
-                _connection.Query<LeadDto, RoleDto, CityDto, LeadDto>(
+                results.Data =_connection.Query<LeadDto, RoleDto, CityDto, LeadDto>(
                     "Lead_GetAll",
                     (lead, role, city) =>
                     {
@@ -75,8 +75,7 @@ namespace CRM.Data
                         leadEntry = lead;
                         leadEntry.Role = role;
                         leadEntry.City = city;
-                        results.Data.Add(leadEntry);
-
+                        
                         return leadEntry;
                     },
                     splitOn: "Id").ToList();
