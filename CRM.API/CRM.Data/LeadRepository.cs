@@ -160,7 +160,7 @@ namespace CRM.Data
                     leadEntry = lead;
                     leadEntry.Role = role;
                     leadEntry.City = city;
-
+                    
                     return leadEntry;
                 },
                 new
@@ -172,7 +172,7 @@ namespace CRM.Data
                     leadDto.Login,
                     leadDto.Password,
                     leadDto.Phone,
-                    leadDto.Email,
+                    leadDto.Email,  
                     CityId = leadDto.City.Id,
                     leadDto.Address,
                     leadDto.BirthDate
@@ -227,6 +227,22 @@ namespace CRM.Data
                 result.ExceptionMessage = e.Message;
             }
             return result;
+        }
+
+        public List<LeadDto> SearchLeads(LeadSearchParameters searchParameters)
+        {
+            return _connection.Query<LeadDto, RoleDto, CityDto, LeadDto>("Lead_Search", 
+                (lead, role, city) =>
+                 {
+                    LeadDto leadEntry;
+
+                    leadEntry = lead;
+                    leadEntry.Role = role;
+                    leadEntry.City = city;
+                    return leadEntry;
+                },
+                searchParameters, splitOn: "Id",
+                commandType: CommandType.StoredProcedure).ToList();           
         }
     }
 }

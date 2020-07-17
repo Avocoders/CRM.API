@@ -120,7 +120,8 @@ namespace CRM.API.Controllers
         [HttpPatch]
         public ActionResult<string> UpdateEmailByLeadId(EmailInputModel emailModel)
         {
-            if (emailModel.Id == null) return BadRequest("Lead was not found");
+            var leadId = _repo.GetById(emailModel.Id.Value);
+            if (leadId == null) return BadRequest("Lead was not found");
             if (string.IsNullOrWhiteSpace(emailModel.Email))
             {
                 return BadRequest("Enter the email");
@@ -132,6 +133,14 @@ namespace CRM.API.Controllers
                 if ((!Regex.IsMatch(emailModel.Email, patternEmail))) return BadRequest("The Email is incorrect");
             }
             return Ok(_repo.UpdateEmailByLeadId(emailModel.Id, emailModel.Email));
+        }
+
+        //[Authorize()]
+        [HttpGet("search")]
+        public ActionResult<List<LeadOutputModel>> SearchLead(SearchParametersInputModel searchparameters)
+        {
+            LeadSearchParameters searchParams = _mapper.ConvertSearchParametersInputModelToLeadDTO(searchparameters);  
+            return Ok(_mapper.ConvertLeadDtosToLeadOutputModels(_repo.SearchLeads(searchParams)));         
         }
     }
 }
