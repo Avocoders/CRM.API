@@ -7,7 +7,7 @@ namespace CRM.Data
     {
         public static IDbConnection GetConnection()
         {
-            string connectionString = @"Data Source=80.78.240.16;Initial Catalog=CRM_Test.DB;User Id = tSystem;Password = qwe!23";
+            string connectionString = @"Data Source=80.78.240.16;Initial Catalog=CRM.DB;User Id = tSystem;Password = qwe!23";
             IDbConnection connection = new SqlConnection(connectionString);
             return connection;
         }
