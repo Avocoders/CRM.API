@@ -4,6 +4,7 @@ using CRM.Data;
 using CRM.Data.DTO;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace CRM.API
 {
@@ -35,20 +36,18 @@ namespace CRM.API
         {
             return new LeadSearchParameters()
             {
-                Role = searchParameters.Role,
+                RoleId = searchParameters.RoleId,
                 FirstName = searchParameters.FirstName,
                 LastName = searchParameters.LastName,
                 Patronymic = searchParameters.Patronymic,
                 Login = searchParameters.Login,
                 Phone = searchParameters.Phone,
                 Email = searchParameters.Email,
-                City = searchParameters.City,
-                Address = searchParameters.Address,
-                BirthDate = searchParameters.BirthDate,
-                //BirthDate = Convert.ToDateTime(searchParameters.BirthDate),
-                RegistrationDate = searchParameters.RegistrationDate,
-                //RegistrationDate = Convert.ToDateTime(searchParameters.RegistrationDate),
-                IncludeDeleted = searchParameters.IsDeleted
+                CityId = searchParameters.CityId,
+                Address = searchParameters.Address,                
+                BirthDate = string.IsNullOrEmpty(searchParameters.BirthDate) ? null : (DateTime?)DateTime.ParseExact(searchParameters.BirthDate, "dd.MM.yyyy", CultureInfo.InvariantCulture),                
+                RegistrationDate = string.IsNullOrEmpty(searchParameters.RegistrationDate) ? null : (DateTime?)DateTime.ParseExact(searchParameters.RegistrationDate, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture),
+                IncludeDeleted = searchParameters.IncludeDeleted
             };
         }
 
@@ -85,37 +84,6 @@ namespace CRM.API
             return leads;
         }
 
-        public LeadOutputModel ConvertDtoToLeadOutputModel(LeadSearchParameters leadModel)
-        {
-            return new LeadOutputModel()
-            {
-                Id = (long)leadModel.Id,
-                Role = leadModel.Role,
-                FirstName = leadModel.FirstName,
-                LastName = leadModel.LastName,
-                Patronymic = leadModel.Patronymic,
-                Login = leadModel.Login,
-                Phone = leadModel.Phone,
-                Email = leadModel.Email,
-                City = leadModel.City,
-                Address = leadModel.Address,
-                BirthDate = leadModel.BirthDate,
-                RegistrationDate = leadModel.RegistrationDate,
-                ChangeDate = leadModel.ChangeDate.ToString("dd.MM.yyyy HH:mm:ss")
-            };
-        }
-
-        public List<LeadOutputModel> ConvertDtosToLeadOutputModels(List<LeadSearchParameters> leadModels)
-        {
-            List<LeadOutputModel> leads = new List<LeadOutputModel>();
-            foreach (var lead in leadModels)
-            {
-                if (lead != null)
-                {
-                    leads.Add(new Mapper().ConvertDtoToLeadOutputModel(lead));
-                }
-            }
-            return leads;
-        }
+        
     }
 }

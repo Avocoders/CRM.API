@@ -126,11 +126,8 @@ namespace CRM.API.Controllers
         [HttpGet("search")]
         public ActionResult<List<LeadOutputModel>> SearchLead(SearchParametersInputModel searchparameters)
         {
-            LeadSearchParameters leadDto = _mapper.ConvertSearchParametersInputModelToLeadDTO(searchparameters);
-            List <LeadSearchParameters> leadsDto = _repo.SearchLeads(leadDto);
-            List<LeadOutputModel> model = _mapper.ConvertDtosToLeadOutputModels(leadsDto);
-            return Ok(model);         
+            LeadSearchParameters searchParams = _mapper.ConvertSearchParametersInputModelToLeadDTO(searchparameters);  
+            return Ok(_mapper.ConvertLeadDtosToLeadOutputModels(_repo.SearchLeads(searchParams)));         
         }
-
     }
 }
