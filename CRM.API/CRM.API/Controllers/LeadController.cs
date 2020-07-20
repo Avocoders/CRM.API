@@ -21,10 +21,25 @@ namespace CRM.API.Controllers
         
         private readonly LeadRepository _repo;
 
+        private bool badLogin = true;
+        public string newLogin;
+
         string patternPassword = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])([a-zA-Z0-9@#$%^&+=*.\-_]){8,20}$";
         string patternLogin = @"^((?!.*@.*\..*$))([a-zA-Z0-9@#$%^&+=*.\-_]){6,}$";
         string patternEmail = @"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
                 @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-0-9a-z]*[0-9a-z]*\.)+[a-z0-9][\-a-z0-9]{0,22}[a-z0-9]))$";
+
+        private string CreateLogin()
+        {
+            DataWrapper<int> dataWrapper;
+            while (badLogin)
+            {
+                newLogin = new LoginEncryptor().EncryptorLogin();
+                dataWrapper = _repo.FindLeadByLogin(newLogin);
+                if (dataWrapper.Data == 0) badLogin = false;                
+            }
+            return newLogin;
+        }
 
         public LeadController(ILogger<LeadController> logger)
         {
@@ -51,22 +66,22 @@ namespace CRM.API.Controllers
 
         //[Authorize()]
         [HttpPost]
-        public ActionResult<LeadOutputModel> PostLead(LeadInputModel leadModel)
+        public ActionResult<LeadOutputModel> CreateLead(LeadInputModel leadModel)
         {
             DataWrapper<int> dataWrapper = new DataWrapper<int>();
             if (string.IsNullOrWhiteSpace(leadModel.FirstName)) return BadRequest("Enter the name");
             if (string.IsNullOrWhiteSpace(leadModel.LastName)) return BadRequest("Enter the last name");
             if (string.IsNullOrWhiteSpace(leadModel.Login)) 
             {
-                leadModel.Login = new LoginEncryptor().EncryptorLogin();
-            } 
-                if(string.IsNullOrWhiteSpace(leadModel.Email)) return BadRequest("Enter a login or the email");
+                leadModel.Login = CreateLogin();                
+            }             
             if (!string.IsNullOrWhiteSpace(leadModel.Login))
             {
                 dataWrapper = _repo.FindLeadByLogin(leadModel.Login);
                 if (dataWrapper.Data != 0) return BadRequest("User with this login already exists");
                 if (!Regex.IsMatch(leadModel.Login, patternLogin)) return BadRequest("The Login is incorrect");
             }
+            if (string.IsNullOrWhiteSpace(leadModel.Email)) return BadRequest("Enter the email");
             if (!string.IsNullOrWhiteSpace(leadModel.Email))
             {
                 dataWrapper = _repo.FindLeadByEmail(leadModel.Email);
