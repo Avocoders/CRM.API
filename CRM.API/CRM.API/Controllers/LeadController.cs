@@ -24,9 +24,9 @@ namespace CRM.API.Controllers
         private bool badLogin = true;
         public string newLogin;
 
-        string patternPassword = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])([a-zA-Z0-9@#$%^&+=*.\-_]){8,20}$";
-        string patternLogin = @"^((?!.*@.*\..*$))([a-zA-Z0-9@#$%^&+=*.\-_]){6,}$";
-        string patternEmail = @"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
+        string constantForPassword = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])([a-zA-Z0-9@#$%^&+=*.\-_]){8,20}$";
+        string constantForLogin = @"^((?!.*@.*\..*$))([a-zA-Z0-9@#$%^&+=*.\-_]){6,}$";
+        string constantForEmail = @"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
                 @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-0-9a-z]*[0-9a-z]*\.)+[a-z0-9][\-a-z0-9]{0,22}[a-z0-9]))$";
 
         private string CreateLogin()
@@ -79,17 +79,17 @@ namespace CRM.API.Controllers
             {
                 dataWrapper = _repo.FindLeadByLogin(leadModel.Login);
                 if (dataWrapper.Data != 0) return BadRequest("User with this login already exists");
-                if (!Regex.IsMatch(leadModel.Login, patternLogin)) return BadRequest("The Login is incorrect");
+                if (!Regex.IsMatch(leadModel.Login, constantForLogin)) return BadRequest("The Login is incorrect");
             }
             if (string.IsNullOrWhiteSpace(leadModel.Email)) return BadRequest("Enter the email");
             if (!string.IsNullOrWhiteSpace(leadModel.Email))
             {
                 dataWrapper = _repo.FindLeadByEmail(leadModel.Email);
                 if (dataWrapper.Data != 0) return BadRequest("User with this email already exists");
-                if((!Regex.IsMatch(leadModel.Email, patternEmail))) return BadRequest("The Email is incorrect");
+                if((!Regex.IsMatch(leadModel.Email, constantForEmail))) return BadRequest("The Email is incorrect");
             }
             if (string.IsNullOrWhiteSpace(leadModel.Password)) return BadRequest("Enter a password");
-            if (!Regex.IsMatch(leadModel.Password, patternPassword)) return BadRequest("Password have to be between 8 and 20 characters long and contain lowercase, uppercase and number, possible characters: @#$%^&+=*.-_");
+            if (!Regex.IsMatch(leadModel.Password, constantForPassword)) return BadRequest("Password have to be between 8 and 20 characters long and contain lowercase, uppercase and number, possible characters: @#$%^&+=*.-_");
             if (string.IsNullOrWhiteSpace(leadModel.Phone)) return BadRequest("Enter the phone number");
             if (string.IsNullOrWhiteSpace(leadModel.Address)) return BadRequest("Enter the address");
             if (string.IsNullOrWhiteSpace(leadModel.BirthDate)) return BadRequest("Enter the date of birth");
@@ -114,7 +114,7 @@ namespace CRM.API.Controllers
             if (string.IsNullOrWhiteSpace(leadModel.Address)) return BadRequest("Enter the address");
             if (string.IsNullOrWhiteSpace(leadModel.BirthDate)) return BadRequest("Enter the date of birth");
             if (string.IsNullOrWhiteSpace(leadModel.Password)) return BadRequest("Enter a password");
-            if (!Regex.IsMatch(leadModel.Password, patternPassword)) return BadRequest("Password have to be between 8 and 20 characters long and contain lowercase, uppercase and number, possible characters: @#$%^&+=*.-_");
+            if (!Regex.IsMatch(leadModel.Password, constantForPassword)) return BadRequest("Password have to be between 8 and 20 characters long and contain lowercase, uppercase and number, possible characters: @#$%^&+=*.-_");
             leadModel.Password = new PasswordEncryptor().EncryptPassword(leadModel.Password);
             DataWrapper<LeadDto> newDataWrapper = _repo.Update(_mapper.ConvertLeadInputModelToLeadDTO(leadModel));
             return MakeResponse(newDataWrapper, _mapper.ConvertLeadDtoToLeadOutputModel);
@@ -144,7 +144,7 @@ namespace CRM.API.Controllers
             {
                 DataWrapper<int> dataWrapper = _repo.FindLeadByEmail(emailModel.Email);
                 if (dataWrapper.Data != 0) return BadRequest("User with this email already exists");
-                if ((!Regex.IsMatch(emailModel.Email, patternEmail))) return BadRequest("The Email is incorrect");
+                if ((!Regex.IsMatch(emailModel.Email, constantForEmail))) return BadRequest("The Email is incorrect");
             }
             DataWrapper<string> newDataWrapper = _repo.UpdateEmailByLeadId(emailModel.Id, emailModel.Email);
             return MakeResponse(newDataWrapper);
