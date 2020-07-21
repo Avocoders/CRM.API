@@ -37,16 +37,25 @@ namespace CRM.API
             return new LeadSearchParameters()
             {
                 RoleId = InputSearchParams.RoleId,
+                FirstNameSearchMode = InputSearchParams.FirstNameSearchMode,
                 FirstName = InputSearchParams.FirstName,
+                LastNameSearchMode = InputSearchParams.LastNameSearchMode,
                 LastName = InputSearchParams.LastName,
+                PatronymicSearchMode = InputSearchParams.PatronymicSearchMode,
                 Patronymic = InputSearchParams.Patronymic,
+                LoginSearchMode = InputSearchParams.LoginSearchMode,
                 Login = InputSearchParams.Login,
+                PhoneSearchMode = InputSearchParams.PhoneSearchMode,
                 Phone = InputSearchParams.Phone,
+                EmailSearchMode = InputSearchParams.EmailSearchMode,
                 Email = InputSearchParams.Email,
                 CityId = InputSearchParams.CityId,
+                AddressSearchMode = InputSearchParams.AddressSearchMode,
                 Address = InputSearchParams.Address,                
-                BirthDate = string.IsNullOrEmpty(InputSearchParams.BirthDate) ? null : (DateTime?)DateTime.ParseExact(InputSearchParams.BirthDate, "dd.MM.yyyy", CultureInfo.InvariantCulture),                
-                RegistrationDate = string.IsNullOrEmpty(InputSearchParams.RegistrationDate) ? null : (DateTime?)DateTime.ParseExact(InputSearchParams.RegistrationDate, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture),
+                BirthDateBegin = string.IsNullOrEmpty(InputSearchParams.BirthDateBegin) ? null : (DateTime?)DateTime.ParseExact(InputSearchParams.RegistrationDateBegin, "dd.MM.yyyy", CultureInfo.InvariantCulture),
+                BirthDateEnd = string.IsNullOrEmpty(InputSearchParams.BirthDateEnd) ? null : (DateTime?)DateTime.ParseExact(InputSearchParams.BirthDateEnd, "dd.MM.yyyy", CultureInfo.InvariantCulture),
+                RegistrationDateBegin = string.IsNullOrEmpty(InputSearchParams.RegistrationDateBegin) ? null : (DateTime?)DateTime.ParseExact(InputSearchParams.RegistrationDateBegin, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture),
+                RegistrationDateEnd = string.IsNullOrEmpty(InputSearchParams.RegistrationDateEnd) ? null : (DateTime?)DateTime.ParseExact(InputSearchParams.RegistrationDateEnd, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture),
                 IncludeDeleted = InputSearchParams.IncludeDeleted
             };
         }
