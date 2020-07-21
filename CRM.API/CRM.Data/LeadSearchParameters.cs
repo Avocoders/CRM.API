@@ -24,6 +24,6 @@ namespace CRM.Data
 		public DateTime? BirthDateEnd { get; set; }
 		public DateTime? RegistrationDateBegin { get; set; }
 		public DateTime? RegistrationDateEnd { get; set; }
-		public bool? IncludeDeleted { get; set; }
+		public byte? IncludeDeleted { get; set; }
     }
 }

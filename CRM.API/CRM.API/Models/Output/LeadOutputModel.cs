@@ -14,6 +14,7 @@
         public string RegistrationDate { get; set; }
         public string ChangeDate { get; set; }
         public string Role { get; set; }
-        public string City { get; set; }        
+        public string City { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }
