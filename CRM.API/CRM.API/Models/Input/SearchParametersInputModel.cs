@@ -22,6 +22,6 @@
 		public string BirthDateEnd { get; set; }
 		public string RegistrationDateBegin { get; set; }
 		public string RegistrationDateEnd { get; set; }
-		public bool? IncludeDeleted { get; set; }
+		public byte? IncludeDeleted { get; set; }
 	}
 }

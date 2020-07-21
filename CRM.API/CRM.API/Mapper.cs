@@ -52,7 +52,7 @@ namespace CRM.API
                 CityId = InputSearchParams.CityId,
                 AddressSearchMode = InputSearchParams.AddressSearchMode,
                 Address = InputSearchParams.Address,                
-                BirthDateBegin = string.IsNullOrEmpty(InputSearchParams.BirthDateBegin) ? null : (DateTime?)DateTime.ParseExact(InputSearchParams.RegistrationDateBegin, "dd.MM.yyyy", CultureInfo.InvariantCulture),
+                BirthDateBegin = string.IsNullOrEmpty(InputSearchParams.BirthDateBegin) ? null : (DateTime?)DateTime.ParseExact(InputSearchParams.BirthDateBegin, "dd.MM.yyyy", CultureInfo.InvariantCulture),
                 BirthDateEnd = string.IsNullOrEmpty(InputSearchParams.BirthDateEnd) ? null : (DateTime?)DateTime.ParseExact(InputSearchParams.BirthDateEnd, "dd.MM.yyyy", CultureInfo.InvariantCulture),
                 RegistrationDateBegin = string.IsNullOrEmpty(InputSearchParams.RegistrationDateBegin) ? null : (DateTime?)DateTime.ParseExact(InputSearchParams.RegistrationDateBegin, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture),
                 RegistrationDateEnd = string.IsNullOrEmpty(InputSearchParams.RegistrationDateEnd) ? null : (DateTime?)DateTime.ParseExact(InputSearchParams.RegistrationDateEnd, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture),
@@ -74,7 +74,9 @@ namespace CRM.API
             Address = leadDto.Address,
             BirthDate = ((DateTime)leadDto.BirthDate).ToString("dd.MM.yyyy"),
             RegistrationDate = ((DateTime)leadDto.RegistrationDate).ToString("dd.MM.yyyy HH:mm:ss"),
-            ChangeDate = leadDto.ChangeDate.ToString("dd.MM.yyyy HH:mm:ss")            
+            ChangeDate = leadDto.ChangeDate.ToString("dd.MM.yyyy HH:mm:ss"),
+            IsDeleted=leadDto.IsDeleted
+            
         };
 
         public List<LeadOutputModel> ConvertLeadDtosToLeadOutputModels(List<LeadDto> leadDtos)
