@@ -12,7 +12,7 @@ namespace CRM.API.Configuration
     {
         protected override void Load(ContainerBuilder builder)
         {
-            CrmAppContext.ContainerBuilder.RegisterType<LeadRepository>().As<ILeadRepository>();
+            builder.RegisterType<LeadRepository>().As<ILeadRepository>();
         }
     }
 }

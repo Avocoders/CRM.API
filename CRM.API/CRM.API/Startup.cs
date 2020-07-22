@@ -65,9 +65,9 @@ namespace CRM.API
             });
         }
 
-        public void ConfigureContainer()
+        public void ConfigureContainer(ContainerBuilder builder)
         {
-            CrmAppContext.ContainerBuilder.RegisterModule(new AutofacModule());
+            builder.RegisterModule(new AutofacModule());
         }
     }
 }
