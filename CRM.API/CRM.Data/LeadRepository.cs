@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace CRM.Data
 {
-    public class LeadRepository
+    public class LeadRepository : ILeadRepository
     {
         private readonly IDbConnection _connection;
 
@@ -49,7 +49,7 @@ namespace CRM.Data
                     commandType: CommandType.StoredProcedure).FirstOrDefault();
                 result.IsOk = true;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 result.ExceptionMessage = e.Message;
             }
@@ -66,7 +66,7 @@ namespace CRM.Data
             var results = new DataWrapper<List<LeadDto>>();
             try
             {
-                results.Data =_connection.Query<LeadDto, RoleDto, CityDto, LeadDto>(
+                results.Data = _connection.Query<LeadDto, RoleDto, CityDto, LeadDto>(
                     "Lead_GetAll",
                     (lead, role, city) =>
                     {
@@ -75,16 +75,16 @@ namespace CRM.Data
                         leadEntry = lead;
                         leadEntry.Role = role;
                         leadEntry.City = city;
-                        
+
                         return leadEntry;
                     },
                     splitOn: "Id").ToList();
                 results.IsOk = true;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 results.ExceptionMessage = e.Message;
-            }            
+            }
             return results;
         }
 
@@ -105,11 +105,11 @@ namespace CRM.Data
 
                         return leadEntry;
                     },
-                    new { leadId },                    
+                    new { leadId },
                     commandType: CommandType.StoredProcedure).FirstOrDefault();
                 result.IsOk = true;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 result.ExceptionMessage = e.Message;
             }
@@ -125,23 +125,23 @@ namespace CRM.Data
                     "Lead_GetByLogin",
                     (lead, role, city) =>
                     {
-                         LeadDto leadEntry;
+                        LeadDto leadEntry;
 
-                         leadEntry = lead;
-                         leadEntry.Role = role;
-                         leadEntry.City = city;
-                         return leadEntry;
+                        leadEntry = lead;
+                        leadEntry.Role = role;
+                        leadEntry.City = city;
+                        return leadEntry;
                     },
                     new { login },
                     splitOn: "Id",
                     commandType: CommandType.StoredProcedure).FirstOrDefault();
                 result.IsOk = true;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 result.ExceptionMessage = e.Message;
             }
-            return result;                       
+            return result;
         }
 
         public DataWrapper<LeadDto> Update(LeadDto leadDto)
@@ -152,33 +152,33 @@ namespace CRM.Data
                 result.Data = _connection.Query<LeadDto, RoleDto, CityDto, LeadDto>("Lead_Add_Or_Update",
                     (lead, role, city) =>
                     {
-                         LeadDto leadEntry;
+                        LeadDto leadEntry;
 
-                         leadEntry = lead;
-                         leadEntry.Role = role;
-                         leadEntry.City = city;
-                    
-                         return leadEntry;
+                        leadEntry = lead;
+                        leadEntry.Role = role;
+                        leadEntry.City = city;
+
+                        return leadEntry;
                     },
                     new
                     {
-                         leadDto.Id,
-                         leadDto.FirstName,
-                         leadDto.LastName,
-                         leadDto.Patronymic,
-                         leadDto.Login,
-                         leadDto.Password,
-                         leadDto.Phone,
-                         leadDto.Email,  
-                         CityId = leadDto.City.Id,
-                         leadDto.Address,
-                         leadDto.BirthDate
+                        leadDto.Id,
+                        leadDto.FirstName,
+                        leadDto.LastName,
+                        leadDto.Patronymic,
+                        leadDto.Login,
+                        leadDto.Password,
+                        leadDto.Phone,
+                        leadDto.Email,
+                        CityId = leadDto.City.Id,
+                        leadDto.Address,
+                        leadDto.BirthDate
                     },
                     splitOn: "Id",
                     commandType: CommandType.StoredProcedure).FirstOrDefault();
                 result.IsOk = true;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 result.ExceptionMessage = e.Message;
             }
@@ -193,7 +193,7 @@ namespace CRM.Data
                 result.Data = _connection.Query<int>("Lead_FindByLogin", new { login }, commandType: CommandType.StoredProcedure).FirstOrDefault();
                 result.IsOk = true;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 result.ExceptionMessage = e.Message;
             }
@@ -208,7 +208,7 @@ namespace CRM.Data
                 result.Data = _connection.Query<int>("Lead_FindByEmail", new { email }, commandType: CommandType.StoredProcedure).FirstOrDefault();
                 result.IsOk = true;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 result.ExceptionMessage = e.Message;
             }
@@ -223,7 +223,7 @@ namespace CRM.Data
                 result.Data = _connection.Query<string>("Lead_UpdateEmail", new { id, email }, commandType: CommandType.StoredProcedure).FirstOrDefault();
                 result.IsOk = true;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 result.ExceptionMessage = e.Message;
             }

@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CRM.Data", "CRM.Data\CRM.Da
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "CRM.Database", "CRM.Database\CRM.Database.sqlproj", "{CF2BFE9D-7252-4396-AF3C-367C47615AED}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRM.Core", "CRM.Core\CRM.Core.csproj", "{2415D202-1CDC-448F-9C2B-1BAEB0D7D93D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{CF2BFE9D-7252-4396-AF3C-367C47615AED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF2BFE9D-7252-4396-AF3C-367C47615AED}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CF2BFE9D-7252-4396-AF3C-367C47615AED}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{2415D202-1CDC-448F-9C2B-1BAEB0D7D93D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2415D202-1CDC-448F-9C2B-1BAEB0D7D93D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2415D202-1CDC-448F-9C2B-1BAEB0D7D93D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2415D202-1CDC-448F-9C2B-1BAEB0D7D93D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

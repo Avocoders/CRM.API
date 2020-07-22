@@ -19,7 +19,7 @@ namespace CRM.API.Controllers
         
         private readonly Mapper _mapper;
         
-        private readonly LeadRepository _repo;
+        private readonly ILeadRepository _repo;
 
         private bool badLogin = true;
         public string newLogin;
@@ -28,6 +28,13 @@ namespace CRM.API.Controllers
         string constantForLogin = @"^((?!.*@.*\..*$))([a-zA-Z0-9@#$%^&+=*.\-_]){6,}$";
         string constantForEmail = @"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
                 @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-0-9a-z]*[0-9a-z]*\.)+[a-z0-9][\-a-z0-9]{0,22}[a-z0-9]))$";
+
+        public LeadController(ILogger<LeadController> logger, ILeadRepository repo)
+        {
+            _logger = logger;
+            _mapper = new Mapper();
+            _repo = repo;
+        }
 
         private string CreateLogin()
         {
@@ -39,13 +46,6 @@ namespace CRM.API.Controllers
                 if (dataWrapper.Data == 0) badLogin = false;                
             }
             return newLogin;
-        }
-
-        public LeadController(ILogger<LeadController> logger)
-        {
-            _logger = logger;
-            _mapper = new Mapper();
-            _repo = new LeadRepository();
         }
 
         //[Authorize()]
