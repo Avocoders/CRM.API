@@ -7,7 +7,6 @@ using TransactionStore.API.Models.Input;
 using Newtonsoft.Json;
 using CRM.Data;
 using CRM.API.Models.Output;
-using CRM.API.Models.Input;
 
 namespace CRM.API.Controllers
 {
