@@ -16,6 +16,11 @@ namespace CRM.API.Controllers
     [ApiController]
     public class LoginController : Controller
     {
+        /// <summary>
+        /// creates token
+        /// </summary>
+        /// <param name="auth"></param>
+        /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost]
