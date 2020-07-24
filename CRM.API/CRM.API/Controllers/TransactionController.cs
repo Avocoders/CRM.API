@@ -7,6 +7,7 @@ using TransactionStore.API.Models.Input;
 using Newtonsoft.Json;
 using CRM.Data;
 using CRM.API.Models.Output;
+using Microsoft.AspNetCore.Http;
 
 namespace CRM.API.Controllers
 {
@@ -22,6 +23,8 @@ namespace CRM.API.Controllers
             _repo = new LeadRepository();
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost("transfer")]
         public async Task<ActionResult<List<long>>> CreateTransferTransaction([FromBody] TransferInputModel transactionModel)
         {
@@ -35,6 +38,8 @@ namespace CRM.API.Controllers
             return StatusCode((int)response.StatusCode, content);
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost("withdraw")]
         public async Task<ActionResult<long>> CreateWithdrawTransaction([FromBody] TransactionInputModel transactionModel)
         {
@@ -47,6 +52,8 @@ namespace CRM.API.Controllers
             return StatusCode((int)response.StatusCode, content);
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost("deposit")]
         public async Task<ActionResult<long>> CreateDepositTransaction([FromBody] TransactionInputModel transactionModel)
         {
@@ -59,6 +66,8 @@ namespace CRM.API.Controllers
             return StatusCode((int)response.StatusCode, content);
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("by-lead-id/{leadId}")]
         public async Task<ActionResult<List<TransferOutputModel>>> GetTransactionsByLeadId(long leadId)
         {
@@ -69,6 +78,8 @@ namespace CRM.API.Controllers
             return StatusCode((int)response.StatusCode, content);
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("{id}")]
         public async Task<ActionResult<TransactionOutputModel>> GetTransactionById(long id)
         {
@@ -78,6 +89,8 @@ namespace CRM.API.Controllers
             return StatusCode((int)response.StatusCode, content);
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("{leadId}/balance/{currencyId}")]
         public async Task<ActionResult<decimal>> GetBalanceByLeadIdInCurrency(long leadId, byte currencyId)
         {
@@ -87,6 +100,5 @@ namespace CRM.API.Controllers
             string content = await response.Content.ReadAsStringAsync();
             return StatusCode((int)response.StatusCode, content);
         }
-
     }
 }

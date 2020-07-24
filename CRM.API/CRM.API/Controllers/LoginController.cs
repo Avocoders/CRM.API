@@ -8,6 +8,7 @@ using CRM.API.Models.Input;
 using CRM.API.Sha256;
 using CRM.Data.DTO;
 using CRM.Data;
+using Microsoft.AspNetCore.Http;
 
 namespace CRM.API.Controllers
 {
@@ -15,6 +16,8 @@ namespace CRM.API.Controllers
     [ApiController]
     public class LoginController : Controller
     {
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost]
         public IActionResult Auth([FromBody] AuthorizeInputModel auth)
         {
