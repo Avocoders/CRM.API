@@ -70,6 +70,7 @@ namespace CRM.API.Controllers
         /// <summary>
         /// gets the list of Leads with city info and role info   подрубить комменты
         /// </summary>
+        /// <param name="item"></param>
         /// <returns></returns>        
         //[Authorize()]
         [ProducesResponseType(StatusCodes.Status200OK)]        
