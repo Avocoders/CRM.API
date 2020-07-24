@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Text.RegularExpressions;
 using CRM.API.Encryptor;
+using Microsoft.AspNetCore.Http;
 
 namespace CRM.API.Controllers
 {
@@ -38,11 +39,11 @@ namespace CRM.API.Controllers
             {
                 newLogin = new LoginEncryptor().EncryptorLogin();
                 dataWrapper = _repo.FindLeadByLogin(newLogin);
-                if (dataWrapper.Data == 0) badLogin = false;                
+                if (dataWrapper.Data == 0) badLogin = false;
             }
             return newLogin;
         }
-  
+
         private string BadRequestsForLeadInputModelForUpdadeLead(LeadInputModel leadModel)
         {
             DataWrapper<int> dataWrapper = new DataWrapper<int>();
@@ -69,8 +70,9 @@ namespace CRM.API.Controllers
         /// <summary>
         /// gets the list of Leads with city info and role info   подрубить комменты
         /// </summary>
-        /// <returns></returns>
+        /// <returns></returns>        
         //[Authorize()]
+        [ProducesResponseType(StatusCodes.Status200OK)]        
         [HttpGet]
         public ActionResult<List<LeadOutputModel>> GetLeadsAll()
         {
@@ -78,7 +80,9 @@ namespace CRM.API.Controllers
             return MakeResponse(dataWrapper, _mapper.ConvertLeadDtosToLeadOutputModels);
         }
 
+
         //[Authorize()]
+        [ProducesResponseType(StatusCodes.Status200OK)]        
         [HttpGet("{leadId}")]
         public ActionResult<LeadOutputModel> GetLeadById(long leadId) 
         {
@@ -87,6 +91,8 @@ namespace CRM.API.Controllers
         }
 
         //[Authorize()]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost]
         public ActionResult<LeadOutputModel> CreateLead(LeadInputModel leadModel)
         {
@@ -101,6 +107,8 @@ namespace CRM.API.Controllers
         }
 
         //[Authorize()]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPut]
         public ActionResult<LeadOutputModel> UpdateLead(LeadInputModel leadModel)
         {
@@ -119,6 +127,8 @@ namespace CRM.API.Controllers
         }
 
         //[Authorize()]      
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpDelete("{leadId}")]
         public ActionResult DeleteLeadById(long leadId) 
         {
@@ -129,6 +139,8 @@ namespace CRM.API.Controllers
         }
 
         //[Authorize()]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPatch]
         public ActionResult<string> UpdateEmailByLeadId(EmailInputModel emailModel)
         {
@@ -149,6 +161,7 @@ namespace CRM.API.Controllers
         }
 
         //[Authorize()]
+        [ProducesResponseType(StatusCodes.Status200OK)]        
         [HttpPost("search")]
         public ActionResult<List<LeadOutputModel>> SearchLead(SearchParametersInputModel searchparameters)
         {
