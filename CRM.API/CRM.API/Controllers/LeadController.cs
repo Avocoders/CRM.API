@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Text.RegularExpressions;
 using CRM.API.Encryptor;
-using CRM.API;
 
 namespace CRM.API.Controllers
 {
@@ -66,6 +65,11 @@ namespace CRM.API.Controllers
             }
             return "";
         }
+
+        /// <summary>
+        /// gets the list of Leads with city info and role info   подрубить комменты
+        /// </summary>
+        /// <returns></returns>
         //[Authorize()]
         [HttpGet]
         public ActionResult<List<LeadOutputModel>> GetLeadsAll()
