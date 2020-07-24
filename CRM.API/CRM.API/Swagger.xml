@@ -7,51 +7,43 @@
         <member name="M:CRM.API.Controllers.LeadController.GetLeadsAll">
             <summary>
             gets the list of leads with all information
-            </summary>
-            <param name="item"></param>
-            <returns></returns>        
+            </summary>             
         </member>
         <member name="M:CRM.API.Controllers.LeadController.GetLeadById(System.Int64)">
             <summary>
             gets the lead by Id with all information
             </summary>
-            <param name="leadId"></param>
-            <returns></returns>
+            <param name="leadId"></param>       
         </member>
         <member name="M:CRM.API.Controllers.LeadController.CreateLead(CRM.API.Models.Input.LeadInputModel)">
             <summary>
             creates a new lead
             </summary>
-            <param name="leadModel"></param>
-            <returns></returns>
+            <param name="leadModel"></param>       
         </member>
         <member name="M:CRM.API.Controllers.LeadController.UpdateLead(CRM.API.Models.Input.LeadInputModel)">
             <summary>
             edits lead's information by leadId
             </summary>
-            <param name="leadModel"></param>
-            <returns></returns>
+            <param name="leadModel"></param>        
         </member>
         <member name="M:CRM.API.Controllers.LeadController.DeleteLeadById(System.Int64)">
             <summary>
             deletes the lead by Id
             </summary>
-            <param name="leadId"></param>
-            <returns></returns>
+            <param name="leadId"></param>        
         </member>
         <member name="M:CRM.API.Controllers.LeadController.UpdateEmailByLeadId(CRM.API.Models.Input.EmailInputModel)">
             <summary>
             edits lead's email by leadId 
             </summary>
-            <param name="emailModel"></param>
-            <returns></returns>
+            <param name="emailModel"></param>        
         </member>
         <member name="M:CRM.API.Controllers.LeadController.SearchLead(CRM.API.Models.Input.SearchParametersInputModel)">
             <summary>
             searches leads by different parameters
             </summary>
-            <param name="searchparameters"></param>
-            <returns></returns>
+            <param name="searchparameters"></param>        
         </member>
         <member name="M:CRM.API.Controllers.LoginController.Auth(CRM.API.Models.Input.AuthorizeInputModel)">
             <summary>

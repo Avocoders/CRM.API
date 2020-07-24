@@ -69,9 +69,7 @@ namespace CRM.API.Controllers
 
         /// <summary>
         /// gets the list of leads with all information
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>        
+        /// </summary>             
         //[Authorize()]
         [ProducesResponseType(StatusCodes.Status200OK)]        
         [HttpGet]
@@ -84,8 +82,7 @@ namespace CRM.API.Controllers
         /// <summary>
         /// gets the lead by Id with all information
         /// </summary>
-        /// <param name="leadId"></param>
-        /// <returns></returns>
+        /// <param name="leadId"></param>       
         //[Authorize()]
         [ProducesResponseType(StatusCodes.Status200OK)]        
         [HttpGet("{leadId}")]
@@ -98,8 +95,7 @@ namespace CRM.API.Controllers
         /// <summary>
         /// creates a new lead
         /// </summary>
-        /// <param name="leadModel"></param>
-        /// <returns></returns>
+        /// <param name="leadModel"></param>       
         //[Authorize()]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -119,8 +115,7 @@ namespace CRM.API.Controllers
         /// <summary>
         /// edits lead's information by leadId
         /// </summary>
-        /// <param name="leadModel"></param>
-        /// <returns></returns>
+        /// <param name="leadModel"></param>        
         //[Authorize()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -144,8 +139,7 @@ namespace CRM.API.Controllers
         /// <summary>
         /// deletes the lead by Id
         /// </summary>
-        /// <param name="leadId"></param>
-        /// <returns></returns>
+        /// <param name="leadId"></param>        
         //[Authorize()]      
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -161,8 +155,7 @@ namespace CRM.API.Controllers
         /// <summary>
         /// edits lead's email by leadId 
         /// </summary>
-        /// <param name="emailModel"></param>
-        /// <returns></returns>
+        /// <param name="emailModel"></param>        
         //[Authorize()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -188,8 +181,7 @@ namespace CRM.API.Controllers
         /// <summary>
         /// searches leads by different parameters
         /// </summary>
-        /// <param name="searchparameters"></param>
-        /// <returns></returns>
+        /// <param name="searchparameters"></param>        
         //[Authorize()]
         [ProducesResponseType(StatusCodes.Status200OK)]        
         [HttpPost("search")]
