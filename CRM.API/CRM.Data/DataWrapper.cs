@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CRM.Data
+﻿namespace CRM.Data
 {
     public class DataWrapper<T>
     {

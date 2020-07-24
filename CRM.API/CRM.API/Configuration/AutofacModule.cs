@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Autofac;
-using CRM.Core;
+﻿using Autofac;
 using CRM.Data;
 
 namespace CRM.API.Configuration

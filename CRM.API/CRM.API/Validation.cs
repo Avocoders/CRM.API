@@ -10,8 +10,6 @@ using CRM.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Text.RegularExpressions;
-using CRM.API.Controllers;
-
 namespace CRM.API
 {
     public class Validation
@@ -32,7 +30,6 @@ namespace CRM.API
             if (string.IsNullOrWhiteSpace(leadModel.Address)) return ("Enter the address");
             if (string.IsNullOrWhiteSpace(leadModel.BirthDate)) return ("Enter the date of birth");
             return "";
-        }
-        
+        }        
     }
 }
