@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using Autofac;
 using CRM.API.Configuration;
 using Microsoft.OpenApi.Models;
+using AutoMapper;
 
 namespace CRM.API
 {
@@ -48,6 +49,14 @@ namespace CRM.API
                 c.SwaggerDoc(name: "v1", new OpenApiInfo { Title = "CRM.API", Version = "v1" });
             }
             );
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

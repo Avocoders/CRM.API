@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using System.Text.RegularExpressions;
 using CRM.API.Encryptor;
 using Microsoft.AspNetCore.Http;
+using AutoMapper;
 
 namespace CRM.API.Controllers
 {
@@ -18,18 +19,20 @@ namespace CRM.API.Controllers
     {
         private readonly ILogger<LeadController> _logger;
         
-        private readonly Mapper _mapper;
-        
+               
         private readonly ILeadRepository _repo;
+        private readonly IMapper _mapper;
 
+        
         private bool badLogin = true;
         public string newLogin;
 
-        public LeadController(ILogger<LeadController> logger, ILeadRepository repo)
+        public LeadController(ILogger<LeadController> logger, ILeadRepository repo, IMapper mapper)
         {
             _logger = logger;
-            _mapper = new Mapper();
+            _mapper = mapper;
             _repo = repo;
+
         }
 
         private string CreateLogin()
@@ -77,7 +80,7 @@ namespace CRM.API.Controllers
         public ActionResult<List<LeadOutputModel>> GetLeadsAll()
         {
             DataWrapper<List<LeadDto>> dataWrapper = _repo.GetAll();
-            return MakeResponse(dataWrapper, _mapper.ConvertLeadDtosToLeadOutputModels);
+            return MakeResponse(dataWrapper, _mapper.Map<List<LeadOutputModel>>);
         }
 
 
@@ -87,7 +90,7 @@ namespace CRM.API.Controllers
         public ActionResult<LeadOutputModel> GetLeadById(long leadId) 
         {
             DataWrapper<LeadDto> dataWrapper = _repo.GetById(leadId);                           
-            return MakeResponse(dataWrapper, _mapper.ConvertLeadDtoToLeadOutputModel);
+            return MakeResponse(dataWrapper, _mapper.Map<LeadOutputModel>);
         }
 
         //[Authorize()]
@@ -102,8 +105,8 @@ namespace CRM.API.Controllers
             string badRequestForUpdateLead = BadRequestsForLeadInputModelForUpdadeLead(leadModel);
             if (!string.IsNullOrWhiteSpace(badRequestForUpdateLead)) return BadRequest(badRequestForUpdateLead);
             leadModel.Password = new PasswordEncryptor().EncryptPassword(leadModel.Password);
-            DataWrapper<LeadDto> newDataWrapper = _repo.Add(_mapper.ConvertLeadInputModelToLeadDTO(leadModel));
-            return MakeResponse(newDataWrapper, _mapper.ConvertLeadDtoToLeadOutputModel);
+            DataWrapper<LeadDto> newDataWrapper = _repo.Add(_mapper.Map<LeadDto>(leadModel));
+            return MakeResponse(newDataWrapper, _mapper.Map<LeadOutputModel>);
         }
 
         //[Authorize()]
@@ -122,8 +125,8 @@ namespace CRM.API.Controllers
             string badRequest = validation.BadRequestsForLeadInputModel(leadModel);
             if (!string.IsNullOrWhiteSpace(badRequest)) return BadRequest(badRequest);
             leadModel.Password = new PasswordEncryptor().EncryptPassword(leadModel.Password);
-            DataWrapper<LeadDto> newDataWrapper = _repo.Update(_mapper.ConvertLeadInputModelToLeadDTO(leadModel));
-            return MakeResponse(newDataWrapper, _mapper.ConvertLeadDtoToLeadOutputModel);
+            DataWrapper<LeadDto> newDataWrapper = _repo.Update(_mapper.Map<LeadDto>(leadModel));
+            return MakeResponse(newDataWrapper, _mapper.Map<LeadOutputModel>);
         }
 
         //[Authorize()]      
@@ -165,9 +168,9 @@ namespace CRM.API.Controllers
         [HttpPost("search")]
         public ActionResult<List<LeadOutputModel>> SearchLead(SearchParametersInputModel searchparameters)
         {
-            LeadSearchParameters searchParams = _mapper.ConvertSearchParametersInputModelToLeadSearchParameters(searchparameters);
-            DataWrapper<List<LeadDto>> dataWrapper = _repo.SearchLeads(searchParams);
-            return MakeResponse(dataWrapper, _mapper.ConvertLeadDtosToLeadOutputModels);         
+          //  LeadSearchParameters searchParams = _imapper.Map<LeadSearchParameters>(searchparameters);
+            DataWrapper<List<LeadDto>> dataWrapper = _repo.SearchLeads(_mapper.Map<LeadSearchParameters>(searchparameters));
+            return MakeResponse(dataWrapper, _mapper.Map<List<LeadOutputModel>>);        
         }
 
         private delegate T DtoConverter<T,K>(K dto);
@@ -189,5 +192,7 @@ namespace CRM.API.Controllers
             }
             return Ok(dtoConverter(dataWrapper.Data));
         }
+
+
     }
 }
