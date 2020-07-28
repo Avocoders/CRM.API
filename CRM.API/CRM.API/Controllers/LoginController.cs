@@ -8,7 +8,6 @@ using CRM.API.Models.Input;
 using CRM.API.Sha256;
 using CRM.Data.DTO;
 using CRM.Data;
-using Microsoft.AspNetCore.Http;
 
 namespace CRM.API.Controllers
 {
@@ -16,10 +15,8 @@ namespace CRM.API.Controllers
     [ApiController]
     public class LoginController : Controller
     {
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost]
-        public IActionResult Auth([FromBody] AuthorizeInputModel auth)
+        public IActionResult Authorization([FromBody] AuthorizeInputModel auth)
         {
             ClaimsIdentity identity = GetIdentity(auth.Login, auth.Password);
             if (identity != null)
@@ -42,24 +39,24 @@ namespace CRM.API.Controllers
             }
             else
             {
-                return BadRequest("Invalid login-password pair entered"); 
+                return BadRequest("Invalid login-password pair entered");
             }
         }
 
         private ClaimsIdentity GetIdentity(string login, string password)
         {
             LeadRepository leadRepository = new LeadRepository();
-            DataWrapper<LeadDto> leadDto = leadRepository.GetByLogin(login);
+            DataWrapper<AuthorizationDto> authorizationDto = leadRepository.GetByLogin(login);
             PasswordEncryptor encryptor = new PasswordEncryptor();
 
-            if (leadDto != null)
+            if (authorizationDto != null)
             {
-                if (encryptor.CheckPassword(leadDto.Data.Password,password))
+                if (encryptor.CheckPassword(authorizationDto.Data.Password, password))
                 {
                     List<Claim> claims = new List<Claim>()
                     {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType,leadDto.Data.Login),
-                    new Claim(ClaimsIdentity.DefaultRoleClaimType,leadDto.Data.Role.Name)
+                    new Claim(ClaimsIdentity.DefaultNameClaimType,authorizationDto.Data.Login),
+                    new Claim(ClaimsIdentity.DefaultRoleClaimType,authorizationDto.Data.Role.Name)
                     };
                     ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
                     return claimsIdentity;

@@ -116,20 +116,19 @@ namespace CRM.Data
             return result;
         }
 
-        public DataWrapper<LeadDto> GetByLogin(string login)
+        public DataWrapper<AuthorizationDto> GetByLogin(string login)
         {
-            var result = new DataWrapper<LeadDto>();
+            var result = new DataWrapper<AuthorizationDto>();
             try
             {
-                result.Data = _connection.Query<LeadDto, RoleDto, CityDto, LeadDto>(
+                result.Data = _connection.Query<AuthorizationDto, RoleDto, AuthorizationDto>(
                     "Lead_GetByLogin",
-                    (lead, role, city) =>
+                    (lead, role) =>
                     {
-                        LeadDto leadEntry;
+                        AuthorizationDto leadEntry;
 
                         leadEntry = lead;
                         leadEntry.Role = role;
-                        leadEntry.City = city;
                         return leadEntry;
                     },
                     new { login },
