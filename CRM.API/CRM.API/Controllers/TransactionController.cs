@@ -22,7 +22,12 @@ namespace CRM.API.Controllers
             _httpClient = new HttpClient();
             _repo = new LeadRepository();
         }
-
+        
+        /// <summary>
+        /// refers to TransactionStore to create a transfer transaction
+        /// </summary>
+        /// <param name="transactionModel"></param>
+        /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost("transfer")]
@@ -38,6 +43,11 @@ namespace CRM.API.Controllers
             return StatusCode((int)response.StatusCode, content);
         }
 
+        /// <summary>
+        /// refers to TransactionStore to create a withdraw transaction
+        /// </summary>
+        /// <param name="transactionModel"></param>
+        /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost("withdraw")]
@@ -52,6 +62,11 @@ namespace CRM.API.Controllers
             return StatusCode((int)response.StatusCode, content);
         }
 
+        /// <summary>
+        /// refers to TransactionStore to create a deposit transaction
+        /// </summary>
+        /// <param name="transactionModel"></param>
+        /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost("deposit")]
@@ -66,6 +81,11 @@ namespace CRM.API.Controllers
             return StatusCode((int)response.StatusCode, content);
         }
 
+        /// <summary>
+        /// refers to TransactionStore to get all lead's transactions by leadId
+        /// </summary>
+        /// <param name="leadId"></param>
+        /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("by-lead-id/{leadId}")]
@@ -78,6 +98,11 @@ namespace CRM.API.Controllers
             return StatusCode((int)response.StatusCode, content);
         }
 
+        /// <summary>
+        /// refers to TransactionStore to get transaction by Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("{id}")]
@@ -89,6 +114,12 @@ namespace CRM.API.Controllers
             return StatusCode((int)response.StatusCode, content);
         }
 
+        /// <summary>
+        /// refers to TransactionStore to get balance by leadId and currencyId
+        /// </summary>
+        /// <param name="leadId"></param>
+        /// <param name="currencyId"></param>
+        /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("{leadId}/balance/{currencyId}")]

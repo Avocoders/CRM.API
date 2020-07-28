@@ -71,9 +71,8 @@ namespace CRM.API.Controllers
         }
 
         /// <summary>
-        /// gets the list of Leads with city info and role info   подрубить комменты
-        /// </summary>
-        /// <returns></returns>        
+        /// gets the list of leads with all information
+        /// </summary>             
         //[Authorize()]
         [ProducesResponseType(StatusCodes.Status200OK)]        
         [HttpGet]
@@ -83,7 +82,10 @@ namespace CRM.API.Controllers
             return MakeResponse(dataWrapper, _mapper.Map<List<LeadOutputModel>>);
         }
 
-
+        /// <summary>
+        /// gets the lead by Id with all information
+        /// </summary>
+        /// <param name="leadId"></param>       
         //[Authorize()]
         [ProducesResponseType(StatusCodes.Status200OK)]        
         [HttpGet("{leadId}")]
@@ -93,6 +95,10 @@ namespace CRM.API.Controllers
             return MakeResponse(dataWrapper, _mapper.Map<LeadOutputModel>);
         }
 
+        /// <summary>
+        /// creates a new lead
+        /// </summary>
+        /// <param name="leadModel"></param>       
         //[Authorize()]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -109,6 +115,10 @@ namespace CRM.API.Controllers
             return MakeResponse(newDataWrapper, _mapper.Map<LeadOutputModel>);
         }
 
+        /// <summary>
+        /// edits lead's information by leadId
+        /// </summary>
+        /// <param name="leadModel"></param>        
         //[Authorize()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -129,6 +139,10 @@ namespace CRM.API.Controllers
             return MakeResponse(newDataWrapper, _mapper.Map<LeadOutputModel>);
         }
 
+        /// <summary>
+        /// deletes the lead by Id
+        /// </summary>
+        /// <param name="leadId"></param>        
         //[Authorize()]      
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -141,6 +155,10 @@ namespace CRM.API.Controllers
             return Ok("Successfully deleted");
         }
 
+        /// <summary>
+        /// edits lead's email by leadId 
+        /// </summary>
+        /// <param name="emailModel"></param>        
         //[Authorize()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -163,6 +181,10 @@ namespace CRM.API.Controllers
             return MakeResponse(newDataWrapper);
         }
 
+        /// <summary>
+        /// searches leads by different parameters
+        /// </summary>
+        /// <param name="searchparameters"></param>        
         //[Authorize()]
         [ProducesResponseType(StatusCodes.Status200OK)]        
         [HttpPost("search")]
