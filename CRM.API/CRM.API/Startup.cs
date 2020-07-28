@@ -7,11 +7,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Autofac;
 using CRM.API.Configuration;
-using Microsoft.OpenApi.Models;
-using AutoMapper;
-
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi.Models;using AutoMapper;using Microsoft.OpenApi.Models;
 using System;
+using CRM.Core;
 
 namespace CRM.API
 {
@@ -47,6 +45,8 @@ namespace CRM.API
                 });
             services.AddMvcCore();
             services.AddControllers();
+            services.Configure<StorageOptions>(Configuration);
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc(name: "v1", new OpenApiInfo { Title = "CRM.API", Version = "v1" });
@@ -59,7 +59,10 @@ namespace CRM.API
             });
 
             IMapper mapper = mappingConfig.CreateMapper();
-            services.AddSingleton(mapper);
+            services.AddSingleton(mapper);
+
+          
+            
 
         }
 
