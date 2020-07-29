@@ -9,7 +9,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CRM.Data", "CRM.Data\CRM.Da
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "CRM.Database", "CRM.Database\CRM.Database.sqlproj", "{CF2BFE9D-7252-4396-AF3C-367C47615AED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRM.Core", "CRM.Core\CRM.Core.csproj", "{2415D202-1CDC-448F-9C2B-1BAEB0D7D93D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CRM.Core", "CRM.Core\CRM.Core.csproj", "{2415D202-1CDC-448F-9C2B-1BAEB0D7D93D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F02A6FCF-849D-4FCC-9CB5-47881C383FA9}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
