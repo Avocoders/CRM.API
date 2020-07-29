@@ -13,7 +13,7 @@
     </RootPath>
     <RootNamespace>DatabaseCRM</RootNamespace>
     <AssemblyName>DatabaseCRM</AssemblyName>
-    <ModelCollation>1033, CI</ModelCollation>
+    <ModelCollation>1049,CI</ModelCollation>
     <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
     <DeployToDatabase>True</DeployToDatabase>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
@@ -22,6 +22,8 @@
     <SqlServerVerification>False</SqlServerVerification>
     <IncludeCompositeObjects>True</IncludeCompositeObjects>
     <TargetDatabaseSet>True</TargetDatabaseSet>
+    <DefaultCollation>Cyrillic_General_CI_AS</DefaultCollation>
+    <DefaultFilegroup>PRIMARY</DefaultFilegroup>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -56,5 +58,22 @@
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Tables\" />
+    <Folder Include="dbo\Stored Procedures\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Tables\City.sql" />
+    <Build Include="dbo\Tables\Role.sql" />
+    <Build Include="dbo\Tables\Lead.sql" />
+    <Build Include="dbo\Stored Procedures\Lead_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\Lead_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\Lead_Add_Or_Update.sql" />
+    <Build Include="dbo\Stored Procedures\CreateStrings.sql" />
+    <Build Include="dbo\Stored Procedures\Lead_Search.sql" />
+    <Build Include="dbo\Stored Procedures\Lead_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\Lead_FindByEmail.sql" />
+    <Build Include="dbo\Stored Procedures\Lead_FindByLogin.sql" />
+    <Build Include="dbo\Stored Procedures\Lead_UpdateEmail.sql" />
   </ItemGroup>
 </Project>

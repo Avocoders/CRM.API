@@ -16,6 +16,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "DatabaseCRM", "DatabaseCRM\DatabaseCRM.sqlproj", "{B00BE258-9148-43D1-81E4-483CFEB0E04A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,12 @@ Global
 		{2415D202-1CDC-448F-9C2B-1BAEB0D7D93D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2415D202-1CDC-448F-9C2B-1BAEB0D7D93D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2415D202-1CDC-448F-9C2B-1BAEB0D7D93D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B00BE258-9148-43D1-81E4-483CFEB0E04A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B00BE258-9148-43D1-81E4-483CFEB0E04A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B00BE258-9148-43D1-81E4-483CFEB0E04A}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{B00BE258-9148-43D1-81E4-483CFEB0E04A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B00BE258-9148-43D1-81E4-483CFEB0E04A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B00BE258-9148-43D1-81E4-483CFEB0E04A}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
