@@ -1,9 +1,13 @@
-﻿using CRM.Data.DTO;
+﻿using CRM.Core;
+using CRM.Data.DTO;
 using Dapper;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
+  
 
 namespace CRM.Data
 {
@@ -11,10 +15,17 @@ namespace CRM.Data
     {
         private readonly IDbConnection _connection;
 
+
+        public LeadRepository(IOptions<StorageOptions> options)
+        {
+            _connection = new SqlConnection(options.Value.DBConnectionString);
+        }
+
         public LeadRepository()
         {
-            _connection = Connection.GetConnection();
+          
         }
+
 
         public DataWrapper<LeadDto> Add(LeadDto leadDto)
         {
