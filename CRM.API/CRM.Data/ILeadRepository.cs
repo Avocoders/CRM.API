@@ -11,7 +11,7 @@ namespace CRM.Data
         DataWrapper<int> FindLeadByLogin(string login);
         DataWrapper<List<LeadDto>> GetAll();
         DataWrapper<LeadDto> GetById(long leadId);
-        DataWrapper<LeadDto> GetByLogin(string login);
+        DataWrapper<AuthorizationDto> GetByLogin(string login);
         DataWrapper<List<LeadDto>> SearchLeads(LeadSearchParameters searchParameters);
         DataWrapper<LeadDto> Update(LeadDto leadDto);
         DataWrapper<string> UpdateEmailByLeadId(long? id, string email);

@@ -45,13 +45,6 @@
             </summary>
             <param name="searchparameters"></param>        
         </member>
-        <member name="M:CRM.API.Controllers.LoginController.Auth(CRM.API.Models.Input.AuthorizeInputModel)">
-            <summary>
-            creates token
-            </summary>
-            <param name="auth"></param>
-            <returns></returns>
-        </member>
         <member name="M:CRM.API.Controllers.TransactionController.CreateTransferTransaction(TransactionStore.API.Models.Input.TransferInputModel)">
             <summary>
             refers to TransactionStore to create a transfer transaction
