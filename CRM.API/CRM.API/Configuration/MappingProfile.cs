@@ -14,7 +14,7 @@ namespace CRM.API.Configuration
     {       
             public MappingProfile()
             {
-                CreateMap<LeadInputModel, LeadDto>()
+                CreateMap<LeadDTO, LeadDto>()
                      .ForPath(dest => dest.City.Id, o => o.MapFrom(src => src.CityId));
 
                 CreateMap<LeadDto, LeadOutputModel>()
