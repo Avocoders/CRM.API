@@ -18,7 +18,7 @@
       }
     },
     "IIST Express": {
-      "commandName": "IISTExpress",
+      "commandName": "IISExpress",
       "launchBrowser": true,
       "launchUrl": "lead",
       "environmentVariables": {
@@ -46,3 +46,6 @@
   }
 }
 
+//Development
+
+//Testing
