@@ -15,6 +15,7 @@ namespace CRM.API
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
         public Startup(IWebHostEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -25,7 +26,7 @@ namespace CRM.API
             Configuration = builder.Build();
         }
 
-        public IConfiguration Configuration { get; }
+       
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -50,6 +51,7 @@ namespace CRM.API
                 });
             services.AddMvcCore();
             services.AddControllers();
+            ConfigureDependencies(services);
             services.Configure<StorageOptions>(Configuration);
 
             services.AddSwaggerGen(c =>
@@ -64,6 +66,11 @@ namespace CRM.API
             });
             IMapper mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);
+        }
+
+        public virtual void ConfigureDependencies(IServiceCollection services)
+        {
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
