@@ -1,4 +1,5 @@
-﻿using CRM.Data.DTO;
+﻿using CRM.Core;
+using CRM.Data.DTO;
 using Dapper;
 using Microsoft.Extensions.Options;
 using System;
@@ -13,6 +14,7 @@ namespace CRM.Data
     public class LeadRepository : ILeadRepository
     {
         private readonly IDbConnection _connection;
+
 
         public LeadRepository(IOptions<StorageOptions> options)
         {

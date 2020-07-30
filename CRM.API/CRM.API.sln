@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CRM.API", "CRM.API\CRM.API.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CRM.Data", "CRM.Data\CRM.Data.csproj", "{A1873506-799E-41BE-8245-B64A37F1EDBC}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "CRM.Database", "CRM.Database\CRM.Database.sqlproj", "{CF2BFE9D-7252-4396-AF3C-367C47615AED}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CRM.Core", "CRM.Core\CRM.Core.csproj", "{2415D202-1CDC-448F-9C2B-1BAEB0D7D93D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F02A6FCF-849D-4FCC-9CB5-47881C383FA9}"
@@ -16,7 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "DatabaseCRM", "DatabaseCRM\DatabaseCRM.sqlproj", "{B00BE258-9148-43D1-81E4-483CFEB0E04A}"
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "CRM.Database", "DatabaseCRM\CRM.Database.sqlproj", "{B00BE258-9148-43D1-81E4-483CFEB0E04A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,12 +30,6 @@ Global
 		{A1873506-799E-41BE-8245-B64A37F1EDBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1873506-799E-41BE-8245-B64A37F1EDBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A1873506-799E-41BE-8245-B64A37F1EDBC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CF2BFE9D-7252-4396-AF3C-367C47615AED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CF2BFE9D-7252-4396-AF3C-367C47615AED}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CF2BFE9D-7252-4396-AF3C-367C47615AED}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{CF2BFE9D-7252-4396-AF3C-367C47615AED}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CF2BFE9D-7252-4396-AF3C-367C47615AED}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CF2BFE9D-7252-4396-AF3C-367C47615AED}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{2415D202-1CDC-448F-9C2B-1BAEB0D7D93D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2415D202-1CDC-448F-9C2B-1BAEB0D7D93D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2415D202-1CDC-448F-9C2B-1BAEB0D7D93D}.Release|Any CPU.ActiveCfg = Release|Any CPU
