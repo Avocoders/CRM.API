@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace CRM.NUnitTest
 {
-    public class BaseTestServerFixture
+    public class BaseTestServerFixture : IDisposable
     {
         public TestServer TestServer { get; }
         
@@ -24,7 +24,6 @@ namespace CRM.NUnitTest
 
             TestServer = new TestServer(builder);
             Client = TestServer.CreateClient();
-        
         }
 
         public void Dispose()

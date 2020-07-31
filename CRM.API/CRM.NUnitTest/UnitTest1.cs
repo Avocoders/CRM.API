@@ -40,7 +40,7 @@ namespace CRM.NUnitTest
 
             };
             var json = JsonConvert.SerializeObject(lead);
-            var handleRequest = await httpClient.PostAsync("",
+            var handleRequest = await httpClient.PostAsync("http://localhost:44382/lead",
                 new StringContent(json, Encoding.UTF8, "application/json"));
            
             Assert.True(handleRequest.StatusCode == System.Net.HttpStatusCode.Created);

@@ -7,7 +7,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Autofac;
 using CRM.API.Configuration;
-using Microsoft.OpenApi.Models;using AutoMapper;using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi.Models;
+using AutoMapper;
 using System;
 using CRM.Core;
 
@@ -21,13 +22,14 @@ namespace CRM.API
             var builder = new ConfigurationBuilder()
             .SetBasePath(env.ContentRootPath)
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-            .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
             .AddEnvironmentVariables();
+            if (!env.IsProduction())
+            {
+                builder.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+            }
             Configuration = builder.Build();
         }
-
-       
-
+        
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
