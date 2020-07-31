@@ -14,11 +14,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F02A6FCF-849D-4FCC-9CB5-47881C383FA9}"
-	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-	EndProjectSection
-EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "CRM.Database", "DatabaseCRM\CRM.Database.sqlproj", "{B00BE258-9148-43D1-81E4-483CFEB0E04A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRM.NUnitTest", "CRM.NUnitTest\CRM.NUnitTest.csproj", "{9A8CD8EB-13A4-45D9-85C0-E3742DB46153}"
