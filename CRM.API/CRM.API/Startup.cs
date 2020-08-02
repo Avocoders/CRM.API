@@ -16,7 +16,7 @@ namespace CRM.API
 {
     public class Startup
     {
-        public IConfiguration Configuration { get; }
+        public IConfiguration Configuration { get; set; }
         public Startup(IWebHostEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -51,7 +51,7 @@ namespace CRM.API
                         IssuerSigningKey = Models.TokenOptions.GetSymmetricSecurityKey()
                     };
                 });
-            services.AddMvcCore();
+            services.AddMvcCore();          
             services.AddControllers();
             ConfigureDependencies(services);
             services.Configure<StorageOptions>(Configuration);
@@ -70,7 +70,7 @@ namespace CRM.API
             services.AddSingleton(mapper);
         }
 
-        public virtual void ConfigureDependencies(IServiceCollection services)
+        protected virtual void ConfigureDependencies(IServiceCollection services)
         {
 
         }
@@ -92,7 +92,7 @@ namespace CRM.API
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
-
+            
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseRouting();            
@@ -102,6 +102,7 @@ namespace CRM.API
             {
                 endpoints.MapControllers();
             });
+         
         }
 
         public void ConfigureContainer(ContainerBuilder builder)

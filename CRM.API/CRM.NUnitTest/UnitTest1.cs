@@ -9,52 +9,57 @@ using System.Threading.Tasks;
 using NUnit.Framework.Internal;
 using System.Linq;
 using System;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.TestHost;
+using CRM.Data;
+using Autofac.Extensions.DependencyInjection;
 
 namespace CRM.NUnitTest
 {
-    public  class LeadTest: TestSetup
+    public class Tests
     {
-       
-
         [Test]
-        public async Task CreateLead()
+
+
+        public async Task TestMethod1()
         {
-            httpClient = new HttpClient
-                
-                 {
-                     BaseAddress = new Uri("http://localhost:44382/lead")
-                 };
-                                 
+            var webHostBuilder =
+                  new WebHostBuilder()                        
+                        .UseEnvironment("Development") // You can set the environment you want (development, staging, production)                           
+                        .UseStartup<Startup>(); // Startup class of your web app project
+                        
 
-            var lead = new LeadDTO()
+            using (var server = new TestServer(webHostBuilder))
+            using (var client = server.CreateClient())
             {
-                FirstName = "Anna",
-                LastName = "Konovalova",
-                Patronymic = "Ivanovna",
-                Password = "konovalova!1989",
-                Phone = "+79110000000",
-                Email = "annakonovalova@mail.ru",
-                CityId = 2,
-                Address = "pr.Lenina, h.22-122",
-                BirthDate = "09/09/1989"
+                string result = await client.GetStringAsync("https://localhost:44382/lead/256");
+                Assert.AreEqual("[\"id\":256,\"firstName\":\"Viktor\",\"lastName\":\"Malyshev\",\"patronymic\":\"Grigorievich\",\"login\":\"ViktorMalyshev5946357064\",\"phone\":\" + 72963050540\",\"email\":\"ViktorMalyshev5946357064@gmail.com\",\"address\":\"Malaya Konyushennaya Ulitsa229\",\"birthDate\":\"17.05.1978 0:00:00\",\"registrationDate\":\"27.07.2011 0:00:00\",\"changeDate\":\"29.07.2020 21:14:21\",\"role\":\"Client\",\"city\":\"Gatchina\",\"isDeleted\":false]", result);
+                //string result = await client.GetStringAsync("lead/1"); /// из базы вернули стрингу
+                //var resultmodel = JsonConvert.DeserializeObject<LeadOutputModel>(result);
+                //LeadOutputModel leadoutputmodel = new LeadOutputModel()
+                //{
+                //    Id = 256,
+                //    FirstName = "Viktor",
+                //    LastName = "Malyshev",
+                //    Patronymic = "Grigorievich",
+                //    Login = "ViktorMalyshev5946357064",
+                //    Phone = "+72963050540",
+                //    Email = "ViktorMalyshev5946357064@gmail.com",
+                //    Address = "Malaya Konyushennaya Ulitsa229",
+                //    BirthDate = "17.05.1978 0:00:00",
+                //    RegistrationDate = "27.07.2011 0:00:00",
+                //    ChangeDate = "29.07.2020 21:14:21",
+                //    Role = "Client",
+                //    City = "Gatchina",
+                //    IsDeleted = false
 
-            };
-            var json = JsonConvert.SerializeObject(lead);
-            var handleRequest = await httpClient.PostAsync("http://localhost:44382/lead",
-                new StringContent(json, Encoding.UTF8, "application/json"));
-           
-            Assert.True(handleRequest.StatusCode == System.Net.HttpStatusCode.Created);
+                //};
 
-            var response = await httpClient.GetAsync("http://localhost:44382/lead/1");
-            var jsonContent = response.Content.ReadAsStringAsync().Result;
-            var result = JsonConvert.DeserializeObject<LeadDTO>(jsonContent);
 
-            Assert.True(response.StatusCode == System.Net.HttpStatusCode.OK);
-            Assert.AreEqual(1, result.Id);
-            Assert.AreEqual("Anna", result.FirstName);
-            Assert.AreEqual("Konovalova", result.LastName);
-            Assert.AreEqual("Ivanovna", result.Patronymic);
-            Assert.AreEqual("09.09.1989 0:00:00", result.BirthDate);
+
+                //Assert.AreEqual(leadoutputmodel, resultmodel);
+            }
         }
     }
 }
+
