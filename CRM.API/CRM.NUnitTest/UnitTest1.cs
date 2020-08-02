@@ -25,16 +25,17 @@ namespace CRM.NUnitTest
         {
             var webHostBuilder =
                   new WebHostBuilder()                        
-                        .UseEnvironment("Development") // You can set the environment you want (development, staging, production)                           
+                        .UseEnvironment("Development") // You can set the environment you want (development, staging, production)
+                        .ConfigureServices(services => services.AddAutofac())
                         .UseStartup<Startup>(); // Startup class of your web app project
                         
 
             using (var server = new TestServer(webHostBuilder))
             using (var client = server.CreateClient())
             {
-                string result = await client.GetStringAsync("https://localhost:44382/lead/256");
-                Assert.AreEqual("[\"id\":256,\"firstName\":\"Viktor\",\"lastName\":\"Malyshev\",\"patronymic\":\"Grigorievich\",\"login\":\"ViktorMalyshev5946357064\",\"phone\":\" + 72963050540\",\"email\":\"ViktorMalyshev5946357064@gmail.com\",\"address\":\"Malaya Konyushennaya Ulitsa229\",\"birthDate\":\"17.05.1978 0:00:00\",\"registrationDate\":\"27.07.2011 0:00:00\",\"changeDate\":\"29.07.2020 21:14:21\",\"role\":\"Client\",\"city\":\"Gatchina\",\"isDeleted\":false]", result);
-                //string result = await client.GetStringAsync("lead/1"); /// из базы вернули стрингу
+                string result = await client.GetStringAsync("http://localhost:5001/lead/256");
+                Assert.AreEqual("{\"id\":256,\"firstName\":\"Viktor\",\"lastName\":\"Malyshev\",\"patronymic\":\"Grigorievich\",\"login\":\"ViktorMalyshev5946357064\",\"phone\":\"+72963050540\",\"email\":\"ViktorMalyshev5946357064@gmail.com\",\"address\":\"Malaya Konyushennaya Ulitsa229\",\"birthDate\":\"05/17/1978 00:00:00\",\"registrationDate\":\"07/27/2011 00:00:00\",\"changeDate\":\"07/29/2020 21:14:21\",\"role\":\"Client\",\"city\":\"Gatchina\",\"isDeleted\":false}", result);
+                //string result = await client.GetStringAsync("lead/1"); /// ?? ???? ??????? ???????
                 //var resultmodel = JsonConvert.DeserializeObject<LeadOutputModel>(result);
                 //LeadOutputModel leadoutputmodel = new LeadOutputModel()
                 //{

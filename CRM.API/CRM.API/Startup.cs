@@ -29,7 +29,7 @@ namespace CRM.API
             }
             Configuration = builder.Build();
         }
-        
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -51,7 +51,7 @@ namespace CRM.API
                         IssuerSigningKey = Models.TokenOptions.GetSymmetricSecurityKey()
                     };
                 });
-            services.AddMvcCore();          
+            services.AddMvcCore();
             services.AddControllers();
             ConfigureDependencies(services);
             services.Configure<StorageOptions>(Configuration);
@@ -59,9 +59,9 @@ namespace CRM.API
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc(name: "v1", new OpenApiInfo { Title = "CRM.API", Version = "v1" });
-                c.IncludeXmlComments(String.Format(@"{0}\Swagger.XML", AppDomain.CurrentDomain.BaseDirectory));
+                //c.IncludeXmlComments(String.Format(@"{0}\Swagger.XML", AppDomain.CurrentDomain.BaseDirectory));
             }
-            );
+        );
             var mappingConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new MappingProfile());
