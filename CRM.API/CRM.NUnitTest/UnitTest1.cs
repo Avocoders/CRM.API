@@ -33,11 +33,11 @@ namespace CRM.NUnitTest
             using (var server = new TestServer(webHostBuilder))
             using (var client = server.CreateClient())
             {
-                string result = await client.GetStringAsync("http://localhost:5001/lead/256");
+                string result = await client.GetStringAsync("https://localhost:44382/lead/256");
                 Assert.AreEqual("{\"id\":256,\"firstName\":\"Viktor\",\"lastName\":\"Malyshev\",\"patronymic\":\"Grigorievich\",\"login\":\"ViktorMalyshev5946357064\",\"phone\":\"+72963050540\",\"email\":\"ViktorMalyshev5946357064@gmail.com\",\"address\":\"Malaya Konyushennaya Ulitsa229\",\"birthDate\":\"05/17/1978 00:00:00\",\"registrationDate\":\"07/27/2011 00:00:00\",\"changeDate\":\"07/29/2020 21:14:21\",\"role\":\"Client\",\"city\":\"Gatchina\",\"isDeleted\":false}", result);
-                //string result = await client.GetStringAsync("lead/1"); /// ?? ???? ??????? ???????
+                //string result = await client.GetStringAsync("lead/256"); // ?? ???? ??????? ???????
                 //var resultmodel = JsonConvert.DeserializeObject<LeadOutputModel>(result);
-                //LeadOutputModel leadoutputmodel = new LeadOutputModel()
+                //var leadoutputmodel = new LeadOutputModel()
                 //{
                 //    Id = 256,
                 //    FirstName = "Viktor",
@@ -53,12 +53,9 @@ namespace CRM.NUnitTest
                 //    Role = "Client",
                 //    City = "Gatchina",
                 //    IsDeleted = false
-
                 //};
 
-
-
-                //Assert.AreEqual(leadoutputmodel, resultmodel);
+                //Assert.AreEqual(resultmodel, result);
             }
         }
     }

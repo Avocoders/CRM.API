@@ -16,5 +16,15 @@
         public string Role { get; set; }
         public string City { get; set; }
         public bool IsDeleted { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }
