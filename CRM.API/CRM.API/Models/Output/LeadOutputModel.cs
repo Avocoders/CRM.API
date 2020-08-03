@@ -19,7 +19,24 @@
 
         public override bool Equals(object obj)
         {
-            return base.Equals(obj);
+            LeadOutputModel lom = (LeadOutputModel)obj;
+            if (Id == lom.Id &&
+                FirstName == lom.FirstName &&
+                LastName == lom.LastName &&
+                Patronymic == lom.Patronymic &&
+                Login == lom.Login &&
+                Phone == lom.Phone &&
+                Email == lom.Email &&
+                Address == lom.Address &&
+                BirthDate == lom.BirthDate &&
+                RegistrationDate == lom.RegistrationDate &&
+                ChangeDate == lom.ChangeDate &&
+                Role == lom.Role &&
+                City == lom.City &&
+                IsDeleted == lom.IsDeleted)
+                return true;
+
+            return false;
         }
 
         public override int GetHashCode()
