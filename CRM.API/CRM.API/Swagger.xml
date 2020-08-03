@@ -15,13 +15,13 @@
             </summary>
             <param name="leadId"></param>       
         </member>
-        <member name="M:CRM.API.Controllers.LeadController.CreateLead(CRM.API.Models.Input.LeadInputModel)">
+        <member name="M:CRM.API.Controllers.LeadController.CreateLead(CRM.API.Models.Input.LeadDTO)">
             <summary>
             creates a new lead
             </summary>
             <param name="leadModel"></param>       
         </member>
-        <member name="M:CRM.API.Controllers.LeadController.UpdateLead(CRM.API.Models.Input.LeadInputModel)">
+        <member name="M:CRM.API.Controllers.LeadController.UpdateLead(CRM.API.Models.Input.LeadDTO)">
             <summary>
             edits lead's information by leadId
             </summary>

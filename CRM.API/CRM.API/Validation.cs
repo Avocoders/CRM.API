@@ -19,7 +19,7 @@ namespace CRM.API
         public const string constantForLogin = @"^((?!.*@.*\..*$))([a-zA-Z0-9@#$%^&+=*.\-_]){6,}$";
         public const string constantForEmail = @"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
                  @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-0-9a-z]*[0-9a-z]*\.)+[a-z0-9][\-a-z0-9]{0,22}[a-z0-9]))$";
-        public string BadRequestsForLeadInputModel(LeadInputModel leadModel)
+        public string BadRequestsForLeadInputModel(LeadDTO leadModel)
         {
             DataWrapper<int> dataWrapper = new DataWrapper<int>();
             if (string.IsNullOrWhiteSpace(leadModel.FirstName)) return ("Enter the name");

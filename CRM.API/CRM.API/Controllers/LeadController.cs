@@ -47,7 +47,7 @@ namespace CRM.API.Controllers
             return newLogin;
         }
 
-        private string BadRequestsForLeadInputModelForUpdadeLead(LeadInputModel leadModel)
+        private string BadRequestsForLeadInputModelForUpdadeLead(LeadDTO leadModel)
         {
             DataWrapper<int> dataWrapper = new DataWrapper<int>();
             if (string.IsNullOrWhiteSpace(leadModel.Login))
@@ -103,7 +103,7 @@ namespace CRM.API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost]
-        public ActionResult<LeadOutputModel> CreateLead(LeadInputModel leadModel)
+        public ActionResult<LeadOutputModel> CreateLead(LeadDTO leadModel)
         {
             Validation validation = new Validation();
             string badRequest = validation.BadRequestsForLeadInputModel(leadModel);
@@ -123,7 +123,7 @@ namespace CRM.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPut]
-        public ActionResult<LeadOutputModel> UpdateLead(LeadInputModel leadModel)
+        public ActionResult<LeadOutputModel> UpdateLead(LeadDTO leadModel)
         {
             if (!leadModel.Id.HasValue)
             {
