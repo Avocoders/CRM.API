@@ -17,13 +17,9 @@ namespace CRM.API.Controllers
     [Route("[controller]")]
     public class LeadController : Controller
     {
-        private readonly ILogger<LeadController> _logger;
-        
-               
+        private readonly ILogger<LeadController> _logger;  
         private readonly ILeadRepository _repo;
         private readonly IMapper _mapper;
-
-        
         private bool badLogin = true;
         public string newLogin;
 
@@ -32,7 +28,6 @@ namespace CRM.API.Controllers
             _logger = logger;
             _mapper = mapper;
             _repo = repo;
-
         }
 
         private string CreateLogin()
@@ -214,7 +209,5 @@ namespace CRM.API.Controllers
             }
             return Ok(dtoConverter(dataWrapper.Data));
         }
-
-
     }
 }

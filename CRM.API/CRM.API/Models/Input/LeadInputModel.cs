@@ -1,7 +1,6 @@
 ﻿namespace CRM.API.Models.Input
 {
     public class LeadInputModel
-
     {
         public long? Id { get; set; }
         public string FirstName { get; set; }
