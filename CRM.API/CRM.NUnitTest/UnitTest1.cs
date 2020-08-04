@@ -15,6 +15,7 @@ using CRM.Data;
 using Autofac.Extensions.DependencyInjection;
 using TransactionStore.API.Models.Input;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace CRM.NUnitTest
 {
@@ -36,6 +37,30 @@ namespace CRM.NUnitTest
 
             server = new TestServer(webHostBuilder);
             client = server.CreateClient();
+        }
+
+        [Test]
+        public async Task CreateTransferTest()
+        {
+            var transferInputModel = new TransferInputModel()
+            {
+                LeadId = 256,
+                CurrencyId = 2,
+                Amount = 80,
+                DestinationLeadId = 555
+            };
+            var jsonContent = new StringContent(JsonConvert.SerializeObject(transferInputModel), Encoding.UTF8, "application/json");
+            var response = await client.PostAsync("https://localhost:44382/transaction/transfer", jsonContent);            
+            string ids = Convert.ToString(await response.Content.ReadAsStringAsync());
+            string[] data = Regex.Split(ids, @"\D+");
+            long id = Convert.ToInt64(data[1]);
+            string result = await client.GetStringAsync($"https://localhost:44382/transaction/{id}");
+            var actual = JsonConvert.DeserializeObject<List<TransactionOutputModel>>(result)[0];
+
+            Assert.AreEqual(actual.LeadId, 256);
+            Assert.AreEqual(actual.Currency, "USD");
+            Assert.AreEqual(actual.Amount, 80);
+            Assert.AreEqual(actual.Type, "Transfer");
         }
 
         [Test]

@@ -33,8 +33,8 @@ namespace CRM.API.Controllers
         [HttpPost("transfer")]
         public async Task<ActionResult<List<long>>> CreateTransferTransaction([FromBody] TransferInputModel transactionModel)
         {
-            if (_repo.GetById(transactionModel.LeadId).Data is null) return BadRequest("The user is not found");
-            if (_repo.GetById(transactionModel.DestinationLeadId).Data is null) return BadRequest("The user is not found");
+            //if (_repo.GetById(transactionModel.LeadId).Data is null) return BadRequest("The user is not found");
+           // if (_repo.GetById(transactionModel.DestinationLeadId).Data is null) return BadRequest("The user is not found");
             if (transactionModel.Amount <= 0) return BadRequest("The amount is missing");
             if (transactionModel.CurrencyId <= 0) return BadRequest("The currency is missing");
             var jsonContent = new StringContent(JsonConvert.SerializeObject(transactionModel), Encoding.UTF8, "application/json");
@@ -72,7 +72,7 @@ namespace CRM.API.Controllers
         [HttpPost("deposit")]
         public async Task<ActionResult<long>> CreateDepositTransaction([FromBody] TransactionInputModel transactionModel)
         {
-            //if (_repo.GetById(transactionModel.LeadId) is null) return BadRequest("The user is not found");
+            if (_repo.GetById(transactionModel.LeadId) is null) return BadRequest("The user is not found");
             if (transactionModel.Amount <= 0) return BadRequest("The amount is missing");
             if (transactionModel.CurrencyId <= 0) return BadRequest("The currency is missing");
             var jsonContent = new StringContent(JsonConvert.SerializeObject(transactionModel), Encoding.UTF8, "application/json");
