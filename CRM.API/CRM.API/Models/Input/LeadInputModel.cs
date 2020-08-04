@@ -1,6 +1,7 @@
 ﻿namespace CRM.API.Models.Input
 {
-    public class LeadDTO
+    public class LeadInputModel
+
     {
         public long? Id { get; set; }
         public string FirstName { get; set; }

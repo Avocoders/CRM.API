@@ -14,15 +14,15 @@ namespace CRM.API.Configuration
     {       
             public MappingProfile()
             {
-                CreateMap<LeadDTO, LeadDto>()
+                CreateMap<LeadInputModel, LeadDto>()
                      .ForPath(dest => dest.City.Id, o => o.MapFrom(src => src.CityId));
 
                 CreateMap<LeadDto, LeadOutputModel>()
                      .ForPath(dest => dest.City, o => o.MapFrom(src => src.City.Name))
                      .ForPath(dest => dest.Role, o => o.MapFrom(src => src.Role.Name));
 
-                 CreateMap<SearchParametersInputModel, LeadSearchParameters>();
-                   
+                CreateMap<SearchParametersInputModel, LeadSearchParameters>();
+               
         }
 
         
