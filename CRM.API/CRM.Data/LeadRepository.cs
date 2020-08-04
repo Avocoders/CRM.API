@@ -6,8 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-  
+using System.Linq;  
 
 namespace CRM.Data
 {
@@ -15,17 +14,13 @@ namespace CRM.Data
     {
         private readonly IDbConnection _connection;
 
-
         public LeadRepository(IOptions<StorageOptions> options)
         {
             _connection = new SqlConnection(options.Value.DBConnectionString);
         }
 
         public LeadRepository()
-        {
-          
-        }
-
+        { }
 
         public DataWrapper<LeadDto> Add(LeadDto leadDto)
         {

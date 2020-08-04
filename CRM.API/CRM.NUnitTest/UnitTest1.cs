@@ -7,11 +7,9 @@ using System.Text;
 using CRM.API.Models.Output;
 using System.Threading.Tasks;
 using NUnit.Framework.Internal;
-using System.Linq;
 using System;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
-using CRM.Data;
 using Autofac.Extensions.DependencyInjection;
 using TransactionStore.API.Models.Input;
 using System.Collections.Generic;
@@ -34,7 +32,6 @@ namespace CRM.NUnitTest
                         .ConfigureServices(services => services.AddAutofac())
                         .UseStartup<Startup>(); // Startup class of your web app project
 
-
             server = new TestServer(webHostBuilder);
             client = server.CreateClient();
         }
@@ -56,7 +53,6 @@ namespace CRM.NUnitTest
             long id = Convert.ToInt64(data[1]);
             string result = await client.GetStringAsync($"https://localhost:44382/transaction/{id}");
             var actual = JsonConvert.DeserializeObject<List<TransactionOutputModel>>(result)[0];
-
             Assert.AreEqual(actual.LeadId, 256);
             Assert.AreEqual(actual.Currency, "USD");
             Assert.AreEqual(actual.Amount, 80);
@@ -64,7 +60,6 @@ namespace CRM.NUnitTest
         }
 
         [Test]
-
         public async Task GetLeadTest()
         {
             string result = await client.GetStringAsync("https://localhost:44382/lead/256");
@@ -86,13 +81,12 @@ namespace CRM.NUnitTest
                 City = "Gatchina",
                 IsDeleted = false
             };
-
             Assert.AreEqual(actual, expected);
         }
+
         [Test]
         public async Task GetLeadWithUpdatedEmail()
         {
-
             var inputmodel = new EmailInputModel()
             {
                 Id = 256,                
@@ -101,8 +95,7 @@ namespace CRM.NUnitTest
             var jsonContent = new StringContent(JsonConvert.SerializeObject(inputmodel), Encoding.UTF8, "application/json");
             var response = await client.PostAsync("https://localhost:44382/lead/email", jsonContent);
             string actual = Convert.ToString(await response.Content.ReadAsStringAsync());                     
-            var expected = "User with this email already exists";
-           
+            var expected = "User with this email already exists";           
             Assert.AreEqual(expected, actual);
         }
 
@@ -118,16 +111,13 @@ namespace CRM.NUnitTest
             var jsonContent = new StringContent(JsonConvert.SerializeObject(transactionInputModel), Encoding.UTF8, "application/json");
             var response = await client.PostAsync("https://localhost:44382/transaction/deposit", jsonContent);
             long id = Convert.ToInt64(await response.Content.ReadAsStringAsync());
-
             string result = await client.GetStringAsync($"https://localhost:44382/transaction/{id}");
             var actual = JsonConvert.DeserializeObject<List<TransactionOutputModel>>(result)[0];
-
             Assert.AreEqual(actual.LeadId, 256);
             Assert.AreEqual(actual.Currency, "USD");
             Assert.AreEqual(actual.Amount, 80);
             Assert.AreEqual(actual.Type, "Deposit");
         }
-
 
         [Test]
         public async Task CreateWithdrawTest()
@@ -141,10 +131,8 @@ namespace CRM.NUnitTest
             var jsonContent = new StringContent(JsonConvert.SerializeObject(transactionInputModel), Encoding.UTF8, "application/json");
             var response = await client.PostAsync("https://localhost:44382/transaction/withdraw", jsonContent);
             long id = Convert.ToInt64(await response.Content.ReadAsStringAsync());
-
             string result = await client.GetStringAsync($"https://localhost:44382/transaction/{id}");
             var actual = JsonConvert.DeserializeObject<List<TransactionOutputModel>>(result)[0];
-
             Assert.AreEqual(actual.LeadId, 256);
             Assert.AreEqual(actual.Currency, "RUR");
             Assert.AreEqual(actual.Amount, -10);
