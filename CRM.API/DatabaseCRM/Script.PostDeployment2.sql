@@ -9,4 +9,4 @@ Post-Deployment Script Template
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */ 
-   :r .\dbo\Migration\v1.1\CRM_v1.1.sql
+  :r .\dbo\Migration\v1.1\CRM-v1.1.sql

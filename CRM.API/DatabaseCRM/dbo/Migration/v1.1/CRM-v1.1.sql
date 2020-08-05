@@ -3,7 +3,7 @@ set @currentDBVersion = (select top(1) DbVersion from [dbo].[DbVersion] order by
 
 IF @currentDBVersion <> '1.1'
 
-CREATE TABLE [dbo].[Currency] (
+create table [dbo].[Currency] (
     Id   int  unique      NOT NULL,
     [Name] nvarchar (30) NOT NULL,
     Code nvarchar (3) unique NOT NULL,
@@ -96,7 +96,7 @@ alter procedure Lead_Search
 @registrationDateBegin	datetime2(7)=null,
 @registrationDateEnd	datetime2(7)=null,
 @accountId				bigint = null,
-@currencyId				nvarchar(1) = null,
+@currencyId				nvarchar(3) = null,
 @includeDeleted			bit = null
 as 
 	begin	
