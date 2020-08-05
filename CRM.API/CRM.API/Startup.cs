@@ -9,7 +9,6 @@ using Autofac;
 using CRM.API.Configuration;
 using Microsoft.OpenApi.Models;
 using AutoMapper;
-using System;
 using CRM.Core;
 
 namespace CRM.API
@@ -71,9 +70,7 @@ namespace CRM.API
         }
 
         protected virtual void ConfigureDependencies(IServiceCollection services)
-        {
-
-        }
+        { }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -101,8 +98,7 @@ namespace CRM.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-            });
-         
+            });         
         }
 
         public void ConfigureContainer(ContainerBuilder builder)

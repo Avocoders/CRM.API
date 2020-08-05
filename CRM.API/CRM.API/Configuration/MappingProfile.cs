@@ -4,28 +4,30 @@ using CRM.API.Models.Output;
 using CRM.Data;
 using CRM.Data.DTO;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Globalization;
 
 namespace CRM.API.Configuration
 {
     public class MappingProfile : Profile
     {       
-            public MappingProfile()
-            {
-                CreateMap<LeadDTO, LeadDto>()
-                     .ForPath(dest => dest.City.Id, o => o.MapFrom(src => src.CityId));
+         public MappingProfile()
+         {
+             CreateMap<LeadInputModel, LeadDto>()
+                 .ForPath(dest => dest.City.Id, o => o.MapFrom(src => src.CityId))
+                 .ForPath(dest => dest.BirthDate, o => o.MapFrom(src => DateTime.ParseExact(src.BirthDate, "dd.MM.yyyy", CultureInfo.InvariantCulture)));                  
 
-                CreateMap<LeadDto, LeadOutputModel>()
-                     .ForPath(dest => dest.City, o => o.MapFrom(src => src.City.Name))
-                     .ForPath(dest => dest.Role, o => o.MapFrom(src => src.Role.Name));
+             CreateMap<LeadDto, LeadOutputModel>()
+                  .ForPath(dest => dest.City, o => o.MapFrom(src => src.City.Name))
+                  .ForPath(dest => dest.Role, o => o.MapFrom(src => src.Role.Name))
+                  .ForPath(dest => dest.BirthDate, o => o.MapFrom(src => src.BirthDate.ToString("dd.MM.yyyy")))
+                  .ForPath(dest => dest.ChangeDate, o => o.MapFrom(src => src.ChangeDate.ToString("dd.MM.yyyy HH:mm:ss")))
+                  .ForPath(dest => dest.RegistrationDate, o => o.MapFrom(src => src.RegistrationDate.ToString("dd.MM.yyyy HH:mm:ss")));
 
-                 CreateMap<SearchParametersInputModel, LeadSearchParameters>();
-                   
-        }
-
-        
-
+             CreateMap<SearchParametersInputModel, LeadSearchParameters>()
+                 .ForPath(dest => dest.RegistrationDateBegin, o => o.MapFrom(src => DateTime.ParseExact(src.RegistrationDateBegin, "dd.MM.yyyy", CultureInfo.InvariantCulture)))
+                 .ForPath(dest => dest.RegistrationDateEnd, o => o.MapFrom(src => DateTime.ParseExact(src.RegistrationDateEnd, "dd.MM.yyyy", CultureInfo.InvariantCulture)))
+                 .ForPath(dest => dest.BirthDateEnd, o => o.MapFrom(src => DateTime.ParseExact(src.BirthDateEnd, "dd.MM.yyyy", CultureInfo.InvariantCulture)))
+                 .ForPath(dest => dest.BirthDateBegin, o => o.MapFrom(src => DateTime.ParseExact(src.BirthDateBegin, "dd.MM.yyyy", CultureInfo.InvariantCulture)));               
+         }
     }
 }
