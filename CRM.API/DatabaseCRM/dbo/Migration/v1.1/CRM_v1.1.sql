@@ -1,16 +1,22 @@
-﻿create table Account(
+﻿CREATE TABLE [dbo].[Currency] (
+    Id   int  unique      NOT NULL,
+    [Name] nvarchar (30) NOT NULL,
+    Code nvarchar (3) unique NOT NULL,
+	primary key (Id),
+);
+go
+create table dbo.[Account](
 		Id bigint Identity, 
 		LeadId bigint not null,
-		Balance bigint null,
 		СurrencyId int null,
 		IsDeleted bit default (0),  
-		PRIMARY KEY (Id),
-		FOREIGN KEY (LeadId)  REFERENCES [Lead] (Id))
-
+		primary key (Id),
+		foreign key (LeadId)  references [Lead] (Id),
+		foreign key (СurrencyId) references [Currency] (Id))
+go
 create procedure Account_Add_Or_Update
 	@id			bigint,
 	@leadId bigint,
-	@balance bigint,
 	@currencyId int
 	as
 	begin
@@ -19,40 +25,50 @@ create procedure Account_Add_Or_Update
 		on a.Id = n.Id 
 		when matched and IsDeleted=0
 			then update 
-				set a.Balance=@balance,
-					a.СurrencyId=@currencyId						
+				set a.СurrencyId=@currencyId						
 		when not matched 
 			then insert (LeadId,
-						Balance,
 						СurrencyId,
 						IsDeleted) 
 				values (@leadId, 
-						@balance, 
 						@currencyId,
 						default);
 		declare @inserted bigint = CAST(SCOPE_IDENTITY() as [bigint])
 		if @id > 0 exec Account_GetById @id
 		else exec Account_GetById @inserted
 	end
-
+go
 create procedure Account_GetById
 	@accoundId bigint
 	as
 	begin
-		select a.Id, l.FirstName, l.LastName, l.BirthDate, a.Balance, a.СurrencyId, a.IsDeleted from dbo.[Account] a
+		select a.Id, 
+				l.FirstName, 
+				l.LastName, 
+				l.BirthDate, 
+				c.[Name], 
+				a.IsDeleted from dbo.[Account] a
 		inner join [Lead] l on l.Id=a.LeadId
+		inner join [Currency] c on c.Id=a.СurrencyId
 		where a.Id=@accoundId 
 	end
-
+go
 create procedure Account_GetByLeadId
 		@LeadId bigint
 		as
 		begin
-			select a.Id, l.FirstName, l.LastName, l.BirthDate, a.Balance, a.СurrencyId, a.IsDeleted from dbo.[Account] a
+			select a.Id, 
+					l.FirstName, 
+					l.LastName, 
+					l.BirthDate, 
+					c.[Name], 
+					a.IsDeleted from dbo.[Account] a
 			inner join [Lead] l on l.Id=a.LeadId
+			inner join [Currency] c on c.Id=a.СurrencyId
 			where a.LeadId=@LeadId and l.IsDeleted=0
-		end
 
+		end
+go
 alter procedure Lead_Search
 @roleId					int = null,
 @firstNameSearchMode	int = null,
@@ -75,6 +91,7 @@ alter procedure Lead_Search
 @registrationDateBegin	datetime2(7)=null,
 @registrationDateEnd	datetime2(7)=null,
 @accountId				bigint = null,
+@currencyId				nvarchar(1) = null,
 @includeDeleted			bit = null
 as 
 	begin	
@@ -99,10 +116,13 @@ as
 			r.[Name],
 			c.Id,
 			c.[Name]
+			a.Id,
+			cr.[Name]
 		from dbo.[Lead] as l
 		inner join [Role] as r on r.Id=l.RoleId
 		inner join City as c on c.Id=l.CityId
 		inner join Account as a on a.LeadId=l.Id
+		inner join Currency cr on cr.Id=a.СurrencyId
 		where 1=1'
 
 		if @roleId>0
@@ -245,6 +265,11 @@ as
 			set @resultSql = @resultSql + ' and a.Id = ''' + convert(nvarchar(1),@accountId) + ''''
 		end
 
+		if @currencyId is not null
+		begin
+			set @resultSql = @resultSql + ' and cr.Id = ''' + convert(nvarchar(1),@currencyId) + ''''
+		end
+
 		if @includeDeleted is not null
 		begin
 			set @resultSql = @resultSql + ' and l.IncludeDeleted =''' + convert(nvarchar(1), @includeDeleted)+''''
@@ -253,7 +278,7 @@ as
 		print @resultSql
 		exec sp_sqlexec @resultSql
 	end
-
+go
 alter procedure [dbo].[Lead_GetById]
 @leadid bigint
 as
@@ -274,14 +299,17 @@ begin
             c.Id, 
 			c.[Name], 
 			a.Id AccountNumber, 
+			cr.[Name],
 			a.IsDeleted AccountState 
 			from dbo.[Lead] l
 	inner join [Role] r on r.Id=l.RoleId
 	inner join City c on c.Id=l.CityId
 	inner join Account a on a.LeadId=l.Id
+	inner join [Currency] cr on c.Id=a.СurrencyId
+
 	where l.Id=@leadid and l.IsDeleted=0
 end
-
+go
 create procedure CreateStrings_Account
 @rowValue bigint 
 as
