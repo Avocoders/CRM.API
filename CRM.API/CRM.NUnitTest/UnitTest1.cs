@@ -44,7 +44,7 @@ namespace CRM.NUnitTest
                 LeadId = 256,
                 CurrencyId = 2,
                 Amount = 80,
-                DestinationLeadId = 555
+                LeadIdReceiver = 555
             };
             var jsonContent = new StringContent(JsonConvert.SerializeObject(transferInputModel), Encoding.UTF8, "application/json");
             var response = await client.PostAsync("https://localhost:44382/transaction/transfer", jsonContent);            

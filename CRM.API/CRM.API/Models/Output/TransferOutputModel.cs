@@ -2,6 +2,6 @@
 {
     public class TransferOutputModel : TransactionOutputModel
     {
-        public long TransientLeadId { get; set; }
+        public long LeadIdReceiver { get; set; }
     }
 }
