@@ -1,4 +1,9 @@
-﻿CREATE TABLE [dbo].[Currency] (
+﻿DECLARE @currentDBVersion nvarchar(10);
+set @currentDBVersion = (select top(1) DbVersion from [dbo].[DbVersion] order by Created desc)
+
+IF @currentDBVersion <> '1.1'
+
+CREATE TABLE [dbo].[Currency] (
     Id   int  unique      NOT NULL,
     [Name] nvarchar (30) NOT NULL,
     Code nvarchar (3) unique NOT NULL,
@@ -339,3 +344,6 @@ as
 	end
 set @length = @length+1
 end
+go
+INSERT INTO dbo.[DbVersion] (Created, DbVersion) VALUES (SYSDATETIME(), '1.1')
+go
