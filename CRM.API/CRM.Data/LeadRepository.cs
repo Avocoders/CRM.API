@@ -22,8 +22,8 @@ namespace CRM.Data
         public LeadRepository()
         { }
 
-        public DataWrapper<LeadDto> GetAccountById(long Id)  //работает :))))))
-        {
+        public DataWrapper<LeadDto> GetAccountById(long Id)  
+        { 
             var result = new DataWrapper<LeadDto>();
             try
             {
@@ -124,37 +124,37 @@ namespace CRM.Data
             return result;
         }
 
-        //public DataWrapper<AccountDto> AddOrUpdateAccount(AccountDto accountDto)
-        //{
-        //    var result = new DataWrapper<AccountDto>();
-        //    try
-        //    {
-        //        result.Data = _connection.Query<AccountDto, LeadDto, CurrencyDto, AccountDto>(
-        //            "Account_Add_Or_Update",
-        //            (account, lead, currency) =>
-        //            {
-        //                AccountDto accountEntry;
-        //                accountEntry = account;
-        //                accountEntry.Lead = lead;
-        //                accountEntry.Currency = currency;
-                        
-        //                return accountEntry;
-        //            },
-        //            new {
-        //                accountDto.Id, 
-        //                LeadId = accountDto.Lead.Id,
-        //                CurrencyId = accountDto.Currency.Id
+        public DataWrapper<LeadDto> AddOrUpdateAccount(AccountDto accountDto)
+        {
+            var result = new DataWrapper<LeadDto>();
+            try
+            {
+                result.Data = _connection.Query<LeadDto,AccountDto,LeadDto>( 
+                    "Account_Add_Or_Update ",
+                     (lead, account) =>
+                     {
+                         LeadDto leadEntry;
+                         leadEntry = lead;
+                         leadEntry.Accounts = new List<AccountDto>();
+                         leadEntry.Accounts.Add(account);
+                         return leadEntry;
+                     },
 
-        //            }, splitOn: "Id",
-        //            commandType: CommandType.StoredProcedure).FirstOrDefault();
-        //        result.IsOk = true;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        result.ExceptionMessage = e.Message;
-        //    }
-        //    return result;
-        //}
+                       new
+                       {
+                           accountDto.Id,
+                           accountDto.LeadId,
+                           accountDto.CurrencyId
+                       }, splitOn: "Id", commandType: CommandType.StoredProcedure).FirstOrDefault();
+            
+                result.IsOk = true;
+            }
+            catch (Exception e)
+            {
+                result.ExceptionMessage = e.Message;
+            }
+            return result;
+        }
 
 
         public void Delete(long id)

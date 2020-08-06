@@ -39,9 +39,8 @@ namespace CRM.API.Configuration
                  .ForPath(dest => dest.BirthDateEnd, o => o.MapFrom(src => DateTime.ParseExact(src.BirthDateEnd, "dd.MM.yyyy", CultureInfo.InvariantCulture)))
                  .ForPath(dest => dest.BirthDateBegin, o => o.MapFrom(src => DateTime.ParseExact(src.BirthDateBegin, "dd.MM.yyyy", CultureInfo.InvariantCulture)));
 
-            //CreateMap<AccountInputModel, AccountDto>()
-            //    .ForPath(dest => dest.Lead.Id, o => o.MapFrom(src => src.LeadId))
-            //    .ForPath(dest => dest.Currency.Id, o => o.MapFrom(src => src.CurrencyId));
+            CreateMap<AccountInputModel, AccountDto>();
+              
         }
     }
 }
