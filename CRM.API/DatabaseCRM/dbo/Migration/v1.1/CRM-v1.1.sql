@@ -13,11 +13,27 @@ go
 create table dbo.[Account](
 		Id bigint Identity, 
 		LeadId bigint not null,
+		Balance bigint null,
 		СurrencyId int null,
 		IsDeleted bit default (0),  
 		primary key (Id),
 		foreign key (LeadId)  references [Lead] (Id),
 		foreign key (СurrencyId) references [Currency] (Id))
+go
+create procedure Account_GetById
+	@accountId bigint
+	as
+	begin
+		select a.Id, 
+				l.FirstName, 
+				l.LastName, 
+				l.BirthDate, 
+				c.[Name], 
+				a.IsDeleted from dbo.[Account] a
+		inner join [Lead] l on l.Id=a.LeadId
+		inner join [Currency] c on c.Id=a.СurrencyId
+		where a.Id=@accountId 
+	end
 go
 create procedure Account_Add_Or_Update
 	@id			bigint,
@@ -43,23 +59,8 @@ create procedure Account_Add_Or_Update
 		else exec Account_GetById @inserted
 	end
 go
-create procedure Account_GetById
-	@accoundId bigint
-	as
-	begin
-		select a.Id, 
-				l.FirstName, 
-				l.LastName, 
-				l.BirthDate, 
-				c.[Name], 
-				a.IsDeleted from dbo.[Account] a
-		inner join [Lead] l on l.Id=a.LeadId
-		inner join [Currency] c on c.Id=a.СurrencyId
-		where a.Id=@accoundId 
-	end
-go
 create procedure Account_GetByLeadId
-		@LeadId bigint
+		@leadId bigint
 		as
 		begin
 			select a.Id, 
@@ -70,7 +71,7 @@ create procedure Account_GetByLeadId
 					a.IsDeleted from dbo.[Account] a
 			inner join [Lead] l on l.Id=a.LeadId
 			inner join [Currency] c on c.Id=a.СurrencyId
-			where a.LeadId=@LeadId and l.IsDeleted=0
+			where a.LeadId=@leadId and l.IsDeleted=0
 
 		end
 go
@@ -345,5 +346,6 @@ as
 set @length = @length+1
 end
 go
+
 INSERT INTO dbo.[DbVersion] (Created, DbVersion) VALUES (SYSDATETIME(), '1.1')
 go
