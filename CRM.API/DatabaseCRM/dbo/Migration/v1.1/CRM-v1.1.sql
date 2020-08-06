@@ -12,8 +12,7 @@ create table [dbo].[Currency] (
 go
 create table dbo.[Account](
 		Id bigint Identity, 
-		LeadId bigint not null,
-		Balance bigint null,
+		LeadId bigint not null,		
 		СurrencyId int null,
 		IsDeleted bit default (0),  
 		primary key (Id),
@@ -323,8 +322,7 @@ as
 		declare @length int = 0
 		while @length < @rowValue
 		begin
-		declare @leadId bigint
-		declare @balance bigint
+		declare @leadId bigint		
 		declare @currencyId int
 
 		set @leadId=(select round((rand()*100000),1))
@@ -334,12 +332,10 @@ as
 		set @currencyId =(select round((rand()*4),1))
 
 		insert into Account(
-			LeadId,
-			Balance,
+			LeadId,			
 			СurrencyId,
 			IsDeleted)
-		values (@leadId,
-				@balance,
+		values (@leadId,				
 				@currencyId,
 				default)
 	end
