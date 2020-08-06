@@ -5,6 +5,7 @@ namespace CRM.Data
 {
     public interface ILeadRepository
     {
+        DataWrapper<AccountDto> GetAccountById(long Id);
         DataWrapper<LeadDto> Add(LeadDto leadDto);
         void Delete(long id);
         DataWrapper<int> FindLeadByEmail(string email);

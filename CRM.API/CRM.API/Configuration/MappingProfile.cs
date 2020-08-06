@@ -12,7 +12,13 @@ namespace CRM.API.Configuration
     {       
          public MappingProfile()
          {
-             CreateMap<LeadInputModel, LeadDto>()
+            CreateMap<AccountDto, AccountOutputModel>()
+                 .ForPath(dest => dest.FirstName, o => o.MapFrom(src => src.Lead.FirstName))
+                 .ForPath(dest => dest.LastName, o => o.MapFrom(src => src.Lead.LastName))
+                 .ForPath(dest => dest.BirthDate, o => o.MapFrom(src => src.Lead.BirthDate.ToString("dd.MM.yyyy")))
+                 .ForPath(dest => dest.CurrencyId, o => o.MapFrom(src => src.Currency.Id));
+
+            CreateMap<LeadInputModel, LeadDto>()
                  .ForPath(dest => dest.City.Id, o => o.MapFrom(src => src.CityId))
                  .ForPath(dest => dest.BirthDate, o => o.MapFrom(src => DateTime.ParseExact(src.BirthDate, "dd.MM.yyyy", CultureInfo.InvariantCulture)));                  
 

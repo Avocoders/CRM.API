@@ -17,7 +17,7 @@ namespace CRM.Data.DTO
         public DateTime RegistrationDate { get; set; }
         public DateTime ChangeDate { get; set; }
         public RoleDto Role { get; set; }
-        public CityDto City { get; set; }                
-        public bool IsDeleted { get; set; }
+        public CityDto City { get; set; }          
+        public bool IsDeleted { get; set; }        
     }
 }

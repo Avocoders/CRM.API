@@ -22,6 +22,33 @@ namespace CRM.Data
         public LeadRepository()
         { }
 
+        public DataWrapper<AccountDto> GetAccountById(long accountId)  //работает :))))))
+        {
+            var result = new DataWrapper<AccountDto>();
+            try
+            {
+                result.Data = _connection.Query<AccountDto, LeadDto, CurrencyDto, AccountDto>(
+                    "Account_GetById",
+                    (account, lead, currency) =>
+                    {
+                        AccountDto accountEntry;
+
+                        accountEntry = account;
+                        accountEntry.Lead= lead;
+                        accountEntry.Currency = currency;
+                        return accountEntry;
+                    },
+                    new { accountId }, splitOn: "Id",
+                    commandType: CommandType.StoredProcedure).FirstOrDefault();
+                result.IsOk = true;
+            }
+            catch (Exception e)
+            {
+                result.ExceptionMessage = e.Message;
+            }
+            return result;
+        }
+           
         public DataWrapper<LeadDto> Add(LeadDto leadDto)
         {
             var result = new DataWrapper<LeadDto>();
