@@ -325,9 +325,7 @@ as
 		declare @leadId bigint		
 		declare @currencyId int
 
-		set @leadId=(select round((rand()*100000),1))
-
-		set @balance = (select round((rand()*100000),1))
+		set @leadId=(select round((rand()*100000),1))		
 
 		set @currencyId =(select round((rand()*4),1))
 
