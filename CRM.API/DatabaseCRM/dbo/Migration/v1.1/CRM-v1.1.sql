@@ -19,21 +19,22 @@ create table dbo.[Account](
 		foreign key (LeadId)  references [Lead] (Id),
 		foreign key (СurrencyId) references [Currency] (Id))
 go
-create procedure Account_GetById
-	@accountId bigint
+create procedure [dbo].[Account_GetById]
+	@Id bigint
 	as
 	begin
-		select  a.Id, 
-				a.IsDeleted,
-				l.Id,
+		select  
+		        l.Id  ,
 				l.FirstName, 
 				l.LastName, 
 				l.BirthDate,
+		        a.Id, 
+				a.IsDeleted,
 				c.Id currencyId
 				from dbo.[Account] a
 		inner join [Lead] l on l.Id=a.LeadId
 		inner join [Currency] c on c.Id=a.СurrencyId
-		where a.Id=@accountId 
+		where a.Id=@Id 
 	end
 go
 create procedure Account_Add_Or_Update
@@ -64,13 +65,13 @@ create procedure Account_GetByLeadId
 		@leadId bigint
 		as
 		begin
-			select  a.Id, 
-					a.IsDeleted,
-					l.Id leadId,
+			select  l.Id ,
 					l.FirstName, 
 					l.LastName, 
-					l.BirthDate, 
-					c.Id currencyId
+					l.BirthDate, 			
+		        	a.Id, 
+					a.IsDeleted, 
+					c.Id CurrencyId
 					 from dbo.[Account] a
 			inner join [Lead] l on l.Id=a.LeadId
 			inner join [Currency] c on c.Id=a.СurrencyId

@@ -22,22 +22,22 @@ namespace CRM.Data
         public LeadRepository()
         { }
 
-        public DataWrapper<AccountDto> GetAccountById(long accountId)  //работает :))))))
+        public DataWrapper<LeadDto> GetAccountById(long Id)  //работает :))))))
         {
-            var result = new DataWrapper<AccountDto>();
+            var result = new DataWrapper<LeadDto>();
             try
             {
-                result.Data = _connection.Query<AccountDto, LeadDto, CurrencyDto, AccountDto>(
+                result.Data = _connection.Query<LeadDto, AccountDto, LeadDto>(
                     "Account_GetById",
-                    (account, lead, currency) =>
+                    (lead,account) =>
                     {
-                        AccountDto accountEntry;
-                        accountEntry = account;
-                        accountEntry.Lead= lead;
-                        accountEntry.Currency = currency;
-                        return accountEntry;
+                        LeadDto leadEntry;
+                        leadEntry = lead;
+                        leadEntry.Accounts = new List<AccountDto>();
+                        leadEntry.Accounts.Add(account);
+                        return leadEntry;
                     },
-                    new { accountId }, splitOn: "Id",
+                    new { Id }, splitOn: "Id",
                     commandType: CommandType.StoredProcedure).FirstOrDefault();
                 result.IsOk = true;
             }
@@ -49,23 +49,29 @@ namespace CRM.Data
         }
 
 
-        public DataWrapper <List<AccountDto>> GetAccountByLeadId(long leadId)  
+        public DataWrapper <LeadDto> GetAccountByLeadId(long leadId)  
         {
-            var result = new DataWrapper <List<AccountDto>>();
+            var leadDictionary = new Dictionary<long, LeadDto>();
+            var result = new DataWrapper <LeadDto>();
             try
-            {
-                result.Data = _connection.Query<AccountDto, LeadDto, CurrencyDto, AccountDto>(
+            {               
+                    result.Data = _connection.Query<LeadDto, AccountDto, LeadDto>(
                     "Account_GetByLeadId",
-                    (account, lead, currency) =>
+                    (lead, account) =>
                     {
-                        AccountDto accountEntry;
-                        accountEntry = account;
-                        accountEntry.Lead = lead;
-                        accountEntry.Currency = currency;
-                        return accountEntry;
+                    LeadDto leadEntry;
+                    if (!leadDictionary.TryGetValue(lead.Id.Value, out leadEntry))
+                        {
+                            leadEntry = lead;
+                            leadEntry.Accounts = new List<AccountDto>();
+                            leadDictionary.Add(leadEntry.Id.Value, leadEntry);
+                        }
+                        leadEntry.Accounts.Add(account);
+                        return leadEntry;
+  
                     },
                     new { leadId }, splitOn: "Id",
-                    commandType: CommandType.StoredProcedure).ToList();
+                    commandType: CommandType.StoredProcedure).FirstOrDefault();
                 result.IsOk = true;
             }
             catch (Exception e)
@@ -73,7 +79,9 @@ namespace CRM.Data
                 result.ExceptionMessage = e.Message;
             }
             return result;
+           
         }
+
 
                                     
         public DataWrapper<LeadDto> Add(LeadDto leadDto)
@@ -116,37 +124,37 @@ namespace CRM.Data
             return result;
         }
 
-        public DataWrapper<AccountDto> AddOrUpdateAccount(AccountDto accountDto)
-        {
-            var result = new DataWrapper<AccountDto>();
-            try
-            {
-                result.Data = _connection.Query<AccountDto, LeadDto, CurrencyDto, AccountDto>(
-                    "Account_Add_Or_Update",
-                    (account, lead, currency) =>
-                    {
-                        AccountDto accountEntry;
-                        accountEntry = account;
-                        accountEntry.Lead = lead;
-                        accountEntry.Currency = currency;
+        //public DataWrapper<AccountDto> AddOrUpdateAccount(AccountDto accountDto)
+        //{
+        //    var result = new DataWrapper<AccountDto>();
+        //    try
+        //    {
+        //        result.Data = _connection.Query<AccountDto, LeadDto, CurrencyDto, AccountDto>(
+        //            "Account_Add_Or_Update",
+        //            (account, lead, currency) =>
+        //            {
+        //                AccountDto accountEntry;
+        //                accountEntry = account;
+        //                accountEntry.Lead = lead;
+        //                accountEntry.Currency = currency;
                         
-                        return accountEntry;
-                    },
-                    new {
-                        accountDto.Id, 
-                        LeadId = accountDto.Lead.Id,
-                        CurrencyId = accountDto.Currency.Id
+        //                return accountEntry;
+        //            },
+        //            new {
+        //                accountDto.Id, 
+        //                LeadId = accountDto.Lead.Id,
+        //                CurrencyId = accountDto.Currency.Id
 
-                    }, splitOn: "Id",
-                    commandType: CommandType.StoredProcedure).FirstOrDefault();
-                result.IsOk = true;
-            }
-            catch (Exception e)
-            {
-                result.ExceptionMessage = e.Message;
-            }
-            return result;
-        }
+        //            }, splitOn: "Id",
+        //            commandType: CommandType.StoredProcedure).FirstOrDefault();
+        //        result.IsOk = true;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        result.ExceptionMessage = e.Message;
+        //    }
+        //    return result;
+        //}
 
 
         public void Delete(long id)

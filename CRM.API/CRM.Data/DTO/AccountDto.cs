@@ -4,7 +4,7 @@
     {
         public long? Id { get; set; }
         public bool IsDeleted { get; set; }            
-        public LeadDto Lead { get; set; }
-        public CurrencyDto Currency { get; set; }
+        
+        public byte CurrencyId { get; set; }
     }
 }

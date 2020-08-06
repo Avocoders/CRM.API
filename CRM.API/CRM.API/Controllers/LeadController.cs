@@ -197,36 +197,36 @@ namespace CRM.API.Controllers
         //[Authorize()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet("account/{Id}")]
-        public ActionResult<AccountOutputModel> GetAccountById(long Id)
+        public ActionResult<LeadWithAccountsOutputModel> GetAccountById(long Id)
         {
-            DataWrapper<AccountDto> dataWrapper = _repo.GetAccountById(Id);
-            return MakeResponse(dataWrapper, _mapper.Map<AccountOutputModel>);
+            DataWrapper<LeadDto> dataWrapper = _repo.GetAccountById(Id);
+            return MakeResponse(dataWrapper, _mapper.Map<LeadWithAccountsOutputModel>);
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet("{leadId}/accounts")]
-        public ActionResult <List<AccountOutputModel>> GetAccountByLeadId(long leadId)
+        public ActionResult <LeadWithAccountsOutputModel> GetAccountByLeadId(long leadId)
         {
-            DataWrapper <List<AccountDto>> dataWrapper = _repo.GetAccountByLeadId(leadId);
-            return MakeResponse(dataWrapper, _mapper.Map<List<AccountOutputModel>>);
+            DataWrapper <LeadDto> dataWrapper = _repo.GetAccountByLeadId(leadId);
+            return MakeResponse(dataWrapper, _mapper.Map<LeadWithAccountsOutputModel>);
         }
 
 
-       [ProducesResponseType(StatusCodes.Status200OK)]
-        [HttpPost("account")]
-        public ActionResult<AccountOutputModel> AddAccount(AccountInputModel account)
-        {
-            DataWrapper<AccountDto> dataWrapper = _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));//_mapper.Map<LeadSearchParameters>
-            return MakeResponse(dataWrapper, _mapper.Map<AccountOutputModel>);
-        }
+       //[ProducesResponseType(StatusCodes.Status200OK)]
+       // [HttpPost("account")]
+        //public ActionResult<AccountOutputModel> AddAccount(AccountInputModel account)
+        //{
+        //    DataWrapper<AccountDto> dataWrapper = _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));//_mapper.Map<LeadSearchParameters>
+        //    return MakeResponse(dataWrapper, _mapper.Map<AccountOutputModel>);
+        //}
 
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [HttpPut("account")]
-        public ActionResult<AccountOutputModel> UpdateAccount(AccountInputModel account)
-        {
-            DataWrapper<AccountDto> dataWrapper = _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));//_mapper.Map<LeadSearchParameters>
-            return MakeResponse(dataWrapper, _mapper.Map<AccountOutputModel>);
-        }
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[HttpPut("account")]
+        //public ActionResult<AccountOutputModel> UpdateAccount(AccountInputModel account)
+        //{
+        //    DataWrapper<AccountDto> dataWrapper = _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));//_mapper.Map<LeadSearchParameters>
+        //    return MakeResponse(dataWrapper, _mapper.Map<AccountOutputModel>);
+        //}
                
 
         private delegate T DtoConverter<T,K>(K dto);
