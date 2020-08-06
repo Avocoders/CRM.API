@@ -2,6 +2,6 @@
 {
     public class TransferOutputModel : TransactionOutputModel
     {
-        public long LeadIdReceiver { get; set; }
+        public long AccountIdReceiver { get; set; }
     }
 }

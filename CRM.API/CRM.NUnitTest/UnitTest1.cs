@@ -41,10 +41,10 @@ namespace CRM.NUnitTest
         {
             var transferInputModel = new TransferInputModel()
             {
-                LeadId = 256,
+                AccountId = 256,
                 CurrencyId = 2,
                 Amount = 80,
-                LeadIdReceiver = 555
+                AccountIdReceiver = 555
             };
             var jsonContent = new StringContent(JsonConvert.SerializeObject(transferInputModel), Encoding.UTF8, "application/json");
             var response = await client.PostAsync(Configuration.LocalHost + "transaction/transfer", jsonContent);            
@@ -53,7 +53,7 @@ namespace CRM.NUnitTest
             long id = Convert.ToInt64(data[1]);
             string result = await client.GetStringAsync(Configuration.LocalHost + $"transaction/{id}");
             var actual = JsonConvert.DeserializeObject<List<TransactionOutputModel>>(result)[0];
-            Assert.AreEqual(actual.LeadId, 256);
+            Assert.AreEqual(actual.AccountId, 256);
             Assert.AreEqual(actual.Currency, "USD");
             Assert.AreEqual(actual.Amount, 80);
             Assert.AreEqual(actual.Type, "Transfer");
@@ -104,7 +104,7 @@ namespace CRM.NUnitTest
         {
             var transactionInputModel = new TransactionInputModel()
             {
-                LeadId = 256,
+                AccountId = 256,
                 CurrencyId = 2,
                 Amount = 80
             };
@@ -113,7 +113,7 @@ namespace CRM.NUnitTest
             long id = Convert.ToInt64(await response.Content.ReadAsStringAsync());
             string result = await client.GetStringAsync(Configuration.LocalHost + $"transaction/{id}");
             var actual = JsonConvert.DeserializeObject<List<TransactionOutputModel>>(result)[0];
-            Assert.AreEqual(actual.LeadId, 256);
+            Assert.AreEqual(actual.AccountId, 256);
             Assert.AreEqual(actual.Currency, "USD");
             Assert.AreEqual(actual.Amount, 80);
             Assert.AreEqual(actual.Type, "Deposit");
@@ -124,7 +124,7 @@ namespace CRM.NUnitTest
         {
             var transactionInputModel = new TransactionInputModel()
             {
-                LeadId = 256,
+                AccountId = 256,
                 CurrencyId = 1,
                 Amount = 10
             };
@@ -133,7 +133,7 @@ namespace CRM.NUnitTest
             long id = Convert.ToInt64(await response.Content.ReadAsStringAsync());
             string result = await client.GetStringAsync(Configuration.LocalHost + $"transaction/{id}");
             var actual = JsonConvert.DeserializeObject<List<TransactionOutputModel>>(result)[0];
-            Assert.AreEqual(actual.LeadId, 256);
+            Assert.AreEqual(actual.AccountId, 256);
             Assert.AreEqual(actual.Currency, "RUR");
             Assert.AreEqual(actual.Amount, -10);
             Assert.AreEqual(actual.Type, "Withdraw");
