@@ -211,6 +211,24 @@ namespace CRM.API.Controllers
             return MakeResponse(dataWrapper, _mapper.Map<List<AccountOutputModel>>);
         }
 
+
+       [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpPost("account")]
+        public ActionResult<AccountOutputModel> AddAccount(AccountInputModel account)
+        {
+            DataWrapper<AccountDto> dataWrapper = _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));//_mapper.Map<LeadSearchParameters>
+            return MakeResponse(dataWrapper, _mapper.Map<AccountOutputModel>);
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpPut("account")]
+        public ActionResult<AccountOutputModel> UpdateAccount(AccountInputModel account)
+        {
+            DataWrapper<AccountDto> dataWrapper = _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));//_mapper.Map<LeadSearchParameters>
+            return MakeResponse(dataWrapper, _mapper.Map<AccountOutputModel>);
+        }
+               
+
         private delegate T DtoConverter<T,K>(K dto);
 
         private ActionResult<T> MakeResponse<T>(DataWrapper<T> dataWrapper)

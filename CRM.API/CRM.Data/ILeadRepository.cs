@@ -17,5 +17,7 @@ namespace CRM.Data
         DataWrapper<LeadDto> Update(LeadDto leadDto);
         DataWrapper<string> UpdateEmailByLeadId(long? id, string email);
         DataWrapper<List<AccountDto>> GetAccountByLeadId(long leadId);
+
+        DataWrapper<AccountDto> AddOrUpdateAccount(AccountDto accountDto);
     }
 }
