@@ -22,6 +22,68 @@ namespace CRM.Data
         public LeadRepository()
         { }
 
+        public DataWrapper<LeadDto> GetAccountById(long Id)  
+        { 
+            var result = new DataWrapper<LeadDto>();
+            try
+            {
+                result.Data = _connection.Query<LeadDto, AccountDto, LeadDto>(
+                    "Account_GetById",
+                    (lead,account) =>
+                    {
+                        LeadDto leadEntry;
+                        leadEntry = lead;
+                        leadEntry.Accounts = new List<AccountDto>();
+                        leadEntry.Accounts.Add(account);
+                        return leadEntry;
+                    },
+                    new { Id }, splitOn: "Id",
+                    commandType: CommandType.StoredProcedure).FirstOrDefault();
+                result.IsOk = true;
+            }
+            catch (Exception e)
+            {
+                result.ExceptionMessage = e.Message;
+            }
+            return result;
+        }
+
+
+        public DataWrapper <LeadDto> GetAccountByLeadId(long leadId)  
+        {
+            var leadDictionary = new Dictionary<long, LeadDto>();
+            var result = new DataWrapper <LeadDto>();
+            try
+            {               
+                    result.Data = _connection.Query<LeadDto, AccountDto, LeadDto>(
+                    "Account_GetByLeadId",
+                    (lead, account) =>
+                    {
+                    LeadDto leadEntry;
+                    if (!leadDictionary.TryGetValue(lead.Id.Value, out leadEntry))
+                        {
+                            leadEntry = lead;
+                            leadEntry.Accounts = new List<AccountDto>();
+                            leadDictionary.Add(leadEntry.Id.Value, leadEntry);
+                        }
+                        leadEntry.Accounts.Add(account);
+                        return leadEntry;
+  
+                    },
+                    new { leadId }, splitOn: "Id",
+                    commandType: CommandType.StoredProcedure).FirstOrDefault();
+                result.IsOk = true;
+            }
+            catch (Exception e)
+            {
+                result.ExceptionMessage = e.Message;
+            }
+            return result;
+           
+        }
+
+
+                                    
         public DataWrapper<LeadDto> Add(LeadDto leadDto)
         {
             var result = new DataWrapper<LeadDto>();
@@ -61,6 +123,39 @@ namespace CRM.Data
             }
             return result;
         }
+
+        public DataWrapper<LeadDto> AddOrUpdateAccount(AccountDto accountDto)
+        {
+            var result = new DataWrapper<LeadDto>();
+            try
+            {
+                result.Data = _connection.Query<LeadDto,AccountDto,LeadDto>( 
+                    "Account_Add_Or_Update ",
+                     (lead, account) =>
+                     {
+                         LeadDto leadEntry;
+                         leadEntry = lead;
+                         leadEntry.Accounts = new List<AccountDto>();
+                         leadEntry.Accounts.Add(account);
+                         return leadEntry;
+                     },
+
+                       new
+                       {
+                           accountDto.Id,
+                           accountDto.LeadId,
+                           accountDto.CurrencyId
+                       }, splitOn: "Id", commandType: CommandType.StoredProcedure).FirstOrDefault();
+            
+                result.IsOk = true;
+            }
+            catch (Exception e)
+            {
+                result.ExceptionMessage = e.Message;
+            }
+            return result;
+        }
+
 
         public void Delete(long id)
         {

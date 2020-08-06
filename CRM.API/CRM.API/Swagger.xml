@@ -45,6 +45,12 @@
             </summary>
             <param name="searchparameters"></param>        
         </member>
+        <member name="M:CRM.API.Controllers.LeadController.GetAccountById(System.Int64)">
+            <summary>
+            gets the account by Id with all information
+            </summary>
+            <param name="Id"></param>       
+        </member>
         <member name="M:CRM.API.Controllers.TransactionController.CreateTransferTransaction(TransactionStore.API.Models.Input.TransferInputModel)">
             <summary>
             refers to TransactionStore to create a transfer transaction

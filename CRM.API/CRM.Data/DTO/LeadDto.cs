@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace CRM.Data.DTO
 {
@@ -17,7 +18,8 @@ namespace CRM.Data.DTO
         public DateTime RegistrationDate { get; set; }
         public DateTime ChangeDate { get; set; }
         public RoleDto Role { get; set; }
-        public CityDto City { get; set; }                
-        public bool IsDeleted { get; set; }
+        public CityDto City { get; set; }
+        public List<AccountDto> Accounts { get; set; }
+        public bool IsDeleted { get; set; }        
     }
 }

@@ -190,6 +190,45 @@ namespace CRM.API.Controllers
             return MakeResponse(dataWrapper, _mapper.Map<List<LeadOutputModel>>);        
         }
 
+        /// <summary>
+        /// gets the account by Id with all information
+        /// </summary>
+        /// <param name="Id"></param>       
+        //[Authorize()]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpGet("account/{Id}")]
+        public ActionResult<LeadWithAccountsOutputModel> GetAccountById(long Id)
+        {
+            DataWrapper<LeadDto> dataWrapper = _repo.GetAccountById(Id);
+            return MakeResponse(dataWrapper, _mapper.Map<LeadWithAccountsOutputModel>);
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpGet("{leadId}/accounts")]
+        public ActionResult <LeadWithAccountsOutputModel> GetAccountByLeadId(long leadId)
+        {
+            DataWrapper <LeadDto> dataWrapper = _repo.GetAccountByLeadId(leadId);
+            return MakeResponse(dataWrapper, _mapper.Map<LeadWithAccountsOutputModel>);
+        }
+
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpPost("account")]
+        public ActionResult<LeadWithAccountsOutputModel> AddAccount(AccountInputModel account)
+        {
+            DataWrapper<LeadDto> dataWrapper = _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));//_mapper.Map<LeadSearchParameters>
+            return MakeResponse(dataWrapper, _mapper.Map<LeadWithAccountsOutputModel>);
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpPut("account")]
+        public ActionResult<LeadWithAccountsOutputModel> UpdateAccount(AccountInputModel account)
+        {
+            DataWrapper<LeadDto> dataWrapper = _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));//_mapper.Map<LeadSearchParameters>
+            return MakeResponse(dataWrapper, _mapper.Map<LeadWithAccountsOutputModel>);
+        }
+
+
         private delegate T DtoConverter<T,K>(K dto);
 
         private ActionResult<T> MakeResponse<T>(DataWrapper<T> dataWrapper)

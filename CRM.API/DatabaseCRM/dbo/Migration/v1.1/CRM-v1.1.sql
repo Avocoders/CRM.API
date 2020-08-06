@@ -4,7 +4,7 @@ set @currentDBVersion = (select top(1) DbVersion from [dbo].[DbVersion] order by
 IF @currentDBVersion <> '1.1'
 
 create table [dbo].[Currency] (
-    Id   int  unique      NOT NULL,
+    Id   tinyint  unique      NOT NULL,
     [Name] nvarchar (30) NOT NULL,
     Code nvarchar (3) unique NOT NULL,
 	primary key (Id),
@@ -13,31 +13,34 @@ go
 create table dbo.[Account](
 		Id bigint Identity, 
 		LeadId bigint not null,		
-		СurrencyId int null,
+		СurrencyId tinyint null,
 		IsDeleted bit default (0),  
 		primary key (Id),
 		foreign key (LeadId)  references [Lead] (Id),
 		foreign key (СurrencyId) references [Currency] (Id))
 go
-create procedure Account_GetById
-	@accountId bigint
+create procedure [dbo].[Account_GetById]
+	@Id bigint
 	as
 	begin
-		select a.Id, 
+		select  
+		        l.Id  ,
 				l.FirstName, 
 				l.LastName, 
-				l.BirthDate, 
-				c.[Name], 
-				a.IsDeleted from dbo.[Account] a
+				l.BirthDate,
+		        a.Id, 
+				a.IsDeleted,
+				c.Id currencyId
+				from dbo.[Account] a
 		inner join [Lead] l on l.Id=a.LeadId
 		inner join [Currency] c on c.Id=a.СurrencyId
-		where a.Id=@accountId 
+		where a.Id=@Id 
 	end
 go
 create procedure Account_Add_Or_Update
 	@id			bigint,
 	@leadId bigint,
-	@currencyId int
+	@currencyId tinyint
 	as
 	begin
 		merge  dbo.[Account] a
@@ -62,12 +65,14 @@ create procedure Account_GetByLeadId
 		@leadId bigint
 		as
 		begin
-			select a.Id, 
+			select  l.Id ,
 					l.FirstName, 
 					l.LastName, 
-					l.BirthDate, 
-					c.[Name], 
-					a.IsDeleted from dbo.[Account] a
+					l.BirthDate, 			
+		        	a.Id, 
+					a.IsDeleted, 
+					c.Id CurrencyId
+					 from dbo.[Account] a
 			inner join [Lead] l on l.Id=a.LeadId
 			inner join [Currency] c on c.Id=a.СurrencyId
 			where a.LeadId=@leadId and l.IsDeleted=0
@@ -96,7 +101,7 @@ alter procedure Lead_Search
 @registrationDateBegin	datetime2(7)=null,
 @registrationDateEnd	datetime2(7)=null,
 @accountId				bigint = null,
-@currencyId				nvarchar(3) = null,
+@currencyId				tinyint = null,
 @includeDeleted			bit = null
 as 
 	begin	
@@ -267,12 +272,12 @@ as
 
 		if @accountId>0
 		begin
-			set @resultSql = @resultSql + ' and a.Id = ''' + convert(nvarchar(1),@accountId) + ''''
+			set @resultSql = @resultSql + ' and a.Id = ''' + convert(nvarchar(15),@accountId) + ''''
 		end
 
 		if @currencyId is not null
 		begin
-			set @resultSql = @resultSql + ' and cr.Id = ''' + convert(nvarchar(1),@currencyId) + ''''
+			set @resultSql = @resultSql + ' and cr.Id = ''' + convert(nvarchar(3),@currencyId) + ''''
 		end
 
 		if @includeDeleted is not null
@@ -323,11 +328,11 @@ as
 		while @length < @rowValue
 		begin
 		declare @leadId bigint		
-		declare @currencyId int
+		declare @currencyId tinyint
 
 		set @leadId=(select round((rand()*100000),1))		
 
-		set @currencyId =(select round((rand()*4),1))
+		set @currencyId = (select round((rand()*5),1))
 
 		insert into Account(
 			LeadId,			
@@ -336,8 +341,9 @@ as
 		values (@leadId,				
 				@currencyId,
 				default)
+   set @length = @length+1
 	end
-set @length = @length+1
+
 end
 go
 
