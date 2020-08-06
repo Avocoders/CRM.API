@@ -32,7 +32,6 @@ namespace CRM.Data
                     (account, lead, currency) =>
                     {
                         AccountDto accountEntry;
-
                         accountEntry = account;
                         accountEntry.Lead= lead;
                         accountEntry.Currency = currency;
@@ -48,7 +47,35 @@ namespace CRM.Data
             }
             return result;
         }
-           
+
+
+        public DataWrapper <List<AccountDto>> GetAccountByLeadId(long leadId)  
+        {
+            var result = new DataWrapper <List<AccountDto>>();
+            try
+            {
+                result.Data = _connection.Query<AccountDto, LeadDto, CurrencyDto, AccountDto>(
+                    "Account_GetByLeadId",
+                    (account, lead, currency) =>
+                    {
+                        AccountDto accountEntry;
+                        accountEntry = account;
+                        accountEntry.Lead = lead;
+                        accountEntry.Currency = currency;
+                        return accountEntry;
+                    },
+                    new { leadId }, splitOn: "Id",
+                    commandType: CommandType.StoredProcedure).ToList();
+                result.IsOk = true;
+            }
+            catch (Exception e)
+            {
+                result.ExceptionMessage = e.Message;
+            }
+            return result;
+        }
+
+                                    
         public DataWrapper<LeadDto> Add(LeadDto leadDto)
         {
             var result = new DataWrapper<LeadDto>();

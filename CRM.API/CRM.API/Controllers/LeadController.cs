@@ -203,6 +203,14 @@ namespace CRM.API.Controllers
             return MakeResponse(dataWrapper, _mapper.Map<AccountOutputModel>);
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [HttpGet("{leadId}/accounts")]
+        public ActionResult <List<AccountOutputModel>> GetAccountByLeadId(long leadId)
+        {
+            DataWrapper <List<AccountDto>> dataWrapper = _repo.GetAccountByLeadId(leadId);
+            return MakeResponse(dataWrapper, _mapper.Map<List<AccountOutputModel>>);
+        }
+
         private delegate T DtoConverter<T,K>(K dto);
 
         private ActionResult<T> MakeResponse<T>(DataWrapper<T> dataWrapper)
