@@ -339,21 +339,28 @@ namespace CRM.Data
 
         public DataWrapper<List<LeadDto>> SearchLeads(LeadSearchParameters searchParameters)
         {
+            var leadDictionary = new Dictionary<long, LeadDto>();
             var results = new DataWrapper<List<LeadDto>>();
             try
             {
-                results.Data = _connection.Query<LeadDto, RoleDto, CityDto, LeadDto>("Lead_Search",
-                    (lead, role, city) =>
+                results.Data = _connection.Query<LeadDto, RoleDto, CityDto, AccountDto, LeadDto>(
+                    "Lead_Search",
+                    (lead, role, city, account) =>
                     {
                         LeadDto leadEntry;
+                        if (!leadDictionary.TryGetValue(lead.Id.Value, out leadEntry))
+                        {
+                            leadEntry = lead;
+                            leadEntry.Accounts = new List<AccountDto>();
+                            leadDictionary.Add(leadEntry.Id.Value, leadEntry);
+                            leadEntry.Role = role;
+                            leadEntry.City = city;
 
-                        leadEntry = lead;
-                        leadEntry.Role = role;
-                        leadEntry.City = city;
+                        }
+                        leadEntry.Accounts.Add(account);
                         return leadEntry;
                     },
-                    searchParameters,
-                    splitOn: "Id",
+                    searchParameters, splitOn: "Id",
                     commandType: CommandType.StoredProcedure).ToList();
                 results.IsOk = true;
             }

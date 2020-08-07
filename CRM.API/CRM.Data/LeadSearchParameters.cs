@@ -25,7 +25,7 @@ namespace CRM.Data
 		public DateTime? RegistrationDateBegin { get; set; }
 		public DateTime? RegistrationDateEnd { get; set; }
 		public long? AccountId { get; set; }
-		public byte CurrencyId { get; set; }
+		public byte? CurrencyId { get; set; }
 		public byte? IncludeDeleted { get; set; }
     }
 }
