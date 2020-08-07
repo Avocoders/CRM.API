@@ -293,7 +293,7 @@ alter procedure [dbo].[Lead_GetById]
 @leadid bigint
 as
 begin
-	select l.Id, 
+	select  l.Id, 
 			l.FirstName, 
 			l.LastName, 
 			l.Patronymic,
@@ -308,14 +308,14 @@ begin
 			r.[Name],
             c.Id, 
 			c.[Name], 
-			a.Id AccountNumber, 
-			cr.[Name],
-			a.IsDeleted AccountState 
+			a.Id , 
+			a.СurrencyId,
+			a.IsDeleted 
 			from dbo.[Lead] l
 	inner join [Role] r on r.Id=l.RoleId
 	inner join City c on c.Id=l.CityId
 	inner join Account a on a.LeadId=l.Id
-	inner join [Currency] cr on c.Id=a.СurrencyId
+	
 
 	where l.Id=@leadid and l.IsDeleted=0
 end

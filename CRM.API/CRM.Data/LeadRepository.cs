@@ -81,9 +81,7 @@ namespace CRM.Data
             return result;
            
         }
-
-
-                                    
+                                            
         public DataWrapper<LeadDto> Add(LeadDto leadDto)
         {
             var result = new DataWrapper<LeadDto>();
@@ -191,25 +189,34 @@ namespace CRM.Data
 
         public DataWrapper<LeadDto> GetById(long leadId)
         {
+            var leadDictionary = new Dictionary<long, LeadDto>();
             var result = new DataWrapper<LeadDto>();
             try
             {
-                result.Data = _connection.Query<LeadDto, RoleDto, CityDto, LeadDto>(
+                result.Data = _connection.Query<LeadDto, RoleDto, CityDto, AccountDto, LeadDto>(
                     "Lead_GetById",
-                    (lead, role, city) =>
+                    (lead, role, city, account) =>
                     {
                         LeadDto leadEntry;
-
-                        leadEntry = lead;
-                        leadEntry.Role = role;
-                        leadEntry.City = city;
-
+                        if (!leadDictionary.TryGetValue(lead.Id.Value, out leadEntry))
+                        {
+                            leadEntry = lead;
+                            leadEntry.Accounts = new List<AccountDto>();
+                            leadDictionary.Add(leadEntry.Id.Value, leadEntry);
+                            leadEntry.Role = role;
+                            leadEntry.City = city;
+                            
+                        }
+                        leadEntry.Accounts.Add(account);
                         return leadEntry;
                     },
                     new { leadId },
+                    splitOn: "Id",
                     commandType: CommandType.StoredProcedure).FirstOrDefault();
                 result.IsOk = true;
-            }
+
+
+                }
             catch (Exception e)
             {
                 result.ExceptionMessage = e.Message;
