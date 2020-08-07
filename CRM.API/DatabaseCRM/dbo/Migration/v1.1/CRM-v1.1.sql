@@ -330,9 +330,9 @@ as
 		declare @leadId bigint		
 		declare @currencyId tinyint
 
-		set @leadId=(select round((rand()*100000),1))		
+		set @leadId=(select round((rand()*990000),0)+1)		
 
-		set @currencyId = (select round((rand()*5),1))
+		set @currencyId = (select round((rand()*3),0)+1)
 
 		insert into Account(
 			LeadId,			
