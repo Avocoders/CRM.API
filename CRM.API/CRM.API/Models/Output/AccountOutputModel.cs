@@ -4,6 +4,7 @@
     {
 		public long Id { get; set; }
 		public bool IsDeleted { get; set; }		
-		public string Currency { get; set; } 
+		public string CurrencyCode { get; set; }
+		public string CurrencyName { get; set; }
 	}
 }
