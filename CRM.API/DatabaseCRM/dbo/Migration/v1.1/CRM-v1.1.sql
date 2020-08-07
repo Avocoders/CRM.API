@@ -13,11 +13,11 @@ go
 create table dbo.[Account](
 		Id bigint Identity, 
 		LeadId bigint not null,		
-		СurrencyId tinyint null,
+		CurrencyId tinyint null,
 		IsDeleted bit default (0),  
 		primary key (Id),
 		foreign key (LeadId)  references [Lead] (Id),
-		foreign key (СurrencyId) references [Currency] (Id))
+		foreign key (CurrencyId) references [Currency] (Id))
 go
 create procedure [dbo].[Account_GetById]
 	@Id bigint
@@ -30,10 +30,10 @@ create procedure [dbo].[Account_GetById]
 				l.BirthDate,
 		        a.Id, 
 				a.IsDeleted,
-				c.Id currencyId
+				c.Id CurrencyId
 				from dbo.[Account] a
 		inner join [Lead] l on l.Id=a.LeadId
-		inner join [Currency] c on c.Id=a.СurrencyId
+		inner join [Currency] c on c.Id=a.CurrencyId
 		where a.Id=@Id 
 	end
 go
@@ -48,10 +48,10 @@ create procedure Account_Add_Or_Update
 		on a.Id = n.Id 
 		when matched and IsDeleted=0
 			then update 
-				set a.СurrencyId=@currencyId						
+				set a.CurrencyId=@currencyId						
 		when not matched 
 			then insert (LeadId,
-						СurrencyId,
+						CurrencyId,
 						IsDeleted) 
 				values (@leadId, 
 						@currencyId,
@@ -74,7 +74,7 @@ create procedure Account_GetByLeadId
 					c.Id CurrencyId
 					 from dbo.[Account] a
 			inner join [Lead] l on l.Id=a.LeadId
-			inner join [Currency] c on c.Id=a.СurrencyId
+			inner join [Currency] c on c.Id=a.CurrencyId
 			where a.LeadId=@leadId and l.IsDeleted=0
 
 		end
@@ -127,12 +127,12 @@ as
 			c.Id,
 			c.[Name]
 			a.Id,
-			cr.[Name]
+			cr.Id CurrencyId
 		from dbo.[Lead] as l
 		inner join [Role] as r on r.Id=l.RoleId
 		inner join City as c on c.Id=l.CityId
 		inner join Account as a on a.LeadId=l.Id
-		inner join Currency cr on cr.Id=a.СurrencyId
+		inner join Currency cr on cr.Id=a.CurrencyId
 		where 1=1'
 
 		if @roleId>0
@@ -309,7 +309,7 @@ begin
             c.Id, 
 			c.[Name], 
 			a.Id , 
-			a.СurrencyId,
+			a.CurrencyId,
 			a.IsDeleted 
 			from dbo.[Lead] l
 	inner join [Role] r on r.Id=l.RoleId
@@ -336,7 +336,7 @@ as
 
 		insert into Account(
 			LeadId,			
-			СurrencyId,
+			CurrencyId,
 			IsDeleted)
 		values (@leadId,				
 				@currencyId,
