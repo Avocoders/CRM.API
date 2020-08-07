@@ -14,7 +14,8 @@ namespace CRM.API.Configuration
          public MappingProfile()
          {
             CreateMap<AccountDto, AccountOutputModel>()
-                 .ForPath(dest => dest.Currency, o => o.MapFrom(src => Enum.GetName(typeof(Currencies), src.CurrencyId)));
+                 .ForPath(dest => dest.CurrencyCode, o => o.MapFrom(src => Enum.GetName(typeof(CurrenciesCode), src.CurrencyId)))
+                 .ForPath(dest => dest.CurrencyName, o => o.MapFrom(src => Enum.GetName(typeof(CurrenciesName), src.CurrencyId)));
 
             CreateMap<LeadDto, LeadWithAccountsOutputModel>()
                   .ForPath(dest => dest.BirthDate, o => o.MapFrom(src => src.BirthDate.ToString("dd.MM.yyyy")))

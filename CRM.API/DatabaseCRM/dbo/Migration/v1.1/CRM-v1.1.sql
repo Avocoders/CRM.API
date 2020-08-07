@@ -125,7 +125,7 @@ as
 			r.Id,
 			r.[Name],
 			c.Id,
-			c.[Name]
+			c.[Name],
 			a.Id,
 			cr.Id CurrencyId
 		from dbo.[Lead] as l

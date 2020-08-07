@@ -22,6 +22,8 @@
 		public string BirthDateEnd { get; set; }
 		public string RegistrationDateBegin { get; set; }
 		public string RegistrationDateEnd { get; set; }
+		public long? AccountId { get; set; }
+		public byte? CurrencyId { get; set; }
 		public byte? IncludeDeleted { get; set; }
 	}
 }
