@@ -14,6 +14,7 @@ using Autofac.Extensions.DependencyInjection;
 using TransactionStore.API.Models.Input;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using CRM.API.Configuration;
 
 namespace CRM.NUnitTest
 {
@@ -47,7 +48,7 @@ namespace CRM.NUnitTest
                 AccountIdReceiver = 555
             };
             var jsonContent = new StringContent(JsonConvert.SerializeObject(transferInputModel), Encoding.UTF8, "application/json");
-            var response = await client.PostAsync(Configuration.LocalHost + "transaction/transfer", jsonContent);            
+            var response = await client.PostAsync(LocalHost.localHost + "transaction/transfer", jsonContent);            
             string ids = Convert.ToString(await response.Content.ReadAsStringAsync());
             string[] data = Regex.Split(ids, @"\D+");
             long id = Convert.ToInt64(data[1]);
