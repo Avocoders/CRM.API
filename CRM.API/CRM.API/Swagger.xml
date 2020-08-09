@@ -86,12 +86,11 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:CRM.API.Controllers.TransactionController.GetBalanceByAccountIdInCurrency(System.Int64,System.Byte)">
+        <member name="M:CRM.API.Controllers.TransactionController.GetBalanceByAccountIdInCurrency(System.Int64)">
             <summary>
             refers to TransactionStore to get balance by leadId and currencyId
             </summary>
             <param name="leadId"></param>
-            <param name="currencyId"></param>
             <returns></returns>
         </member>
     </members>
