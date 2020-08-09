@@ -34,10 +34,11 @@ namespace CRM.API.Controllers
         [HttpPost("transfer")]
         public async Task<ActionResult<List<long>>> CreateTransferTransaction([FromBody] TransferInputModel transactionModel)
         {
-            if (_repo.GetAccountById(transactionModel.AccountId).Data is null) return BadRequest("The user is not found");
-            if (_repo.GetAccountById(transactionModel.AccountIdReceiver).Data is null) return BadRequest("The user is not found");
+         //   if (_repo.GetAccountById(transactionModel.AccountId).Data is null) return BadRequest("The account is not found");
+          //  if (_repo.GetAccountById(transactionModel.AccountIdReceiver).Data is null) return BadRequest("The account of receiver is not found");
             if (transactionModel.Amount <= 0) return BadRequest("The amount is missing");
-            if (transactionModel.CurrencyId <= 0) return BadRequest("The currency is missing");
+            transactionModel.CurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountId).Data;
+            transactionModel.ReceiverCurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountIdReceiver).Data;
             var jsonContent = new StringContent(JsonConvert.SerializeObject(transactionModel), Encoding.UTF8, "application/json");
             var response = await _httpClient.PostAsync(LocalHost.localHostTransaction + "transaction/transfer", jsonContent);
             string content = await response.Content.ReadAsStringAsync();
@@ -56,7 +57,7 @@ namespace CRM.API.Controllers
         {
             if (_repo.GetAccountById(transactionModel.AccountId) is null) return BadRequest("The user is not found");
             if (transactionModel.Amount <= 0) return BadRequest("The amount is missing");
-            if (transactionModel.CurrencyId <= 0) return BadRequest("The currency is missing");
+          
             var jsonContent = new StringContent(JsonConvert.SerializeObject(transactionModel), Encoding.UTF8, "application/json");
             var response = await _httpClient.PostAsync(LocalHost.localHostTransaction+ "transaction/withdraw", jsonContent);
             string content = await response.Content.ReadAsStringAsync();
@@ -75,7 +76,6 @@ namespace CRM.API.Controllers
         {
             if (_repo.GetAccountById(transactionModel.AccountId) is null) return BadRequest("The user is not found");
             if (transactionModel.Amount <= 0) return BadRequest("The amount is missing");
-            if (transactionModel.CurrencyId <= 0) return BadRequest("The currency is missing");
             var jsonContent = new StringContent(JsonConvert.SerializeObject(transactionModel), Encoding.UTF8, "application/json");
             var response = await _httpClient.PostAsync(LocalHost.localHostTransaction+"transaction/deposit", jsonContent);
             string content = await response.Content.ReadAsStringAsync();

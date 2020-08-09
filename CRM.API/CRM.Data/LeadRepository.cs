@@ -370,5 +370,23 @@ namespace CRM.Data
             }
             return results;
         }
+
+        public DataWrapper<byte> GetCurrencyByAccountId(long accountId)
+        {
+            var result = new DataWrapper<byte>();
+            try
+            {
+                string sqlExpression = "GetCurrencyByAccountId";
+                var currency = _connection.Query<byte>(sqlExpression, new { accountId }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+                result.Data = currency;
+                result.IsOk = true;
+            }
+
+            catch (Exception e)
+            {
+                result.ExceptionMessage = e.Message;
+            }
+            return result;
+        }
     }
 }

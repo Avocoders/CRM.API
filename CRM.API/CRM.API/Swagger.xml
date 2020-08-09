@@ -72,11 +72,11 @@
             <param name="transactionModel"></param>
             <returns></returns>
         </member>
-        <member name="M:CRM.API.Controllers.TransactionController.GetTransactionsByLeadId(System.Int64)">
+        <member name="M:CRM.API.Controllers.TransactionController.GetTransactionsByAccountId(System.Int64)">
             <summary>
             refers to TransactionStore to get all lead's transactions by leadId
             </summary>
-            <param name="leadId"></param>
+            <param name="accountId"></param>
             <returns></returns>
         </member>
         <member name="M:CRM.API.Controllers.TransactionController.GetTransactionById(System.Int64)">
@@ -86,7 +86,7 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:CRM.API.Controllers.TransactionController.GetBalanceByLeadIdInCurrency(System.Int64,System.Byte)">
+        <member name="M:CRM.API.Controllers.TransactionController.GetBalanceByAccountIdInCurrency(System.Int64,System.Byte)">
             <summary>
             refers to TransactionStore to get balance by leadId and currencyId
             </summary>
