@@ -16,12 +16,12 @@ namespace CRM.API.Controllers
     [ApiController]
     public class TransactionController : Controller
     {
-        private static readonly HttpClient _httpClient;
-        private static readonly LeadRepository _repo;
-        static TransactionController()
+        private readonly HttpClient _httpClient;
+        private readonly ILeadRepository _repo;
+        public TransactionController(ILeadRepository repo)
         {
             _httpClient = new HttpClient();
-            _repo = new LeadRepository();
+            _repo = repo;
         }
         
         /// <summary>

@@ -19,6 +19,7 @@ namespace CRM.Data
         
         DataWrapper<LeadDto> AddOrUpdateAccount(AccountDto accountDto);
         DataWrapper<LeadDto> GetAccountByLeadId(long leadId);
-      
+        DataWrapper<byte> GetCurrencyByAccountId(long accountId);
+
     }
 }
