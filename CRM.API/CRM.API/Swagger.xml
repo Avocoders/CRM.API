@@ -90,7 +90,7 @@
             <summary>
             refers to TransactionStore to get balance by leadId and currencyId
             </summary>
-            <param name="leadId"></param>
+            <param name="accountId"></param>
             <returns></returns>
         </member>
     </members>
