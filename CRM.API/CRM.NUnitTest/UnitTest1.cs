@@ -41,20 +41,20 @@ namespace CRM.NUnitTest
            
             server = new TestServer(webHostBuilder);
             client = server.CreateClient();
-           // IDbConnection _connection = new SqlConnection("Data Source=31.31.196.234;Initial Catalog=u1093787_CRM_Test;User Id = u1093787_User;Password = Etcr0?38");
-            //_connection.Execute(Queries.fillTestBase);
+           IDbConnection _connection = new SqlConnection("Data Source=31.31.196.234;Initial Catalog=u1093787_CRM_Test;User Id = u1093787_User;Password = Etcr0?38");
+           _connection.Execute(Queries.fillTestBase);
         }
 
-        [TestCase(68)]
-        [TestCase(69)]
-        [TestCase(70)]
-        [TestCase(71)]
-        [TestCase(72)]
-        [TestCase(73)]
-        [TestCase(74)]
-        [TestCase(75)]
-        [TestCase(76)]
-        [TestCase(77)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(3)]
+        [TestCase(4)]
+        [TestCase(5)]
+        [TestCase(6)]
+        [TestCase(7)]
+        [TestCase(8)]
+        [TestCase(9)]
+        [TestCase(10)]
         public async Task DeleteLeadTest(int num)
         {
             var response = await client.DeleteAsync(LocalHost.localHostCrm + $"lead/{num}");
@@ -152,7 +152,7 @@ namespace CRM.NUnitTest
         [OneTimeTearDown]
         public void Teardown()
         {
-           // _connection.Execute(Queries.clearTestBase);
+           _connection.Execute(Queries.clearTestBase);
             server.Dispose();
             client.Dispose();      
                
