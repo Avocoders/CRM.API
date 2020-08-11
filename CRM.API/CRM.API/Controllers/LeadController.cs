@@ -144,8 +144,8 @@ namespace CRM.API.Controllers
         [HttpDelete("{leadId}")]
         public ActionResult DeleteLeadById(long leadId) 
         {
-            DataWrapper<LeadDto> dataWrapper = _repo.GetById(leadId);
-            if (dataWrapper.Data.Id == null) return BadRequest("Lead was not found");
+            //DataWrapper<LeadDto> dataWrapper = _repo.GetById(leadId);
+            //if (dataWrapper.Data.Id == null) return BadRequest("Lead was not found");
             _repo.Delete(leadId);
             return Ok("Successfully deleted");
         }
