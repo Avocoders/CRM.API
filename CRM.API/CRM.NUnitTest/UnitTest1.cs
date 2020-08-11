@@ -15,6 +15,8 @@ using TransactionStore.API.Models.Input;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using CRM.API.Configuration;
+using System.Data;
+using Dapper;
 
 namespace CRM.NUnitTest
 {
@@ -23,19 +25,23 @@ namespace CRM.NUnitTest
         IWebHostBuilder webHostBuilder;
         TestServer server;
         HttpClient client;
+        IDbConnection _connection;
 
         [OneTimeSetUp]
         public void Setup()
         {
             webHostBuilder =
                   new WebHostBuilder()
-                        .UseEnvironment("Development") // You can set the environment you want (development, staging, production)
+                        .UseEnvironment("Testing") // You can set the environment you want (development, staging, production)
                         .ConfigureServices(services => services.AddAutofac())
                         .UseStartup<Startup>(); // Startup class of your web app project
 
             server = new TestServer(webHostBuilder);
             client = server.CreateClient();
+            _connection.Execute(Queries.fillTestBase);
         }
+
+    
 
         [Test]
         public async Task CreateTransferTest()
@@ -128,6 +134,9 @@ namespace CRM.NUnitTest
         {
             server.Dispose();
             client.Dispose();
+            
+                _connection.Execute(Queries.clearTestBase);
+            
         }
     }
 }
