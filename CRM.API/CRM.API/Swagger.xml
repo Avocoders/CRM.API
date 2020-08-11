@@ -4,11 +4,6 @@
         <name>CRM.API</name>
     </assembly>
     <members>
-        <member name="M:CRM.API.Controllers.LeadController.GetLeadsAll">
-            <summary>
-            gets the list of leads with all information
-            </summary>             
-        </member>
         <member name="M:CRM.API.Controllers.LeadController.GetLeadById(System.Int64)">
             <summary>
             gets the lead by Id with all information

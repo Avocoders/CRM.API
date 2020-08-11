@@ -65,17 +65,17 @@ namespace CRM.API.Controllers
             return "";
         }
 
-        /// <summary>
-        /// gets the list of leads with all information
-        /// </summary>             
-        //[Authorize()]
-        [ProducesResponseType(StatusCodes.Status200OK)]        
-        [HttpGet]
-        public ActionResult<List<LeadOutputModel>> GetLeadsAll()
-        {
-            DataWrapper<List<LeadDto>> dataWrapper = _repo.GetAll();
-            return MakeResponse(dataWrapper, _mapper.Map<List<LeadOutputModel>>);
-        }
+        ///// <summary>
+        ///// gets the list of leads with all information
+        ///// </summary>             
+        ////[Authorize()]
+        //[ProducesResponseType(StatusCodes.Status200OK)]        
+        //[HttpGet]
+        //public ActionResult<List<LeadOutputModel>> GetLeadsAll()
+        //{
+        //    DataWrapper<List<LeadDto>> dataWrapper = _repo.GetAll();
+        //    return MakeResponse(dataWrapper, _mapper.Map<List<LeadOutputModel>>);
+        //}
 
         /// <summary>
         /// gets the lead by Id with all information
@@ -84,7 +84,7 @@ namespace CRM.API.Controllers
         //[Authorize()]
         [ProducesResponseType(StatusCodes.Status200OK)]        
         [HttpGet("{leadId}")]
-        public ActionResult<LeadOutputModel> GetLeadById(long leadId) 
+        public ActionResult<LeadOutputModel> GetLeadById(long leadId) // тесты готовы
         {
             DataWrapper<LeadDto> dataWrapper = _repo.GetById(leadId);                           
             return MakeResponse(dataWrapper, _mapper.Map<LeadOutputModel>);
@@ -98,7 +98,7 @@ namespace CRM.API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost]
-        public ActionResult<LeadOutputModel> CreateLead(LeadInputModel leadModel)
+        public ActionResult<LeadOutputModel> CreateLead(LeadInputModel leadModel) // хранимка не вытаскивает аутпут модель
         {
             Validation validation = new Validation();
             string badRequest = validation.BadRequestsForLeadInputModel(leadModel);
@@ -106,7 +106,7 @@ namespace CRM.API.Controllers
             string badRequestForUpdateLead = BadRequestsForLeadInputModelForUpdadeLead(leadModel);
             if (!string.IsNullOrWhiteSpace(badRequestForUpdateLead)) return BadRequest(badRequestForUpdateLead);
             leadModel.Password = new PasswordEncryptor().EncryptPassword(leadModel.Password);
-            DataWrapper<LeadDto> newDataWrapper = _repo.Add(_mapper.Map<LeadDto>(leadModel));
+            DataWrapper<LeadDto> newDataWrapper = _repo.AddOrUpdateLead(_mapper.Map<LeadDto>(leadModel));
             return MakeResponse(newDataWrapper, _mapper.Map<LeadOutputModel>);
         }
 
@@ -118,7 +118,7 @@ namespace CRM.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPut]
-        public ActionResult<LeadOutputModel> UpdateLead(LeadInputModel leadModel)
+        public ActionResult<LeadOutputModel> UpdateLead(LeadInputModel leadModel) //та же не работающая хранимка
         {
             if (!leadModel.Id.HasValue)
             {
@@ -130,7 +130,7 @@ namespace CRM.API.Controllers
             string badRequest = validation.BadRequestsForLeadInputModel(leadModel);
             if (!string.IsNullOrWhiteSpace(badRequest)) return BadRequest(badRequest);
             leadModel.Password = new PasswordEncryptor().EncryptPassword(leadModel.Password);
-            DataWrapper<LeadDto> newDataWrapper = _repo.Update(_mapper.Map<LeadDto>(leadModel));
+            DataWrapper<LeadDto> newDataWrapper = _repo.AddOrUpdateLead(_mapper.Map<LeadDto>(leadModel));
             return MakeResponse(newDataWrapper, _mapper.Map<LeadOutputModel>);
         }
 
@@ -142,10 +142,10 @@ namespace CRM.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpDelete("{leadId}")]
-        public ActionResult DeleteLeadById(long leadId) 
+        public ActionResult DeleteLeadById(long leadId)    // тесты есть
         {
-            //DataWrapper<LeadDto> dataWrapper = _repo.GetById(leadId);
-            //if (dataWrapper.Data.Id == null) return BadRequest("Lead was not found");
+            DataWrapper<LeadDto> dataWrapper = _repo.GetById(leadId);
+            if (dataWrapper.Data.Id == null) return BadRequest("Lead was not found");
             _repo.Delete(leadId);
             return Ok("Successfully deleted");
         }
@@ -158,7 +158,7 @@ namespace CRM.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost("email")]
-        public ActionResult<string> UpdateEmailByLeadId(EmailInputModel emailModel)
+        public ActionResult<string> UpdateEmailByLeadId(EmailInputModel emailModel) //тесты есть
         {
             var leadId = _repo.GetById(emailModel.Id.Value);
             if (leadId == null) return BadRequest("Lead was not found");
@@ -185,7 +185,6 @@ namespace CRM.API.Controllers
         [HttpPost("search")]
         public ActionResult<List<LeadOutputModel>> SearchLead(SearchParametersInputModel searchparameters)
         {
-          //  LeadSearchParameters searchParams = _imapper.Map<LeadSearchParameters>(searchparameters);
             DataWrapper<List<LeadDto>> dataWrapper = _repo.SearchLeads(_mapper.Map<LeadSearchParameters>(searchparameters));
             return MakeResponse(dataWrapper, _mapper.Map<List<LeadOutputModel>>);        
         }
