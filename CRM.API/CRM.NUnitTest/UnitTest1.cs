@@ -149,7 +149,8 @@ namespace CRM.NUnitTest
             TransactionInputModel transactionInputModel = test.DepositMock(num);
             var restClient = new RestClient("https://localhost:44382/");
             var restRequest = new RestRequest("transaction/deposit",Method.POST) { RequestFormat = DataFormat.Json };
-            restRequest.AddJsonBody(new { transactionInputModel });             var actual = restClient.Execute(restRequest);
+            restRequest.AddJsonBody(new { transactionInputModel }); 
+            var actual = restClient.Execute(restRequest);
             TransactionMock resulttest = new TransactionMock();
             var expected = resulttest.DepositOutputMock(num);
             TransactionOutputModel exp = new TransferOutputModel();
