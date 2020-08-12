@@ -22,8 +22,8 @@ using CRM.Core;
 using System.Data.SqlClient;
 using RestSharp;
 using RestSharp.Authenticators;
-
-
+using Autofac;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CRM.NUnitTest
 {
@@ -49,9 +49,11 @@ namespace CRM.NUnitTest
 
 
             server = new TestServer(webHostBuilder);
+            var sp = server.Services.GetAutofacRoot();
+            var options = sp.Resolve<IOptions<StorageOptions>>();
             client = server.CreateClient();
-           _connection = new SqlConnection("Data Source=31.31.196.234;Initial Catalog=u1093787_CRM_Test;User Id = u1093787_User;Password = Etcr0?38");
-           _connection.Execute(Queries.fillTestBase);
+            _connection = new SqlConnection(options.Value.DBConnectionString);
+            _connection.Execute(Queries.fillTestBase);
         }
                 
         [TestCase(1)]
