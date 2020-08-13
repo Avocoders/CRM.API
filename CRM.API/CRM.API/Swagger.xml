@@ -4,11 +4,6 @@
         <name>CRM.API</name>
     </assembly>
     <members>
-        <member name="M:CRM.API.Controllers.LeadController.GetLeadsAll">
-            <summary>
-            gets the list of leads with all information
-            </summary>             
-        </member>
         <member name="M:CRM.API.Controllers.LeadController.GetLeadById(System.Int64)">
             <summary>
             gets the lead by Id with all information
@@ -56,42 +51,6 @@
             refers to TransactionStore to create a transfer transaction
             </summary>
             <param name="transactionModel"></param>
-            <returns></returns>
-        </member>
-        <member name="M:CRM.API.Controllers.TransactionController.CreateWithdrawTransaction(TransactionStore.API.Models.Input.TransactionInputModel)">
-            <summary>
-            refers to TransactionStore to create a withdraw transaction
-            </summary>
-            <param name="transactionModel"></param>
-            <returns></returns>
-        </member>
-        <member name="M:CRM.API.Controllers.TransactionController.CreateDepositTransaction(TransactionStore.API.Models.Input.TransactionInputModel)">
-            <summary>
-            refers to TransactionStore to create a deposit transaction
-            </summary>
-            <param name="transactionModel"></param>
-            <returns></returns>
-        </member>
-        <member name="M:CRM.API.Controllers.TransactionController.GetTransactionsByLeadId(System.Int64)">
-            <summary>
-            refers to TransactionStore to get all lead's transactions by leadId
-            </summary>
-            <param name="leadId"></param>
-            <returns></returns>
-        </member>
-        <member name="M:CRM.API.Controllers.TransactionController.GetTransactionById(System.Int64)">
-            <summary>
-            refers to TransactionStore to get transaction by Id
-            </summary>
-            <param name="id"></param>
-            <returns></returns>
-        </member>
-        <member name="M:CRM.API.Controllers.TransactionController.GetBalanceByLeadIdInCurrency(System.Int64,System.Byte)">
-            <summary>
-            refers to TransactionStore to get balance by leadId and currencyId
-            </summary>
-            <param name="leadId"></param>
-            <param name="currencyId"></param>
             <returns></returns>
         </member>
     </members>

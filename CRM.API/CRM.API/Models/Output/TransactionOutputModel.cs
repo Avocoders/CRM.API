@@ -7,8 +7,8 @@ namespace CRM.API.Models.Output
         public long Id { get; set; }
         public long AccountId { get; set; }
         public string Type { get; set; }
-        public string Currency { get; set; }
         public decimal Amount { get; set; }
-        public DateTime Timestamp { get; set; }
+        public string Timestamp { get; set; }
+        public long? AccountIdReceiver { get; set; }
     }
 }

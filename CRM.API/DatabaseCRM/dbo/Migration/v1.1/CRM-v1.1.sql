@@ -349,3 +349,12 @@ go
 
 INSERT INTO dbo.[DbVersion] (Created, DbVersion) VALUES (SYSDATETIME(), '1.1')
 go
+
+create Procedure dbo.GetCurrencyByAccountId
+@accountId bigint
+as
+begin
+select CurrencyId from dbo.Account a
+where a.Id = @accountId
+end
+go
