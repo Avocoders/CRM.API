@@ -171,7 +171,7 @@ namespace CRM.API.Controllers
         //[Authorize()]
         [ProducesResponseType(StatusCodes.Status200OK)]        
         [HttpPost("search")]
-        public ActionResult<List<LeadOutputModel>> SearchLead(SearchParametersInputModel searchparameters)
+        public ActionResult<List<LeadOutputModel>> SearchLead(SearchParametersInputModel searchparameters)  // тесты есть
         {
             DataWrapper<List<LeadDto>> dataWrapper = _repo.SearchLeads(_mapper.Map<LeadSearchParameters>(searchparameters));
             return MakeResponse(dataWrapper, _mapper.Map<List<LeadOutputModel>>);        

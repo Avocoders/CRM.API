@@ -27,12 +27,12 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CRM.NUnitTest
 {
-    public class Tests 
+    public class Tests
     {
         IWebHostBuilder webHostBuilder;
         TestServer server;
         HttpClient client;
-        private IRestResponse response;
+
 
 
         IDbConnection _connection;
@@ -45,7 +45,7 @@ namespace CRM.NUnitTest
                         .UseEnvironment("Testing") // You can set the environment you want (development, staging, production)
                         .ConfigureServices(services => services.AddAutofac())
                         .UseStartup<Startup>(); // Startup class of your web app project
-           
+
 
 
             server = new TestServer(webHostBuilder);
@@ -55,7 +55,7 @@ namespace CRM.NUnitTest
             _connection = new SqlConnection(options.Value.DBConnectionString);
             _connection.Execute(Queries.fillTestBase);
         }
-                
+
         [TestCase(1)]
         [TestCase(2)]
         [TestCase(3)]
@@ -66,7 +66,7 @@ namespace CRM.NUnitTest
         [TestCase(8)]
         [TestCase(9)]
         [TestCase(10)]
-        
+
         public async Task GetLeadTest(int num)
         {
             string result = await client.GetStringAsync(LocalHost.localHostCrm + $"lead/{num}");
@@ -93,7 +93,7 @@ namespace CRM.NUnitTest
             Assert.AreEqual(expected, actual);
 
         }
-              
+
         [TestCase(2)]
         [TestCase(3)]
         [TestCase(5)]
@@ -105,12 +105,25 @@ namespace CRM.NUnitTest
         {
             LeadInputMock test = new LeadInputMock();
             EmailInputModel inputmodel = test.UpdateEmailByLeadId(num);
-                     
+
             var jsonContent = new StringContent(JsonConvert.SerializeObject(inputmodel), Encoding.UTF8, "application/json");
             var response = await client.PostAsync(LocalHost.localHostCrm + "lead/email", jsonContent);
             string actual = Convert.ToString(await response.Content.ReadAsStringAsync());
             LeadOutputMock result = new LeadOutputMock();
             string expected = result.GetEmailByLeadId(num);
+            Assert.AreEqual(expected, actual);
+        }
+        [TestCase(1)]
+        [TestCase(3)]
+        [TestCase(4)]
+        [TestCase(78)]
+
+        public async Task GetAccountTest(int num)
+        {
+            string result = await client.GetStringAsync(LocalHost.localHostCrm + $"lead/account/{num}");
+            var actual = JsonConvert.DeserializeObject<LeadWithAccountsOutputModel>(result);
+            AccountOuputModelMock test = new AccountOuputModelMock();
+            LeadWithAccountsOutputModel expected = test.GetAccountOfLeadMock(num);
             Assert.AreEqual(expected, actual);
         }
 
@@ -137,38 +150,38 @@ namespace CRM.NUnitTest
         //}
 
 
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(3)]
-        [TestCase(4)]
-        [TestCase(5)]
-               
-        public async Task CreateDepositTest(int num)
-        {
-            TransactionMock test = new TransactionMock();
-            TransactionInputModel transactionInputModel = test.DepositMock(num);
-            var restClient = new RestClient("https://localhost:44382/");
-            var restRequest = new RestRequest("transaction/deposit",Method.POST) { RequestFormat = DataFormat.Json };
-            restRequest.AddJsonBody(new { transactionInputModel }); 
-            var actual = restClient.Execute(restRequest);
-            TransactionMock resulttest = new TransactionMock();
-            var expected = resulttest.DepositOutputMock(num);
-            TransactionOutputModel exp = new TransferOutputModel();
-            var expected2 = JsonConvert.SerializeObject(exp);
-            Assert.AreEqual(expected2, actual);
-            //Assert.AreEqual(expected.Amount, actual.Amount);
-            //Assert.AreEqual(expected.Type, actual.Type);
+        //[TestCase(1)]
+        //[TestCase(2)]
+        //[TestCase(3)]
+        //[TestCase(4)]
+        //[TestCase(5)]
+
+        //public async Task CreateDepositTest(int num)
+        //{
+        //    TransactionMock test = new TransactionMock();
+        //    TransactionInputModel transactionInputModel = test.DepositMock(num);
+        //    var restClient = new RestClient("https://localhost:44382/");
+        //    var restRequest = new RestRequest("transaction/deposit",Method.POST) { RequestFormat = DataFormat.Json };
+        //    restRequest.AddJsonBody(new { transactionInputModel }); 
+        //    var actual = restClient.Execute(restRequest);
+        //    TransactionMock resulttest = new TransactionMock();
+        //    var expected = resulttest.DepositOutputMock(num);
+        //    TransactionOutputModel exp = new TransferOutputModel();
+        //    var expected2 = JsonConvert.SerializeObject(exp);
+        //    Assert.AreEqual(expected2, actual);
+        //Assert.AreEqual(expected.Amount, actual.Amount);
+        //Assert.AreEqual(expected.Type, actual.Type);
 
 
 
-            //var jsonContent = new StringContent(JsonConvert.SerializeObject(transactionInputModel), Encoding.UTF8, "application/json");
-            //var response = await client.PostAsync(LocalHost.localHostCrm + "transaction/deposit", jsonContent);
-            //long id = Convert.ToInt64(await response.Content.ReadAsStringAsync());
-            //string result = await client.GetStringAsync(LocalHost.localHostTransaction + $"transaction/{id}");
-            //var actual = JsonConvert.DeserializeObject<TransactionOutputModel>(result);
+        //var jsonContent = new StringContent(JsonConvert.SerializeObject(transactionInputModel), Encoding.UTF8, "application/json");
+        //var response = await client.PostAsync(LocalHost.localHostCrm + "transaction/deposit", jsonContent);
+        //long id = Convert.ToInt64(await response.Content.ReadAsStringAsync());
+        //string result = await client.GetStringAsync(LocalHost.localHostTransaction + $"transaction/{id}");
+        //var actual = JsonConvert.DeserializeObject<TransactionOutputModel>(result);
 
 
-        }
+
 
         //[Test]
         //public async Task CreateWithdrawTest()
@@ -212,12 +225,13 @@ namespace CRM.NUnitTest
         [OneTimeTearDown]
         public void Teardown()
         {
-           //_connection.Execute(Queries.clearTestBase);
+            //_connection.Execute(Queries.clearTestBase);
             server.Dispose();
-            client.Dispose();      
-               
-            
+            client.Dispose();
+
+
         }
+
     }
 }
 
