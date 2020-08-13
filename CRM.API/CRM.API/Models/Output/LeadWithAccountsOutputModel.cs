@@ -16,7 +16,7 @@ namespace CRM.API.Models.Output
 
         public override bool Equals(object obj)
         {
-            LeadOutputModel lom = (LeadOutputModel)obj;
+            LeadWithAccountsOutputModel lom = (LeadWithAccountsOutputModel)obj;
             if (Id == lom.Id &&
                 FirstName == lom.FirstName &&
                 LastName == lom.LastName &&
