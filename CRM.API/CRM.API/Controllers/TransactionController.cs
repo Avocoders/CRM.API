@@ -17,12 +17,12 @@ namespace CRM.API.Controllers
     [ApiController]
     public class TransactionController : Controller
     {
-        //private readonly HttpClient _httpClient;
+        private readonly HttpClient _httpClient;
         private readonly RestClient _restClient;
         private readonly ILeadRepository _repo;
         public TransactionController(ILeadRepository repo)
         {
-            //_httpClient = new HttpClient();
+            _httpClient = new HttpClient();
             _restClient = new RestClient();
             _repo = repo;
         }
@@ -43,104 +43,100 @@ namespace CRM.API.Controllers
             transactionModel.CurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountId).Data;
             transactionModel.ReceiverCurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountIdReceiver).Data;
             var restClient = new RestClient("https://localhost:44388/");
-            var restRequest = new RestRequest("transaction/transfer", Method.POST) { RequestFormat = DataFormat.Json };
-            restRequest.AddJsonBody(new { transactionModel });
-            //var response = restClient.Execute(restRequest).Content;
-            var queryResult = restClient.Execute<List<long>>(restRequest).Data;
-            //var jsonContent = new StringContent(JsonConvert.SerializeObject(transactionModel), Encoding.UTF8, "application/json");
-            //var response = await _restClient.Execute(LocalHost.localHostTransaction + "transaction/transfer", jsonContent);
-            //string content = await response.Content.ReadAsStringAsync();
-
-            return queryResult;
+            var restRequest = new RestRequest("transaction/transfer", Method.POST, DataFormat.Json);
+            restRequest.AddJsonBody(transactionModel);
+            restRequest.OnBeforeDeserialization = r => { r.ContentType = "application/json"; }; 
+            return restClient.Execute<List<long>>(restRequest).Data; 
         }
 
-        ///// <summary>
-        ///// refers to TransactionStore to create a withdraw transaction
-        ///// </summary>
-        ///// <param name="transactionModel"></param>
-        ///// <returns></returns>
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[HttpPost("withdraw")]
-        //public async Task<ActionResult<long>> CreateWithdrawTransaction([FromBody] TransactionInputModel transactionModel)
-        //{
-        //    if (_repo.GetAccountById(transactionModel.AccountId) is null) return BadRequest("The user is not found");
-        //    if (transactionModel.Amount <= 0) return BadRequest("The amount is missing");
+        /// <summary>
+        /// refers to TransactionStore to create a withdraw transaction
+        /// </summary>
+        /// <param name="transactionModel"></param>
+        /// <returns></returns>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpPost("withdraw")]
+        public async Task<ActionResult<long>> CreateWithdrawTransaction([FromBody] TransactionInputModel transactionModel)
+        {
+            if (_repo.GetAccountById(transactionModel.AccountId) is null) return BadRequest("The user is not found");
+            if (transactionModel.Amount <= 0) return BadRequest("The amount is missing");
 
-        //    transactionModel.CurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountId).Data;
-        //    var jsonContent = new StringContent(JsonConvert.SerializeObject(transactionModel), Encoding.UTF8, "application/json");
-        //    var response = await _httpClient.PostAsync(LocalHost.localHostTransaction+ "transaction/withdraw", jsonContent);
-        //    string content = await response.Content.ReadAsStringAsync();
-        //    return StatusCode((int)response.StatusCode, content);
-        //}
+            transactionModel.CurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountId).Data;
+            var restClient = new RestClient("https://localhost:44388/");
+            var restRequest = new RestRequest("transaction/withdraw", Method.POST, DataFormat.Json);
+            restRequest.AddJsonBody(transactionModel);
+            restRequest.OnBeforeDeserialization = r => { r.ContentType = "application/json"; };
+            return restClient.Execute<long>(restRequest).Data;
+        }
 
-        ///// <summary>
-        ///// refers to TransactionStore to create a deposit transaction
-        ///// </summary>
-        ///// <param name="transactionModel"></param>
-        ///// <returns></returns>
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[HttpPost("deposit")]
-        //public async Task<ActionResult<long>> CreateDepositTransaction([FromBody] TransactionInputModel transactionModel)
-        //{
-        //    if (_repo.GetAccountById(transactionModel.AccountId) is null) return BadRequest("The user is not found");
-        //    if (transactionModel.Amount <= 0) return BadRequest("The amount is missing");
+        /// <summary>
+        /// refers to TransactionStore to create a deposit transaction
+        /// </summary>
+        /// <param name="transactionModel"></param>
+        /// <returns></returns>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpPost("deposit")]
+        public async Task<ActionResult<long>> CreateDepositTransaction([FromBody] TransactionInputModel transactionModel)
+        {
+            if (_repo.GetAccountById(transactionModel.AccountId) is null) return BadRequest("The user is not found");
+            if (transactionModel.Amount <= 0) return BadRequest("The amount is missing");
+            transactionModel.CurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountId).Data;
+            var restClient = new RestClient("https://localhost:44388/");
+            var restRequest = new RestRequest("transaction/deposit", Method.POST, DataFormat.Json);
+            restRequest.AddJsonBody(transactionModel);
+            restRequest.OnBeforeDeserialization = r => { r.ContentType = "application/json"; };
+            return restClient.Execute<long>(restRequest).Data; ;
+        }
 
-        //    transactionModel.CurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountId).Data;
-        //    var jsonContent = new StringContent(JsonConvert.SerializeObject(transactionModel), Encoding.UTF8, "application/json");
-        //    var response = await _httpClient.PostAsync(LocalHost.localHostTransaction+"transaction/deposit", jsonContent);
-        //    string content = await response.Content.ReadAsStringAsync();
-        //    return StatusCode((int)response.StatusCode, content);
-        //}
+        /// <summary>
+        /// refers to TransactionStore to get all lead's transactions by leadId
+        /// </summary>
+        /// <param name="accountId"></param>
+        /// <returns></returns>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpGet("by-account-id/{accountId}")]
+        public async Task<ActionResult<List<TransactionOutputModel>>> GetTransactionsByAccountId(long accountId)
+        {
+            if (accountId <= 0) return BadRequest("Account was not found");
+            var restClient = new RestClient("https://localhost:44388/");
+            var restRequest = new RestRequest($"transaction/by-account-id/{accountId}", Method.GET, DataFormat.Json);
+            return restClient.Execute<List<TransactionOutputModel>>(restRequest).Data;
+        }
 
-        ///// <summary>
-        ///// refers to TransactionStore to get all lead's transactions by leadId
-        ///// </summary>
-        ///// <param name="accountId"></param>
-        ///// <returns></returns>
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[HttpGet("by-account-id/{accountId}")]
-        //public async Task<ActionResult<List<TransactionOutputModel>>> GetTransactionsByAccountId(long accountId)
-        //{
-            
-        //    if (accountId <= 0) return BadRequest("Account was not found");
-        //    var response = await _httpClient.GetAsync(LocalHost.localHostTransaction+$"transaction/by-account-id/{accountId}");
-        //    string content = await response.Content.ReadAsStringAsync();
-        //    return StatusCode((int)response.StatusCode, content);
-        //}
+        /// <summary>
+        /// refers to TransactionStore to get transaction by Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpGet("{id}")]
+        public async Task<ActionResult<TransactionOutputModel>> GetTransactionById(long id)
+        {
+            if (id <= 0) return BadRequest("Transaction was not found");
+            var restClient = new RestClient("https://localhost:44388/");
+            var restRequest = new RestRequest($"transaction/{id}", Method.GET, DataFormat.Json);
+            var a = restClient.Execute<TransactionOutputModel>(restRequest).Data;
+            return a;
+        }
 
-        ///// <summary>
-        ///// refers to TransactionStore to get transaction by Id
-        ///// </summary>
-        ///// <param name="id"></param>
-        ///// <returns></returns>
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<TransactionOutputModel>> GetTransactionById(long id)
-        //{
-        //    if (id <= 0) return BadRequest("Transaction was not found");
-        //    var response = await _httpClient.GetAsync(LocalHost.localHostTransaction + $"transaction/{id}");
-        //    string content = await response.Content.ReadAsStringAsync();
-        //    return StatusCode((int)response.StatusCode, content);
-        //}
-
-        ///// <summary>
-        ///// refers to TransactionStore to get balance by leadId and currencyId
-        ///// </summary>
-        ///// <param name="accountId"></param>
-        ///// <returns></returns>
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[HttpGet("{accountId}/balance")]
-        //public async Task<ActionResult<decimal>> GetBalanceByAccountIdInCurrency(long accountId)
-        //{
-        //    if (accountId <= 0) return BadRequest("Account was not found");
-        //    var response = await _httpClient.GetAsync(LocalHost.localHostTransaction + $"transaction/{accountId}/balance");
-        //    string content = await response.Content.ReadAsStringAsync();
-        //    return StatusCode((int)response.StatusCode, content);
-        //}
+        /// <summary>
+        /// refers to TransactionStore to get balance by leadId and currencyId
+        /// </summary>
+        /// <param name="accountId"></param>
+        /// <returns></returns>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpGet("{accountId}/balance")]
+        public async Task<ActionResult<decimal>> GetBalanceByAccountIdInCurrency(long accountId)
+        {
+            if (accountId <= 0) return BadRequest("Account was not found");
+            var restClient = new RestClient("https://localhost:44388/");
+            var restRequest = new RestRequest($"transaction/{accountId}/balance", Method.GET, DataFormat.Json);
+            return restClient.Execute<decimal>(restRequest).Data;
+        }
     }
 }
