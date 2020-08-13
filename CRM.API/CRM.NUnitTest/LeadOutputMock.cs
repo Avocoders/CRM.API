@@ -326,6 +326,75 @@ namespace CRM.NUnitTest
 
                         IsDeleted = false
                     }; break;
+
+                case 11:
+
+                    return new LeadOutputModel()
+                    {
+                        Id = 11,
+                        FirstName = "Anna",
+                        LastName = "Yazikova",
+                        Patronymic = "Ivannova",
+                        Login = "annayazikova2456388",
+                        Phone = "+79314554545",
+                        Email = "annayazikova2456388@gmail.com",
+                        Address = "Malaya Konyushennaya Ulitsa229",
+                        BirthDate = "16.05.1991",
+
+                        RegistrationDate = null,
+                        ChangeDate = null,
+                        Role = "Client",
+                        City = "Saratov",
+                        Accounts = null,
+                    
+
+                        IsDeleted = false
+                    }; break;
+
+                case 12:
+
+                    return new LeadOutputModel()
+                    {
+                        Id = 12,
+                        FirstName = "Milena",
+                        LastName = "Murashova",
+                        Patronymic = "Nikolaevna",
+                        Login = "AnnaMurashka7639",
+                        Phone = "+79762457628",
+                        Email = "annamurashova@gmail.com",
+                        Address = "Kaliningradskaya, 35, 15",
+                        BirthDate = "17.03.1990",
+                        RegistrationDate = null,
+                        ChangeDate = null,
+                        Role = "Client",
+                        City = "Minsk",
+                        Accounts = null,
+
+
+                        IsDeleted = false
+                    }; break;
+
+                case 13:
+
+                    return new LeadOutputModel()
+                    {
+                        Id = 13,
+                        FirstName = "Zena",
+                        LastName = "Koroleva",
+                        Patronymic = "Nikolaevna",
+                        Login = "Zena7639",
+                        Phone = "+79762457633",
+                        Email = "Zena7639@gmail.com",
+                        Address = "Kaliningradskaya, 35, 15",
+                        BirthDate = "17.03.1998",
+                        RegistrationDate = null,
+                        ChangeDate = null,
+                        Role = "Client",
+                        City = "Minsk",
+                        Accounts = null,
+
+                        IsDeleted = false
+                    }; break;
             }
             return new LeadOutputModel();
         }

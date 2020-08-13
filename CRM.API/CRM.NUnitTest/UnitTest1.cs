@@ -118,7 +118,7 @@ namespace CRM.NUnitTest
         [TestCase(4)]
         [TestCase(78)]
 
-        public async Task GetAccountTest(int num)
+        public async Task GetAccountTest(int num) //тесты есть
         {
             string result = await client.GetStringAsync(LocalHost.localHostCrm + $"lead/account/{num}");
             var actual = JsonConvert.DeserializeObject<LeadWithAccountsOutputModel>(result);
@@ -127,6 +127,57 @@ namespace CRM.NUnitTest
             Assert.AreEqual(expected, actual);
         }
 
+        [TestCase(1)]
+        [TestCase(3)]
+        [TestCase(4)]
+        [TestCase(78)]
+
+        public async Task GetAccountByLeadIdTest(int num) // тесты есть
+        {
+            string result = await client.GetStringAsync(LocalHost.localHostCrm + $"lead/{num}/accounts");
+            var actual = JsonConvert.DeserializeObject<LeadWithAccountsOutputModel>(result);
+            AccountOuputModelMock test = new AccountOuputModelMock();
+            LeadWithAccountsOutputModel expected = test.GetAccountByLeadOfLeadMock(num);
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(3)]
+        [TestCase(4)]
+
+        public async Task AddAccountTest(int num)
+        {
+            AccountInputModelMock test = new AccountInputModelMock();
+            AccountInputModel inputmodel = test.AddAccountMock(num);
+
+            var jsonContent = new StringContent(JsonConvert.SerializeObject(inputmodel), Encoding.UTF8, "application/json");
+            var result = await client.PostAsync(LocalHost.localHostCrm + "lead/account", jsonContent);
+            string model = Convert.ToString(await result.Content.ReadAsStringAsync());
+            var actual = JsonConvert.DeserializeObject<LeadWithAccountsOutputModel>(model);
+            AccountOuputModelMock testresult = new AccountOuputModelMock();
+            LeadWithAccountsOutputModel expected = testresult.AddAccountByLeadOfLeadMock(num);
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(3)]
+        [TestCase(4)]
+
+        public async Task UpdateAccountTest(int num)
+        {
+            AccountInputModelMock test = new AccountInputModelMock();
+            AccountInputModel inputmodel = test.UpdateAccountMock(num);
+
+            var jsonContent = new StringContent(JsonConvert.SerializeObject(inputmodel), Encoding.UTF8, "application/json");
+            var result = await client.PutAsync(LocalHost.localHostCrm + "lead/account", jsonContent);
+            string model = Convert.ToString(await result.Content.ReadAsStringAsync());
+            var actual = JsonConvert.DeserializeObject<LeadWithAccountsOutputModel>(model);
+            AccountOuputModelMock testresult = new AccountOuputModelMock();
+            LeadWithAccountsOutputModel expected = testresult.UpdateAccountByLeadOfLeadMock(num);
+            Assert.AreEqual(expected, actual);
+        }
 
         //public async Task CreateTransferTest()
         //{
@@ -222,10 +273,32 @@ namespace CRM.NUnitTest
         //    Assert.AreEqual("Successfully deleted", actual);
         //}
 
+        [TestCase(11)]
+        [TestCase(12)]
+        [TestCase(13)]
+       
+
+        public async Task CreateLead(int num)
+        {
+            LeadInputMock test = new LeadInputMock();
+            LeadInputModel inputmodel = test.CreateLeadMock(num);
+
+            var jsonContent = new StringContent(JsonConvert.SerializeObject(inputmodel), Encoding.UTF8, "application/json");
+            var result = await client.PostAsync(LocalHost.localHostCrm + "lead", jsonContent);
+            string model = Convert.ToString(await result.Content.ReadAsStringAsync());
+            var actual = JsonConvert.DeserializeObject<LeadOutputModel>(model);
+            LeadOutputMock testresult = new LeadOutputMock();
+            LeadOutputModel expected = testresult.GetLeadByIdMock(num);
+            Assert.AreEqual(expected.FirstName, actual.FirstName);
+            Assert.AreEqual(expected.LastName, actual.LastName);
+            Assert.AreEqual(expected.Login, actual.Login);
+            Assert.AreEqual(expected.BirthDate, actual.BirthDate);
+        }
+
         [OneTimeTearDown]
         public void Teardown()
         {
-            //_connection.Execute(Queries.clearTestBase);
+            _connection.Execute(Queries.clearTestBase);
             server.Dispose();
             client.Dispose();
 

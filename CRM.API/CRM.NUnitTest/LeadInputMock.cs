@@ -13,7 +13,7 @@ namespace CRM.NUnitTest
         {
             switch (num)
             {
-                case 1:
+                case 11:
                     return new LeadInputModel()
                     {
 
@@ -28,7 +28,7 @@ namespace CRM.NUnitTest
                         Address = "Malaya Konyushennaya Ulitsa229",
                         BirthDate = "16.05.1991"
                     }; break;
-                case 2:
+                case 12:
                     return new LeadInputModel()
                     {
                         FirstName = "Milena",
@@ -42,6 +42,22 @@ namespace CRM.NUnitTest
                         Address = "Kaliningradskaya, 35, 15",
                         BirthDate = "17.03.1990"
                     }; break;
+
+                case 13:
+                    return new LeadInputModel()
+                    {
+                        FirstName = "Zena",
+                        LastName = "Koroleva",
+                        Patronymic = "Nikolaevna",
+                        Login = "Zena7639",
+                        Password = "Zena867594",
+                        Phone = "+79762457633",
+                        Email = "zena7639@gmail.com",
+                        CityId = 14,
+                        Address = "Kaliningradskaya, 35, 15",
+                        BirthDate = "17.03.1998"
+                    }; break;
+                    return new LeadInputModel();
             }
             return new LeadInputModel();
         }
