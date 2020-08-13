@@ -65,18 +65,6 @@ namespace CRM.API.Controllers
             return "";
         }
 
-        ///// <summary>
-        ///// gets the list of leads with all information
-        ///// </summary>             
-        ////[Authorize()]
-        //[ProducesResponseType(StatusCodes.Status200OK)]        
-        //[HttpGet]
-        //public ActionResult<List<LeadOutputModel>> GetLeadsAll()
-        //{
-        //    DataWrapper<List<LeadDto>> dataWrapper = _repo.GetAll();
-        //    return MakeResponse(dataWrapper, _mapper.Map<List<LeadOutputModel>>);
-        //}
-
         /// <summary>
         /// gets the lead by Id with all information
         /// </summary>
@@ -98,7 +86,7 @@ namespace CRM.API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost]
-        public ActionResult<LeadOutputModel> CreateLead(LeadInputModel leadModel) // хранимка не вытаскивает аутпут модель
+        public ActionResult<LeadOutputModel> CreateLead(LeadInputModel leadModel) 
         {
             Validation validation = new Validation();
             string badRequest = validation.BadRequestsForLeadInputModel(leadModel);
@@ -118,7 +106,7 @@ namespace CRM.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPut]
-        public ActionResult<LeadOutputModel> UpdateLead(LeadInputModel leadModel) //та же не работающая хранимка
+        public ActionResult<LeadOutputModel> UpdateLead(LeadInputModel leadModel) //усё робiць)))
         {
             if (!leadModel.Id.HasValue)
             {

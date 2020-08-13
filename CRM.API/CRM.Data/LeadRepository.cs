@@ -166,34 +166,7 @@ namespace CRM.Data
         {
             _connection.Execute("Lead_Delete", new { id }, commandType: CommandType.StoredProcedure);
         }
-
-        //public DataWrapper<List<LeadDto>> GetAll() на удаление
-        //{
-        //    var results = new DataWrapper<List<LeadDto>>();
-        //    try
-        //    {
-        //        results.Data = _connection.Query<LeadDto, RoleDto, CityDto, LeadDto>(
-        //            "Lead_GetAll",
-        //            (lead, role, city) =>
-        //            {
-        //                LeadDto leadEntry;
-
-        //                leadEntry = lead;
-        //                leadEntry.Role = role;
-        //                leadEntry.City = city;
-
-        //                return leadEntry;
-        //            },
-        //            splitOn: "Id").ToList();
-        //        results.IsOk = true;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        results.ExceptionMessage = e.Message;
-        //    }
-        //    return results;
-        //}
-
+      
         public DataWrapper<LeadDto> GetById(long leadId)
         {
             var leadDictionary = new Dictionary<long, LeadDto>();
@@ -257,48 +230,7 @@ namespace CRM.Data
             }
             return result;
         }
-
-        //public DataWrapper<LeadDto> Update(LeadDto leadDto)
-        //{
-        //    var result = new DataWrapper<LeadDto>();
-        //    try
-        //    {
-        //        result.Data = _connection.Query<LeadDto, RoleDto, CityDto, LeadDto>("Lead_Add_Or_Update",
-        //            (lead, role, city) =>
-        //            {
-        //                LeadDto leadEntry;
-
-        //                leadEntry = lead;
-        //                leadEntry.Role = role;
-        //                leadEntry.City = city;
-
-        //                return leadEntry;
-        //            },
-        //            new
-        //            {
-        //                leadDto.Id,
-        //                leadDto.FirstName,
-        //                leadDto.LastName,
-        //                leadDto.Patronymic,
-        //                leadDto.Login,
-        //                leadDto.Password,
-        //                leadDto.Phone,
-        //                leadDto.Email,
-        //                CityId = leadDto.City.Id,
-        //                leadDto.Address,
-        //                leadDto.BirthDate
-        //            },
-        //            splitOn: "Id",
-        //            commandType: CommandType.StoredProcedure).FirstOrDefault();
-        //        result.IsOk = true;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        result.ExceptionMessage = e.Message;
-        //    }
-        //    return result;
-        //}
-
+       
         public DataWrapper<int> FindLeadByLogin(string login)
         {
             var result = new DataWrapper<int>();
