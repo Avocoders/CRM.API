@@ -114,21 +114,21 @@ namespace CRM.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("{id}")]
-        public async Task<ActionResult<TransactionOutputModel>> GetTransactionById(long id)
+        public async Task<ActionResult<List<TransactionOutputModel>>> GetTransactionById(long id)
         {
             if (id <= 0) return BadRequest("Transaction was not found");
             var restClient = new RestClient("https://localhost:44388/");
             var restRequest = new RestRequest($"transaction/{id}", Method.GET, DataFormat.Json);
-            var a = restClient.Execute<TransactionOutputModel>(restRequest).Data;
+            var a = restClient.Execute<List<TransactionOutputModel>>(restRequest).Data;
             return a;
         }
 
-        /// <summary>
-        /// refers to TransactionStore to get balance by leadId and currencyId
-        /// </summary>
-        /// <param name="accountId"></param>
-        /// <returns></returns>
-        [ProducesResponseType(StatusCodes.Status200OK)]
+    /// <summary>
+    /// refers to TransactionStore to get balance by leadId and currencyId
+    /// </summary>
+    /// <param name="accountId"></param>
+    /// <returns></returns>
+    [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("{accountId}/balance")]
         public async Task<ActionResult<decimal>> GetBalanceByAccountIdInCurrency(long accountId)
