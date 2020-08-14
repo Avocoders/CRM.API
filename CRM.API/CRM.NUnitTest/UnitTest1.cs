@@ -18,7 +18,7 @@ using Microsoft.Extensions.Options;
 using CRM.Core;
 using System.Data.SqlClient;
 using Autofac;
-
+using CRM.NUnitTest.Mocks.OutputModelMocks;
 
 namespace CRM.NUnitTest
 {
@@ -67,7 +67,7 @@ namespace CRM.NUnitTest
             string result = await client.GetStringAsync(LocalHost.localHostCrm + $"lead/{num}");
             var actual = JsonConvert.DeserializeObject<LeadOutputModel>(result);
             LeadOutputModelMocks test = new LeadOutputModelMocks();
-            LeadOutputModel expected = test.GetLeadMockById(num);   
+            LeadOutputModel expected = test.GetLeadMockById(num);
             Assert.AreEqual(expected, actual);
         }
         [TestCase(1)]
@@ -77,13 +77,13 @@ namespace CRM.NUnitTest
 
         public async Task SearchParametersTest(int num)
         {
-            var test = new InputModelMocks();
+            var test = new LeadInputModelMocks();
             var inputmodel = test.SearchInputMock(num);
             var jsonContent = new StringContent(JsonConvert.SerializeObject(inputmodel), Encoding.UTF8, "application/json");
             var response = await client.PostAsync(LocalHost.localHostCrm + "lead/search", jsonContent);   //leadsearch тоже в константу
-            var ids = await response.Content.ReadAsStringAsync();           
-            var actual = JsonConvert.DeserializeObject<List<LeadOutputModel>>(ids);            
-            var leadOutputMock  = new LeadOutputModelMocks();
+            var ids = await response.Content.ReadAsStringAsync();
+            var actual = JsonConvert.DeserializeObject<List<LeadOutputModel>>(ids);
+            var leadOutputMock = new LeadOutputModelMocks();
             var expected = leadOutputMock.SearchParametersMock(num);
             Assert.AreEqual(expected, actual);
         }
@@ -97,7 +97,7 @@ namespace CRM.NUnitTest
         [TestCase(10)]
         public async Task GetLeadWithUpdatedEmail(int num)
         {
-            InputModelMocks test = new InputModelMocks();
+            LeadInputModelMocks test = new LeadInputModelMocks();
             EmailInputModel inputmodel = test.GetEmailInputModelByLeadId(num);
 
             var jsonContent = new StringContent(JsonConvert.SerializeObject(inputmodel), Encoding.UTF8, "application/json");
@@ -173,108 +173,111 @@ namespace CRM.NUnitTest
             Assert.AreEqual(expected, actual);
         }
 
-        //public async Task CreateTransferTest()
-        //{
-        //    var transferInputModel = new TransferInputModel()
-        //    {
-        //        AccountId = 256,
-        //        CurrencyId = 2,
-        //        Amount = 80,
-        //        AccountIdReceiver = 555
-        //    };
-        //    var jsonContent = new StringContent(JsonConvert.SerializeObject(transferInputModel), Encoding.UTF8, "application/json");
-        //    var response = await client.PostAsync(LocalHost.localHostCrm + "transaction/transfer", jsonContent);
-        //    string ids = Convert.ToString(await response.Content.ReadAsStringAsync());
-        //    string[] data = Regex.Split(ids, @"\D+");
-        //    long id = Convert.ToInt64(data[1]);
-        //    string result = await client.GetStringAsync(LocalHost.localHostTransaction + $"transaction/{id}");
-        //    var actual = JsonConvert.DeserializeObject<List<TransactionOutputModel>>(result)[0];
-        //    Assert.AreEqual(actual.AccountId, 256);
-        //    Assert.AreEqual(actual.Amount, 80);
-        //    Assert.AreEqual(actual.Type, "Transfer");
-        //}
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(3)]
+        [TestCase(4)]
+        [TestCase(5)]
+        [TestCase(6)]
+        public async Task CreateDepositTest(int num)   //сделала, но хз, как будем удалять их из базы
+        {
+            var inputModelMock = new TransactionInputModelMocks();
+            var inputModel = inputModelMock.GetDepositInputModel(num);
+            var jsonContent = new StringContent(JsonConvert.SerializeObject(inputModel), Encoding.UTF8, "application/json");
+            var response = await client.PostAsync(LocalHost.localHostTransaction + "transaction/deposit", jsonContent);
+            var id = await response.Content.ReadAsStringAsync();
+            if (num < 4)
+            {
+                var actual = JsonConvert.DeserializeObject<int>(id);
+                var outputModelMock = new TransactionOutputModelMocks();
+                var expected = outputModelMock.GetIdDeposit(num);
+                Assert.AreEqual(expected, actual);
+            }
+            else
+            {                
+                var outputModelMock = new TransactionOutputModelMocks();
+                var expected = outputModelMock.GetIdDeposit(num);
+                Assert.AreEqual(expected, id);
+            }
+        }
 
-
-        //[TestCase(1)]
-        //[TestCase(2)]
-        //[TestCase(3)]
-        //[TestCase(4)]
-        //[TestCase(5)]
-
-        //public async Task CreateDepositTest(int num)
-        //{
-        //    TransactionMock test = new TransactionMock();
-        //    TransactionInputModel transactionInputModel = test.DepositMock(num);
-        //    var restClient = new RestClient("https://localhost:44382/");
-        //    var restRequest = new RestRequest("transaction/deposit",Method.POST) { RequestFormat = DataFormat.Json };
-        //    restRequest.AddJsonBody(new { transactionInputModel }); 
-        //    var actual = restClient.Execute(restRequest);
-        //    TransactionMock resulttest = new TransactionMock();
-        //    var expected = resulttest.DepositOutputMock(num);
-        //    TransactionOutputModel exp = new TransferOutputModel();
-        //    var expected2 = JsonConvert.SerializeObject(exp);
-        //    Assert.AreEqual(expected2, actual);
-        //Assert.AreEqual(expected.Amount, actual.Amount);
-        //Assert.AreEqual(expected.Type, actual.Type);
-
-
-
-        //var jsonContent = new StringContent(JsonConvert.SerializeObject(transactionInputModel), Encoding.UTF8, "application/json");
-        //var response = await client.PostAsync(LocalHost.localHostCrm + "transaction/deposit", jsonContent);
-        //long id = Convert.ToInt64(await response.Content.ReadAsStringAsync());
-        //string result = await client.GetStringAsync(LocalHost.localHostTransaction + $"transaction/{id}");
-        //var actual = JsonConvert.DeserializeObject<TransactionOutputModel>(result);
-
-
-
-
-        //[Test]
-        //public async Task CreateWithdrawTest()
-        //{
-        //    var transactionInputModel = new TransactionInputModel()
-        //    {
-        //        AccountId = 256,
-        //        CurrencyId = 1,
-        //        Amount = 10
-        //    };
-        //    var jsonContent = new StringContent(JsonConvert.SerializeObject(transactionInputModel), Encoding.UTF8, "application/json");
-        //    var response = await client.PostAsync(LocalHost.localHostCrm + "transaction/withdraw", jsonContent);
-        //    long id = Convert.ToInt64(await response.Content.ReadAsStringAsync());
-        //    string result = await client.GetStringAsync(LocalHost.localHostTransaction + $"transaction/{id}");
-        //    var actual = JsonConvert.DeserializeObject<List<TransactionOutputModel>>(result)[0];
-        //    Assert.AreEqual(actual.AccountId, 256);
-        //    Assert.AreEqual(actual.Amount, -10);
-        //    Assert.AreEqual(actual.Type, "Withdraw");
-        //}
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(3)]
+        [TestCase(4)]
+        [TestCase(5)]
+        [TestCase(6)]
+        public async Task CreateTransferTest(int num)   //сделала, но хз, как будем удалять их из базы
+        {
+            var inputModelMock = new TransactionInputModelMocks();
+            var inputModel = inputModelMock.GetTransferInputModel(num);
+            var jsonContent = new StringContent(JsonConvert.SerializeObject(inputModel), Encoding.UTF8, "application/json");
+            var response = await client.PostAsync(LocalHost.localHostTransaction + "transaction/transfer", jsonContent);
+            var ids = await response.Content.ReadAsStringAsync();
+            if (num < 4)
+            {
+                var actual = JsonConvert.DeserializeObject<List<int>>(ids);
+                var outputModelMock = new TransactionOutputModelMocks();
+                var expected = outputModelMock.GetIdsTransfer(num);
+                Assert.AreEqual(expected, actual);
+            }
+            else
+            {
+                var outputModelMock = new TransactionOutputModelMocks();
+                var expected = outputModelMock.GetIdsTransfer(num);
+                Assert.AreEqual(expected, ids);
+            }
+        }
 
 
 
-        //[TestCase(1)]
-        //[TestCase(2)]
-        //[TestCase(3)]
-        //[TestCase(4)]
-        //[TestCase(5)]
-        //[TestCase(6)]
-        //[TestCase(7)]
-        //[TestCase(8)]
-        //[TestCase(9)]
-        //[TestCase(10)]
+            //[Test]
+            //public async Task CreateWithdrawTest()
+            //{
+            //    var transactionInputModel = new TransactionInputModel()
+            //    {
+            //        AccountId = 256,
+            //        CurrencyId = 1,
+            //        Amount = 10
+            //    };
+            //    var jsonContent = new StringContent(JsonConvert.SerializeObject(transactionInputModel), Encoding.UTF8, "application/json");
+            //    var response = await client.PostAsync(LocalHost.localHostCrm + "transaction/withdraw", jsonContent);
+            //    long id = Convert.ToInt64(await response.Content.ReadAsStringAsync());
+            //    string result = await client.GetStringAsync(LocalHost.localHostTransaction + $"transaction/{id}");
+            //    var actual = JsonConvert.DeserializeObject<List<TransactionOutputModel>>(result)[0];
+            //    Assert.AreEqual(actual.AccountId, 256);
+            //    Assert.AreEqual(actual.Amount, -10);
+            //    Assert.AreEqual(actual.Type, "Withdraw");
+            //}
 
-        //public async Task DeleteLeadTest(int num)
-        //{
-        //    var response = await client.DeleteAsync(LocalHost.localHostCrm + $"lead/{num}");
-        //    string actual = Convert.ToString(await response.Content.ReadAsStringAsync());
-        //    Assert.AreEqual("Successfully deleted", actual);
-        //}
 
-        [TestCase(11)]
+
+            //[TestCase(1)]
+            //[TestCase(2)]
+            //[TestCase(3)]
+            //[TestCase(4)]
+            //[TestCase(5)]
+            //[TestCase(6)]
+            //[TestCase(7)]
+            //[TestCase(8)]
+            //[TestCase(9)]
+            //[TestCase(10)]
+
+            //public async Task DeleteLeadTest(int num)
+            //{
+            //    var response = await client.DeleteAsync(LocalHost.localHostCrm + $"lead/{num}");
+            //    string actual = Convert.ToString(await response.Content.ReadAsStringAsync());
+            //    Assert.AreEqual("Successfully deleted", actual);
+            //}
+
+            [TestCase(11)]
         [TestCase(12)]
         [TestCase(13)]
        
 
         public async Task CreateLead(int num)
         {
-            InputModelMocks test = new InputModelMocks();
+            LeadInputModelMocks test = new LeadInputModelMocks();
             LeadInputModel inputmodel = test.CreateLeadMock(num);
 
             var jsonContent = new StringContent(JsonConvert.SerializeObject(inputmodel), Encoding.UTF8, "application/json");

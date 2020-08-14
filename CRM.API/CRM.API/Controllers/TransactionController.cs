@@ -59,7 +59,7 @@ namespace CRM.API.Controllers
         [HttpPost("withdraw")]
         public async Task<ActionResult<long>> CreateWithdrawTransaction([FromBody] TransactionInputModel transactionModel)
         {
-            if (_repo.GetAccountById(transactionModel.AccountId) is null) return BadRequest("The user is not found");
+            if (_repo.GetAccountById(transactionModel.AccountId).Data is null) return BadRequest("The account is not found");
             if (transactionModel.Amount <= 0) return BadRequest("The amount is missing");
 
             transactionModel.CurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountId).Data;
@@ -80,7 +80,7 @@ namespace CRM.API.Controllers
         [HttpPost("deposit")]
         public async Task<ActionResult<long>> CreateDepositTransaction([FromBody] TransactionInputModel transactionModel)
         {
-            if (_repo.GetAccountById(transactionModel.AccountId) is null) return BadRequest("The user is not found");
+            if (_repo.GetAccountById(transactionModel.AccountId).Data is null) return BadRequest("The account is not found");
             if (transactionModel.Amount <= 0) return BadRequest("The amount is missing");
             transactionModel.CurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountId).Data;
             var restClient = new RestClient("https://localhost:44388/");
