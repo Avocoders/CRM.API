@@ -246,7 +246,7 @@ namespace CRM.Data
             return result;
         }
 
-        public DataWrapper<int> FindLeadByEmail(string email)
+        public DataWrapper<int> CheckEmail(string email)
         {
             var result = new DataWrapper<int>();
             try

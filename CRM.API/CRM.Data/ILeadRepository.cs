@@ -8,7 +8,7 @@ namespace CRM.Data
         DataWrapper<LeadDto> GetAccountById(long Id);
         DataWrapper<LeadDto> AddOrUpdateLead(LeadDto leadDto);
         void Delete(long id);
-        DataWrapper<int> FindLeadByEmail(string email);
+        DataWrapper<int> CheckEmail(string email);
         DataWrapper<int> FindLeadByLogin(string login);
         //DataWrapper<List<LeadDto>> GetAll();
         DataWrapper<LeadDto> GetById(long leadId);

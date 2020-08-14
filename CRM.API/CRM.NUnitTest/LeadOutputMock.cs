@@ -9,7 +9,7 @@ namespace CRM.NUnitTest
     public class LeadOutputMock
 
     {
-        public LeadOutputModel GetLeadByIdMock(int leadId)
+        public LeadOutputModel GetLeadMockById(int leadId)
         {
             switch (leadId)
             {

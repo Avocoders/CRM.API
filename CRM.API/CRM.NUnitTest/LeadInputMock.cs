@@ -27,7 +27,7 @@ namespace CRM.NUnitTest
                         CityId = 11,
                         Address = "Malaya Konyushennaya Ulitsa229",
                         BirthDate = "16.05.1991"
-                    }; break;
+                    }; 
                 case 12:
                     return new LeadInputModel()
                     {
@@ -41,7 +41,7 @@ namespace CRM.NUnitTest
                         CityId = 14,
                         Address = "Kaliningradskaya, 35, 15",
                         BirthDate = "17.03.1990"
-                    }; break;
+                    }; 
 
                 case 13:
                     return new LeadInputModel()
@@ -56,99 +56,85 @@ namespace CRM.NUnitTest
                         CityId = 14,
                         Address = "Kaliningradskaya, 35, 15",
                         BirthDate = "17.03.1998"
-                    }; break;
-                    return new LeadInputModel();
+                    };
+                    
             }
             return new LeadInputModel();
         }
 
-        public EmailInputModel UpdateEmailByLeadId(int num)
+        public EmailInputModel GetEmailInputModelByLeadId(int num)
         {
-            switch (num)
+            return num switch
             {
-
-                case 2:
-                    return new EmailInputModel()
-                    {
-                        Id = 2,
-                        Email = "voron2@gmail.com"
-                    }; break;
-                case 3:
-                    return new EmailInputModel()
-                    {
-                        Id = 3,
-                        Email = "voron3@gmail.com"
-                    }; break;
-
-                case 5:
-                    return new EmailInputModel()
-                    {
-                        Id = 5,
-                        Email = "voron5@gmail.com"
-                    }; break;
-                case 6:
-                    return new EmailInputModel()
-                    {
-                        Id = 6,
-                        Email = "voron6@gmail.com"
-                    }; break;
-                case 7:
-                    return new EmailInputModel()
-                    {
-                        Id = 7,
-                        Email = ""
-                    }; break;
-                case 8:
-                    return new EmailInputModel()
-                    {
-                        Id = 8,
-                        Email = "gjfjhfjvjkvfkjvfmail.com"
-                    }; break;
-
-                case 10:
-                    return new EmailInputModel()
-                    {
-                        Id = 10,
-                        Email = "oksimiron@gmail.com"
-                    }; break;
-            }
-            return new EmailInputModel();
+                2 => new EmailInputModel()
+                {
+                    Id = 2,
+                    Email = "voron2@gmail.com"
+                },
+                3 => new EmailInputModel()
+                {
+                    Id = 3,
+                    Email = "voron3@gmail.com"
+                },
+                5 => new EmailInputModel()
+                {
+                    Id = 5,
+                    Email = "voron5@gmail.com"
+                },
+                6 => new EmailInputModel()
+                {
+                    Id = 6,
+                    Email = "voron6@gmail.com"
+                },
+                7 => new EmailInputModel()
+                {
+                    Id = 7,
+                    Email = ""
+                },
+                8 => new EmailInputModel()
+                {
+                    Id = 8,
+                    Email = "gjfjhfjvjkvfkjvfmail.com"
+                },
+                10 => new EmailInputModel()
+                {
+                    Id = 10,
+                    Email = "oksimiron@gmail.com"
+                },
+                _ => new EmailInputModel(),
+            };
         }
-        public SearchParametersInputModel SearchInputMock(int num)
+        public SearchParametersInputModel SearchInputMock(int num)  // вынести в отдельный класс
         {
-            switch (num)
+            return num switch
             {
-                case 1:
-                    return new SearchParametersInputModel()
-                    {
-                        FirstNameSearchMode = 1,
-                        FirstName = "Alena"
+                1 => new SearchParametersInputModel()
+                {
+                    FirstNameSearchMode = 1, //перекинуть на enum searchmode
+                    FirstName = "Alena"
 
 
-                    }; break;
-                case 2:
-                    return new SearchParametersInputModel()
-                    {
-                        PhoneSearchMode = 3,
-                        Phone = "+793244"
+                },
+                2 => new SearchParametersInputModel()
+                {
+                    PhoneSearchMode = 3,
+                    Phone = "+793244"
 
-                    }; break;
-                case 3:
-                    return new SearchParametersInputModel()
-                    {
-                        LoginSearchMode = 2,
-                        Login = "Galich"
+                },
+                3 => new SearchParametersInputModel()
+                {
+                    LoginSearchMode = 2,
+                    Login = "Galich"
 
-                    }; break;
-                case 4:
-                    return new SearchParametersInputModel()
-                    {
-                        BirthDateBegin = "01.01.1969",
-                        BirthDateEnd = "11.01.1970"
+                },
+                4 => new SearchParametersInputModel()
+                {
+                    BirthDateBegin = "01.01.1969",
+                    BirthDateEnd = "11.01.1970"
 
-                    }; break;
-            }
-            return new SearchParametersInputModel();
+                },
+                _ => new SearchParametersInputModel(),// добавить поиск по лида по аккаунту
+            };
         }
         
     }

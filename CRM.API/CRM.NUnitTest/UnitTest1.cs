@@ -72,7 +72,7 @@ namespace CRM.NUnitTest
             string result = await client.GetStringAsync(LocalHost.localHostCrm + $"lead/{num}");
             var actual = JsonConvert.DeserializeObject<LeadOutputModel>(result);
             LeadOutputMock test = new LeadOutputMock();
-            LeadOutputModel expected = test.GetLeadByIdMock(num);
+            LeadOutputModel expected = test.GetLeadMockById(num);   
             Assert.AreEqual(expected, actual);
         }
         [TestCase(1)]
@@ -82,16 +82,15 @@ namespace CRM.NUnitTest
 
         public async Task SearchParametersTest(int num)
         {
-            LeadInputMock test = new LeadInputMock();
-            SearchParametersInputModel inputmodel = test.SearchInputMock(num);
+            var test = new LeadInputMock();
+            var inputmodel = test.SearchInputMock(num);
             var jsonContent = new StringContent(JsonConvert.SerializeObject(inputmodel), Encoding.UTF8, "application/json");
-            var result = await client.PostAsync(LocalHost.localHostCrm + "lead/search", jsonContent);
-            string ids = Convert.ToString(await result.Content.ReadAsStringAsync());
-            List<LeadOutputModel> actual = JsonConvert.DeserializeObject<List<LeadOutputModel>>(ids);
-            LeadOutputMock resulttest = new LeadOutputMock();
-            var expected = resulttest.SearchParametersMock(num);
+            var response = await client.PostAsync(LocalHost.localHostCrm + "lead/search", jsonContent);   //leadsearch тоже в константу
+            var ids = await response.Content.ReadAsStringAsync();           
+            var actual = JsonConvert.DeserializeObject<List<LeadOutputModel>>(ids);            
+            var leadOutputMock  = new LeadOutputMock();
+            var expected = leadOutputMock.SearchParametersMock(num);
             Assert.AreEqual(expected, actual);
-
         }
 
         [TestCase(2)]
@@ -104,11 +103,11 @@ namespace CRM.NUnitTest
         public async Task GetLeadWithUpdatedEmail(int num)
         {
             LeadInputMock test = new LeadInputMock();
-            EmailInputModel inputmodel = test.UpdateEmailByLeadId(num);
+            EmailInputModel inputmodel = test.GetEmailInputModelByLeadId(num);
 
             var jsonContent = new StringContent(JsonConvert.SerializeObject(inputmodel), Encoding.UTF8, "application/json");
             var response = await client.PostAsync(LocalHost.localHostCrm + "lead/email", jsonContent);
-            string actual = Convert.ToString(await response.Content.ReadAsStringAsync());
+            string actual = await response.Content.ReadAsStringAsync();
             LeadOutputMock result = new LeadOutputMock();
             string expected = result.GetEmailByLeadId(num);
             Assert.AreEqual(expected, actual);
@@ -122,8 +121,8 @@ namespace CRM.NUnitTest
         {
             string result = await client.GetStringAsync(LocalHost.localHostCrm + $"lead/account/{num}");
             var actual = JsonConvert.DeserializeObject<LeadWithAccountsOutputModel>(result);
-            AccountOuputModelMock test = new AccountOuputModelMock();
-            LeadWithAccountsOutputModel expected = test.GetAccountOfLeadMock(num);
+            var mockGetter = new AccountMocksGetter();
+            var expected = mockGetter.GetAccountOfLeadMock(num);
             Assert.AreEqual(expected, actual);
         }
 
@@ -136,8 +135,8 @@ namespace CRM.NUnitTest
         {
             string result = await client.GetStringAsync(LocalHost.localHostCrm + $"lead/{num}/accounts");
             var actual = JsonConvert.DeserializeObject<LeadWithAccountsOutputModel>(result);
-            AccountOuputModelMock test = new AccountOuputModelMock();
-            LeadWithAccountsOutputModel expected = test.GetAccountByLeadOfLeadMock(num);
+            var accountMocksGetter = new AccountMocksGetter();
+            var expected = accountMocksGetter.GetAccountByLeadOfLeadMock(num);
             Assert.AreEqual(expected, actual);
         }
 
@@ -155,7 +154,7 @@ namespace CRM.NUnitTest
             var result = await client.PostAsync(LocalHost.localHostCrm + "lead/account", jsonContent);
             string model = Convert.ToString(await result.Content.ReadAsStringAsync());
             var actual = JsonConvert.DeserializeObject<LeadWithAccountsOutputModel>(model);
-            AccountOuputModelMock testresult = new AccountOuputModelMock();
+            AccountMocksGetter testresult = new AccountMocksGetter();
             LeadWithAccountsOutputModel expected = testresult.AddAccountByLeadOfLeadMock(num);
             Assert.AreEqual(expected, actual);
         }
@@ -174,7 +173,7 @@ namespace CRM.NUnitTest
             var result = await client.PutAsync(LocalHost.localHostCrm + "lead/account", jsonContent);
             string model = Convert.ToString(await result.Content.ReadAsStringAsync());
             var actual = JsonConvert.DeserializeObject<LeadWithAccountsOutputModel>(model);
-            AccountOuputModelMock testresult = new AccountOuputModelMock();
+            AccountMocksGetter testresult = new AccountMocksGetter();
             LeadWithAccountsOutputModel expected = testresult.UpdateAccountByLeadOfLeadMock(num);
             Assert.AreEqual(expected, actual);
         }
@@ -288,7 +287,7 @@ namespace CRM.NUnitTest
             string model = Convert.ToString(await result.Content.ReadAsStringAsync());
             var actual = JsonConvert.DeserializeObject<LeadOutputModel>(model);
             LeadOutputMock testresult = new LeadOutputMock();
-            LeadOutputModel expected = testresult.GetLeadByIdMock(num);
+            LeadOutputModel expected = testresult.GetLeadMockById(num);
             Assert.AreEqual(expected.FirstName, actual.FirstName);
             Assert.AreEqual(expected.LastName, actual.LastName);
             Assert.AreEqual(expected.Login, actual.Login);
