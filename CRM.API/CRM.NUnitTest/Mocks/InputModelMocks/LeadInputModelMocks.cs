@@ -1,65 +1,55 @@
 ﻿using CRM.API.Models.Input;
-using CRM.API.Models.Output;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using TransactionStore.API.Models.Input;
 
 namespace CRM.NUnitTest
 {
-    public class LeadInputMock
+    public class LeadInputModelMocks
     {
         public LeadInputModel CreateLeadMock(int num)
         {
-            switch (num)
+            return num switch
             {
-                case 11:
-                    return new LeadInputModel()
-                    {
+                11 => new LeadInputModel()
+                {
 
-                        FirstName = "Anna",
-                        LastName = "Yazikova",
-                        Patronymic = "Ivannova",
-                        Login = "annayazikova2456388",
-                        Password = "Samolettu356",
-                        Phone = "+79314554545",
-                        Email = "annayazikova2456388@gmail.com",
-                        CityId = 11,
-                        Address = "Malaya Konyushennaya Ulitsa229",
-                        BirthDate = "16.05.1991"
-                    }; 
-                case 12:
-                    return new LeadInputModel()
-                    {
-                        FirstName = "Milena",
-                        LastName = "Murashova",
-                        Patronymic = "Nikolaevna",
-                        Login = "AnnaMurashka7639",
-                        Password = "AnMuNi867594",
-                        Phone = "+79762457628",
-                        Email = "annamurashova@gmail.com",
-                        CityId = 14,
-                        Address = "Kaliningradskaya, 35, 15",
-                        BirthDate = "17.03.1990"
-                    }; 
-
-                case 13:
-                    return new LeadInputModel()
-                    {
-                        FirstName = "Zena",
-                        LastName = "Koroleva",
-                        Patronymic = "Nikolaevna",
-                        Login = "Zena7639",
-                        Password = "Zena867594",
-                        Phone = "+79762457633",
-                        Email = "zena7639@gmail.com",
-                        CityId = 14,
-                        Address = "Kaliningradskaya, 35, 15",
-                        BirthDate = "17.03.1998"
-                    };
-                    
-            }
-            return new LeadInputModel();
+                    FirstName = "Anna",
+                    LastName = "Yazikova",
+                    Patronymic = "Ivannova",
+                    Login = "annayazikova2456388",
+                    Password = "Samolettu356",
+                    Phone = "+79314554545",
+                    Email = "annayazikova2456388@gmail.com",
+                    CityId = 11,
+                    Address = "Malaya Konyushennaya Ulitsa229",
+                    BirthDate = "16.05.1991"
+                },
+                12 => new LeadInputModel()
+                {
+                    FirstName = "Milena",
+                    LastName = "Murashova",
+                    Patronymic = "Nikolaevna",
+                    Login = "AnnaMurashka7639",
+                    Password = "AnMuNi867594",
+                    Phone = "+79762457628",
+                    Email = "annamurashova@gmail.com",
+                    CityId = 14,
+                    Address = "Kaliningradskaya, 35, 15",
+                    BirthDate = "17.03.1990"
+                },
+                13 => new LeadInputModel()
+                {
+                    FirstName = "Zena",
+                    LastName = "Koroleva",
+                    Patronymic = "Nikolaevna",
+                    Login = "Zena7639",
+                    Password = "Zena867594",
+                    Phone = "+79762457633",
+                    Email = "zena7639@gmail.com",
+                    CityId = 14,
+                    Address = "Kaliningradskaya, 35, 15",
+                    BirthDate = "17.03.1998"
+                },
+                _ => new LeadInputModel(),
+            };
         }
 
         public EmailInputModel GetEmailInputModelByLeadId(int num)
