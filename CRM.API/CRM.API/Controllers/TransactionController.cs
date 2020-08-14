@@ -33,7 +33,7 @@ namespace CRM.API.Controllers
         /// <param name="transactionModel"></param>
         /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]       //контроллер не возвращает badRequest из TransactionStore
         [HttpPost("transfer")]
         public async Task<ActionResult<List<long>>> CreateTransferTransaction([FromBody] TransferInputModel transactionModel)
         {
@@ -55,13 +55,12 @@ namespace CRM.API.Controllers
         /// <param name="transactionModel"></param>
         /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]       //контроллер не возвращает badRequest из TransactionStore
         [HttpPost("withdraw")]
         public async Task<ActionResult<long>> CreateWithdrawTransaction([FromBody] TransactionInputModel transactionModel)
         {
             if (_repo.GetAccountById(transactionModel.AccountId).Data is null) return BadRequest("The account is not found");
             if (transactionModel.Amount <= 0) return BadRequest("The amount is missing");
-
             transactionModel.CurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountId).Data;
             var restClient = new RestClient("https://localhost:44388/");
             var restRequest = new RestRequest("transaction/withdraw", Method.POST, DataFormat.Json);

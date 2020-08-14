@@ -1,5 +1,4 @@
-﻿using CRM.API.Models.Output;
-using TransactionStore.API.Models.Input;
+﻿using TransactionStore.API.Models.Input;
 
 namespace CRM.NUnitTest
 {
@@ -51,7 +50,7 @@ namespace CRM.NUnitTest
                 {
                     AccountId = 1,                    
                     Amount = 500000,
-                    AccountIdReceiver = 2                    
+                    AccountIdReceiver = 6                    
                 },
 
                 2 => new TransferInputModel()
@@ -65,7 +64,7 @@ namespace CRM.NUnitTest
                 {
                     AccountId = 4,                    
                     Amount = 500,
-                    AccountIdReceiver = 3                   
+                    AccountIdReceiver = 5                   
                 },
                 4 => new TransferInputModel()
                 {
@@ -89,74 +88,42 @@ namespace CRM.NUnitTest
             };
         }
 
-        
-
-        public TransactionOutputModel DepositOutputMock(int num)
+        public TransactionInputModel GetWithdrawInputModel(int num)
         {
-            switch (num)
+            return num switch
             {
-                case 1:
-                    {
-                        return new TransactionOutputModel()
-                        {
-                            Id = 1,
-                            AccountId = 1,
-                            Type = "Deposit",
-                            Amount = 80500.0000M,
-                            Timestamp = "11.08.2020 23:32:04",
-                            AccountIdReceiver = null
-                        };
-                    }
-                case 2:
-                    {
-                        return new TransactionOutputModel()
-                        {
-                            Id = 2,
-                            AccountId = 2,
-                            Type = "Deposit",
-                            Amount = 500.0000M,
-                            Timestamp = "11.08.2020 23:11:04",
-                            AccountIdReceiver = null
-                        };
-                    }
-                case 3:
-                    {
-                        return new TransactionOutputModel()
-                        {
-                            Id = 3,
-                            AccountId = 3,
-                            Type = "Deposit",
-                            Amount = 10500.0000M,
-                            Timestamp = "11.08.2020 23:11:04",
-                            AccountIdReceiver = null
-                        };
-                    }
-                case 4:
-                    {
-                        return new TransactionOutputModel()
-                        {
-                            Id = 4,
-                            AccountId = 11,
-                            Type = "Deposit",
-                            Amount = 1500.0000M,
-                            Timestamp = "11.08.2020 23:11:04",
-                            AccountIdReceiver = null
-                        };
-                    }
-                case 5:
-                    {
-                        return new TransactionOutputModel()
-                        {
-                            Id = 5,
-                            AccountId = 12,
-                            Type = "Deposit",
-                            Amount = 15000.0000M,
-                            Timestamp = "11.08.2020 23:11:04",
-                            AccountIdReceiver = null
-                        };
-                    }
-            }
-            return new TransactionOutputModel();
+                1 => new TransactionInputModel()
+                {
+                    AccountId = 2,
+                    Amount = 1000
+                },
+                2 => new TransactionInputModel()
+                {
+                    AccountId = 3,
+                    Amount = 500
+                },
+                3 => new TransactionInputModel()
+                {
+                    AccountId = 4,
+                    Amount = 2
+                },
+                4 => new TransactionInputModel()
+                {
+                    AccountId = 1,
+                    Amount = -200000
+                },
+                5 => new TransactionInputModel()
+                {
+                    AccountId = 1,
+                    Amount = 2000
+                },
+                6 => new TransactionInputModel()
+                {
+                    AccountId = 546,
+                    Amount = 2003
+                },
+                _ => new TransactionInputModel(),
+            };
         }
     }
 }
