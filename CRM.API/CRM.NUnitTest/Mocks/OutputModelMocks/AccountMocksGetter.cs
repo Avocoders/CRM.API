@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CRM.NUnitTest
 {
-    public class AccountOuputModelMock
+    public class AccountMocksGetter
     {
         public LeadWithAccountsOutputModel GetAccountOfLeadMock(int num)
         {
