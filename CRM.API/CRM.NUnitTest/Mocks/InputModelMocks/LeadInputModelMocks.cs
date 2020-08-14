@@ -7,7 +7,7 @@ using TransactionStore.API.Models.Input;
 
 namespace CRM.NUnitTest
 {
-    public class LeadInputMock
+    public class InputModelMocks
     {
         public LeadInputModel CreateLeadMock(int num)
         {

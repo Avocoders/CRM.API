@@ -6,7 +6,7 @@ using System.Text;
 
 namespace CRM.NUnitTest
 {
-    public class LeadOutputMock
+    public class LeadOutputModelMocks
 
     {
         public LeadOutputModel GetLeadMockById(int leadId)
@@ -40,7 +40,7 @@ namespace CRM.NUnitTest
                                     },                                                               
                         },
                         IsDeleted = false
-                    }; break;
+                    }; 
        
                    case 2:
                     return new LeadOutputModel()
@@ -77,7 +77,7 @@ namespace CRM.NUnitTest
                     },   
 
                     IsDeleted = false
-                    }; break;
+                    }; 
 
                 case 3:
                     return new LeadOutputModel()
@@ -114,7 +114,7 @@ namespace CRM.NUnitTest
                     },
 
                         IsDeleted = false
-                    }; break;
+                    }; 
 
                 case 4:
                     return new LeadOutputModel()
@@ -144,7 +144,7 @@ namespace CRM.NUnitTest
                     },
 
                         IsDeleted = false
-                    }; break;
+                    };
 
                 case 5:
                     return new LeadOutputModel()

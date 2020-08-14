@@ -6,24 +6,19 @@ using Newtonsoft.Json;
 using System.Text;
 using CRM.API.Models.Output;
 using System.Threading.Tasks;
-using NUnit.Framework.Internal;
 using System;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Autofac.Extensions.DependencyInjection;
-using TransactionStore.API.Models.Input;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using CRM.API.Configuration;
 using System.Data;
 using Dapper;
 using Microsoft.Extensions.Options;
 using CRM.Core;
 using System.Data.SqlClient;
-using RestSharp;
-using RestSharp.Authenticators;
 using Autofac;
-using Microsoft.Extensions.DependencyInjection;
+
 
 namespace CRM.NUnitTest
 {
@@ -71,7 +66,7 @@ namespace CRM.NUnitTest
         {
             string result = await client.GetStringAsync(LocalHost.localHostCrm + $"lead/{num}");
             var actual = JsonConvert.DeserializeObject<LeadOutputModel>(result);
-            LeadOutputMock test = new LeadOutputMock();
+            LeadOutputModelMocks test = new LeadOutputModelMocks();
             LeadOutputModel expected = test.GetLeadMockById(num);   
             Assert.AreEqual(expected, actual);
         }
@@ -82,13 +77,13 @@ namespace CRM.NUnitTest
 
         public async Task SearchParametersTest(int num)
         {
-            var test = new LeadInputMock();
+            var test = new InputModelMocks();
             var inputmodel = test.SearchInputMock(num);
             var jsonContent = new StringContent(JsonConvert.SerializeObject(inputmodel), Encoding.UTF8, "application/json");
             var response = await client.PostAsync(LocalHost.localHostCrm + "lead/search", jsonContent);   //leadsearch тоже в константу
             var ids = await response.Content.ReadAsStringAsync();           
             var actual = JsonConvert.DeserializeObject<List<LeadOutputModel>>(ids);            
-            var leadOutputMock  = new LeadOutputMock();
+            var leadOutputMock  = new LeadOutputModelMocks();
             var expected = leadOutputMock.SearchParametersMock(num);
             Assert.AreEqual(expected, actual);
         }
@@ -102,13 +97,13 @@ namespace CRM.NUnitTest
         [TestCase(10)]
         public async Task GetLeadWithUpdatedEmail(int num)
         {
-            LeadInputMock test = new LeadInputMock();
+            InputModelMocks test = new InputModelMocks();
             EmailInputModel inputmodel = test.GetEmailInputModelByLeadId(num);
 
             var jsonContent = new StringContent(JsonConvert.SerializeObject(inputmodel), Encoding.UTF8, "application/json");
             var response = await client.PostAsync(LocalHost.localHostCrm + "lead/email", jsonContent);
             string actual = await response.Content.ReadAsStringAsync();
-            LeadOutputMock result = new LeadOutputMock();
+            LeadOutputModelMocks result = new LeadOutputModelMocks();
             string expected = result.GetEmailByLeadId(num);
             Assert.AreEqual(expected, actual);
         }
@@ -279,14 +274,14 @@ namespace CRM.NUnitTest
 
         public async Task CreateLead(int num)
         {
-            LeadInputMock test = new LeadInputMock();
+            InputModelMocks test = new InputModelMocks();
             LeadInputModel inputmodel = test.CreateLeadMock(num);
 
             var jsonContent = new StringContent(JsonConvert.SerializeObject(inputmodel), Encoding.UTF8, "application/json");
             var result = await client.PostAsync(LocalHost.localHostCrm + "lead", jsonContent);
             string model = Convert.ToString(await result.Content.ReadAsStringAsync());
             var actual = JsonConvert.DeserializeObject<LeadOutputModel>(model);
-            LeadOutputMock testresult = new LeadOutputMock();
+            LeadOutputModelMocks testresult = new LeadOutputModelMocks();
             LeadOutputModel expected = testresult.GetLeadMockById(num);
             Assert.AreEqual(expected.FirstName, actual.FirstName);
             Assert.AreEqual(expected.LastName, actual.LastName);
