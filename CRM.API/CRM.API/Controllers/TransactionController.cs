@@ -55,7 +55,7 @@ namespace CRM.API.Controllers
         /// <param name="transactionModel"></param>
         /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]       //контроллер не возвращает badRequest из TransactionStore
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]       //контроллер не возвращает badRequest из TransactionStore (not enough money)
         [HttpPost("withdraw")]
         public async Task<ActionResult<long>> CreateWithdrawTransaction([FromBody] TransactionInputModel transactionModel)
         {
@@ -122,12 +122,12 @@ namespace CRM.API.Controllers
             return a;
         }
 
-    /// <summary>
-    /// refers to TransactionStore to get balance by leadId and currencyId
-    /// </summary>
-    /// <param name="accountId"></param>
-    /// <returns></returns>
-    [ProducesResponseType(StatusCodes.Status200OK)]
+        /// <summary>
+        /// refers to TransactionStore to get balance by leadId and currencyId
+        /// </summary>
+        /// <param name="accountId"></param>
+        /// <returns></returns>
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("{accountId}/balance")]
         public async Task<ActionResult<decimal>> GetBalanceByAccountIdInCurrency(long accountId)
