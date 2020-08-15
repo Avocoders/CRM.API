@@ -3,14 +3,75 @@ using System.Collections.Generic;
 
 namespace CRM.NUnitTest
 {
-    public class LeadOutputModelMocks
+    public class OutputDataMocksForLeads
 
     {
-        public LeadOutputModel GetLeadMockById(int leadId)
+        public dynamic GetLeadOutputModelMockById(int leadId)
         {
             return leadId switch
             {
                 1 => new LeadOutputModel()
+                {
+                    Id = 11,
+                    FirstName = "Anna",
+                    LastName = "Yazikova",
+                    Login = "annayazikova2456388",
+                    Phone = "+79314554545",                 
+                    City = "Saratov",                    
+                    BirthDate = "16.05.1991"                    
+                },
+                2 => new LeadOutputModel()
+                {
+                    Id = 12,
+                    FirstName = "Milena",
+                    LastName = "Murashova",                    
+                    Login = "AnnaMurashka7639",                    
+                    Phone = "+79762457628",                    
+                    City = "Minsk",                    
+                    BirthDate = "17.03.1990"
+                },
+                3 => new LeadOutputModel()
+                {
+                    Id = 13,
+                    FirstName = "Zena",
+                    LastName = "Koroleva",                    
+                    Login = "Zena7639",                   
+                    Phone = "+79762457633",                   
+                    City = "Minsk",                   
+                    BirthDate = "17.03.1998"
+                },
+                4 => new LeadOutputModel()
+                {
+                    Id = 14,
+                    FirstName = "Nastya",
+                    LastName = "Ivleeva",                    
+                    Login = "NastyshaAgon7639",                    
+                    Phone = "+79762443633",
+                    City = "Minsk",                    
+                    BirthDate = "17.03.1989"
+                },
+                5 => new LeadOutputModel()
+                {
+                    Id = 15,
+                    FirstName = "Alberta",
+                    LastName = "Koval",                    
+                    Login = "Berta435",                   
+                    Phone = "+79762457634",
+                    City = "Minsk",                   
+                    BirthDate = "17.03.1993"
+                },
+                6 => new LeadOutputModel()
+                {
+                    Id = 16,
+                    FirstName = "Ida",
+                    LastName = "Galich",                    
+                    Login = "Galichchch7463",                    
+                    Phone = "+79762457493",
+                    City = "Minsk",                    
+                    BirthDate = "17.05.1968"
+                },
+
+                7 => new LeadOutputModel()
                 {
                     Id = 1,
                     FirstName = "Alena",
@@ -37,7 +98,7 @@ namespace CRM.NUnitTest
                     },
                     IsDeleted = false
                 },
-                2 => new LeadOutputModel()
+                8 => new LeadOutputModel()
                 {
                     Id = 2,
                     FirstName = "Pavel",
@@ -71,7 +132,7 @@ namespace CRM.NUnitTest
                     },
                     IsDeleted = false
                 },
-                3 => new LeadOutputModel()
+                9 => new LeadOutputModel()
                 {
                     Id = 3,
                     FirstName = "Elena",
@@ -105,7 +166,7 @@ namespace CRM.NUnitTest
                     },
                     IsDeleted = false
                 },
-                4 => new LeadOutputModel()
+                10 => new LeadOutputModel()
                 {
                     Id = 4,
                     FirstName = "Ivan",
@@ -132,7 +193,7 @@ namespace CRM.NUnitTest
                     },
                     IsDeleted = false
                 },
-                5 => new LeadOutputModel()
+                11 => new LeadOutputModel()
                 {
                     Id = 5,
                     FirstName = "Sergei",
@@ -159,7 +220,7 @@ namespace CRM.NUnitTest
                     },
                     IsDeleted = false
                 },
-                6 => new LeadOutputModel()
+                12 => new LeadOutputModel()
                 {
                     Id = 6,
                     FirstName = "Daria",
@@ -186,7 +247,7 @@ namespace CRM.NUnitTest
                     },
                     IsDeleted = false
                 },
-                7 => new LeadOutputModel()
+                13 => new LeadOutputModel()
                 {
                     Id = 7,
                     FirstName = "Vladimir",
@@ -213,7 +274,7 @@ namespace CRM.NUnitTest
                     },
                     IsDeleted = false
                 },
-                8 => new LeadOutputModel()
+                14 => new LeadOutputModel()
                 {
                     Id = 8,
                     FirstName = "Oksana",
@@ -240,7 +301,7 @@ namespace CRM.NUnitTest
                     },
                     IsDeleted = false
                 },
-                9 => new LeadOutputModel()
+                15 => new LeadOutputModel()
                 {
                     Id = 9,
                     FirstName = "Vlada",
@@ -267,7 +328,7 @@ namespace CRM.NUnitTest
                     },
                     IsDeleted = false
                 },
-                10 => new LeadOutputModel()
+                16 => new LeadOutputModel()
                 {
                     Id = 10,
                     FirstName = "Oksi",
@@ -292,60 +353,6 @@ namespace CRM.NUnitTest
                             CurrencyName = "USDollar"
                         },
                     },
-                    IsDeleted = false
-                },
-                11 => new LeadOutputModel()
-                {
-                    Id = 11,
-                    FirstName = "Anna",
-                    LastName = "Yazikova",
-                    Patronymic = "Ivannova",
-                    Login = "annayazikova2456388",
-                    Phone = "+79314554545",
-                    Email = "annayazikova2456388@gmail.com",
-                    Address = "Malaya Konyushennaya Ulitsa229",
-                    BirthDate = "16.05.1991",
-                    RegistrationDate = null,
-                    ChangeDate = null,
-                    Role = "Client",
-                    City = "Saratov",
-                    Accounts = null,
-                    IsDeleted = false
-                },
-                12 => new LeadOutputModel()
-                {
-                    Id = 12,
-                    FirstName = "Milena",
-                    LastName = "Murashova",
-                    Patronymic = "Nikolaevna",
-                    Login = "AnnaMurashka7639",
-                    Phone = "+79762457628",
-                    Email = "annamurashova@gmail.com",
-                    Address = "Kaliningradskaya, 35, 15",
-                    BirthDate = "17.03.1990",
-                    RegistrationDate = null,
-                    ChangeDate = null,
-                    Role = "Client",
-                    City = "Minsk",
-                    Accounts = null,
-                    IsDeleted = false
-                },
-                13 => new LeadOutputModel()
-                {
-                    Id = 13,
-                    FirstName = "Zena",
-                    LastName = "Koroleva",
-                    Patronymic = "Nikolaevna",
-                    Login = "Zena7639",
-                    Phone = "+79762457633",
-                    Email = "Zena7639@gmail.com",
-                    Address = "Kaliningradskaya, 35, 15",
-                    BirthDate = "17.03.1998",
-                    RegistrationDate = null,
-                    ChangeDate = null,
-                    Role = "Client",
-                    City = "Minsk",
-                    Accounts = null,
                     IsDeleted = false
                 },
                 _ => new LeadOutputModel(),

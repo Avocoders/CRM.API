@@ -1,54 +1,57 @@
 ﻿using CRM.API.Models.Input;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CRM.NUnitTest
 {
-    public class AccountInputModelMock
+    public class InputDataMocksForAccounts
     {
-        public AccountInputModel AddAccountMock(int num)
+        public dynamic GetAccountInputModelMock(int num)
         {
-            switch (num)
+            return num switch
             {
-                case 1:
-                    return new AccountInputModel()
-                    {
+                1 => new AccountInputModel()
+                {
 
-                        LeadId = 10,
-                        CurrencyId = 2
+                    LeadId = 10,
+                    CurrencyId = 2
 
-                    }; break;
+                },
+                2 => new AccountInputModel()
+                {
 
-                case 2:
-                    return new AccountInputModel()
-                    {
+                    LeadId = 2,
+                    CurrencyId = 4
 
-                        LeadId = 2,
-                        CurrencyId = 4
+                },
+                3 => new AccountInputModel()
+                {
 
-                    }; break;
-                case 3:
+                    LeadId = 5,
+                    CurrencyId = 1
 
-                    return new AccountInputModel()
-                    {
+                },
+                4 => new AccountInputModel()
+                {
 
-                        LeadId = 88,
-                        CurrencyId = 1
+                    LeadId = 1,
+                    CurrencyId = 3
 
-                    }; break;
+                },
+                5 => new AccountInputModel()
+                {
 
-                case 4:
+                    LeadId = 6,
+                    CurrencyId = 2
 
-                    return new AccountInputModel()
-                    {
+                },
+                6 => new AccountInputModel()
+                {
 
-                        LeadId = 0,
-                        CurrencyId = 1
+                    LeadId = 4,
+                    CurrencyId = 1
 
-                    }; break;
-            }
-            return new AccountInputModel();
+                },                
+                _ => new AccountInputModel(),
+            };
         }
 
         public AccountInputModel UpdateAccountMock(int num)

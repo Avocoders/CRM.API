@@ -1,6 +1,6 @@
 ﻿namespace CRM.Core
 {
-   public class StorageOptions : IStorageOptions
+    public interface IDatabaseOptions
     {
         public string DBConnectionString { get; set; }
     }

@@ -9,7 +9,8 @@ namespace CRM.API.Configuration
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<LeadRepository>().As<ILeadRepository>();
-            builder.RegisterType<StorageOptions>().As<IStorageOptions>();           
+            builder.RegisterType<DatabaseOptions>().As<IDatabaseOptions>();
+            builder.RegisterType<UrlOptions>().As<IUrlOptions>();
         }
     }
 }

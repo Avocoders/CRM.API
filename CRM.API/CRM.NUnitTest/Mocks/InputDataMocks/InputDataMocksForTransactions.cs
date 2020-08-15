@@ -2,9 +2,9 @@
 
 namespace CRM.NUnitTest
 {
-   public class TransactionInputModelMocks
+   public class InputDataMocksForTransactions
     {
-        public TransactionInputModel GetDepositInputModel(int num)
+        public TransactionInputModel GetDepositInputModelMock(int num)
         {
             return num switch
             {
@@ -42,7 +42,7 @@ namespace CRM.NUnitTest
             };
         }
 
-        public TransferInputModel GetTransferInputModel(int num)
+        public TransferInputModel GetTransferInputModelMock(int num)
         {
             return num switch
             {
@@ -88,7 +88,7 @@ namespace CRM.NUnitTest
             };
         }
 
-        public TransactionInputModel GetWithdrawInputModel(int num)
+        public TransactionInputModel GetWithdrawInputModelMock(int num)
         {
             return num switch
             {
