@@ -300,6 +300,21 @@ namespace CRM.NUnitTest
             }
         }
 
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(3)]
+        [TestCase(4)]
+        [TestCase(5)]
+        [TestCase(256)]
+        public async Task GetBalanceByAccountIdTest(int num)
+        {
+            var outputModelMock = new TransactionOutputModelMocks();
+            var expected = outputModelMock.GetBalanceMockByAccountId(num);
+            var response = await client.GetStringAsync(LocalHost.localHostCrm + $"transaction/{num}/balance");
+            var actual = JsonConvert.DeserializeObject<decimal>(response);
+            Assert.AreEqual(expected, actual);
+        }
+
         [TestCase(11)]
         [TestCase(12)]
         [TestCase(13)]
@@ -340,7 +355,7 @@ namespace CRM.NUnitTest
         [OneTimeTearDown]
         public void Teardown()
         {
-            _connection.Execute(Queries.clearTestBase);
+            //_connection.Execute(Queries.clearTestBase);
             server.Dispose();
             client.Dispose();
         }
