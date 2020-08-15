@@ -45,7 +45,7 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
             };
         }
 
-        public List<TransactionOutputModel> GetTransactionsMockByAccountId(int num)
+        public dynamic GetTransactionsMockByAccountId(int num)
         {
             switch (num)
             {
@@ -116,18 +116,9 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
                             }
                         };
                     }
-                case 5:
+                case 0:
                     {
-                        return new List<TransactionOutputModel>()
-                        {
-                            new TransactionOutputModel()
-                            {
-                                Id = 8,
-                                AccountId = 4,
-                                Type = "Transfer",
-                                Amount = -500 
-                            }
-                        };
+                        return "Account was not found";
                     }
                 case 6:
                     {
@@ -171,6 +162,63 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
                     }
             }
             return new List<TransactionOutputModel>();
+        }
+
+        public dynamic GetTransactionMockById(int num)
+        {
+            switch (num)
+            {
+                case 1:
+                    {
+                        return new TransactionOutputModel()
+                        {
+                            Id = 1,
+                            AccountId = 1,
+                            Type = "Deposit",
+                            Amount = 800000,
+                        };
+                    }
+                case 2:
+                    {
+                        return new TransactionOutputModel()
+                        {
+                            Id = 2,
+                            AccountId = 2,
+                            Type = "Deposit",
+                            Amount = 5000,
+                        };
+                    }
+                case 4:
+                    {
+                        return new TransactionOutputModel()
+                        {
+                            Id = 4,
+                            AccountId = 1,
+                            Type = "Transfer",
+                            Amount = -500000,
+                        };
+                    }
+                case 8:
+                    {
+                        return new TransactionOutputModel()
+                        {
+                            Id = 8,
+                            AccountId = 4,
+                            Type = "Transfer",
+                            Amount = -500.0000M
+                        };
+                    }               
+                case 13:
+                    {
+                        return new TransactionOutputModel()
+                        {};
+                    }
+                case 0:
+                    {
+                        return "Transactions were not found";
+                    }
+            }
+            return new TransactionOutputModel();
         }
     }
 }

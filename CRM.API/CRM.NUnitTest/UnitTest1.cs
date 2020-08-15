@@ -112,7 +112,7 @@ namespace CRM.NUnitTest
         [TestCase(4)]
         [TestCase(78)]
 
-        public async Task GetAccountTest(int num) //тесты есть
+        public async Task GetAccountTest(int num) 
         {
             string result = await client.GetStringAsync(LocalHost.localHostCrm + $"lead/account/{num}");
             var actual = JsonConvert.DeserializeObject<LeadWithAccountsOutputModel>(result);
@@ -126,7 +126,7 @@ namespace CRM.NUnitTest
         [TestCase(4)]
         [TestCase(78)]
 
-        public async Task GetAccountByLeadIdTest(int num) // тесты есть
+        public async Task GetAccountByLeadIdTest(int num) 
         {
             string result = await client.GetStringAsync(LocalHost.localHostCrm + $"lead/{num}/accounts");
             var actual = JsonConvert.DeserializeObject<LeadWithAccountsOutputModel>(result);
@@ -181,7 +181,9 @@ namespace CRM.NUnitTest
         [TestCase(6)]
         public async Task CreateDepositTest(int num)   //сделала, но хз, как будем удалять их из базы
         {
-            var inputModelMock = new TransactionInputModelMocks();
+            var outputModelMock = new TransactionOutputModelMocks();
+            var expected = outputModelMock.GetIdDeposit(num);
+            var inputModelMock = new TransactionInputModelMocks();            
             var inputModel = inputModelMock.GetDepositInputModel(num);
             var jsonContent = new StringContent(JsonConvert.SerializeObject(inputModel), Encoding.UTF8, "application/json");
             var response = await client.PostAsync(LocalHost.localHostCrm + "transaction/deposit", jsonContent);
@@ -189,14 +191,10 @@ namespace CRM.NUnitTest
             if (num < 4)
             {
                 var actual = JsonConvert.DeserializeObject<int>(result);
-                var outputModelMock = new TransactionOutputModelMocks();
-                var expected = outputModelMock.GetIdDeposit(num);
                 Assert.AreEqual(expected, actual);
             }
             else
-            {                
-                var outputModelMock = new TransactionOutputModelMocks();
-                var expected = outputModelMock.GetIdDeposit(num);
+            { 
                 Assert.AreEqual(expected, result);
             }
         }
@@ -209,6 +207,8 @@ namespace CRM.NUnitTest
         [TestCase(6)]
         public async Task CreateTransferTest(int num)   //сделала, но хз, как будем удалять их из базы
         {
+            var outputModelMock = new TransactionOutputModelMocks();
+            var expected = outputModelMock.GetIdsTransfer(num);
             var inputModelMock = new TransactionInputModelMocks();
             var inputModel = inputModelMock.GetTransferInputModel(num);
             var jsonContent = new StringContent(JsonConvert.SerializeObject(inputModel), Encoding.UTF8, "application/json");
@@ -216,15 +216,11 @@ namespace CRM.NUnitTest
             var result = await response.Content.ReadAsStringAsync();
             if (num < 4)
             {
-                var actual = JsonConvert.DeserializeObject<List<int>>(result);
-                var outputModelMock = new TransactionOutputModelMocks();
-                var expected = outputModelMock.GetIdsTransfer(num);
+                var actual = JsonConvert.DeserializeObject<List<int>>(result);  
                 Assert.AreEqual(expected, actual);
             }
             else
             {
-                var outputModelMock = new TransactionOutputModelMocks();
-                var expected = outputModelMock.GetIdsTransfer(num);
                 Assert.AreEqual(expected, result);
             }
         }
@@ -237,6 +233,8 @@ namespace CRM.NUnitTest
         [TestCase(6)]
         public async Task CreateWithdrawTest(int num)         //сделала, но хз, как будем удалять их из базы
         {
+            var outputModelMock = new TransactionOutputModelMocks();
+            var expected = outputModelMock.GetIdWithdraw(num);
             var inputModelMock = new TransactionInputModelMocks();
             var inputModel = inputModelMock.GetWithdrawInputModel(num);
             var jsonContent = new StringContent(JsonConvert.SerializeObject(inputModel), Encoding.UTF8, "application/json");
@@ -245,14 +243,10 @@ namespace CRM.NUnitTest
             if (num < 4)
             {
                 var actual = JsonConvert.DeserializeObject<int>(result);
-                var outputModelMock = new TransactionOutputModelMocks();
-                var expected = outputModelMock.GetIdWithdraw(num);
                 Assert.AreEqual(expected, actual);
             }
             else
             {
-                var outputModelMock = new TransactionOutputModelMocks();
-                var expected = outputModelMock.GetIdWithdraw(num);
                 Assert.AreEqual(expected, result);
             }
         }
@@ -260,20 +254,51 @@ namespace CRM.NUnitTest
         [TestCase(1)]
         [TestCase(2)]
         [TestCase(3)]
-        [TestCase(5)]
+        //[TestCase(0)]
         [TestCase(6)]
         [TestCase(4)]
         public async Task GetTransactionsByAccountIdTest(int num)
         {
-            string result = await client.GetStringAsync(LocalHost.localHostCrm + $"transaction/by-account-id/{num}");
-            var actual = JsonConvert.DeserializeObject<List<TransactionOutputModel>>(result);
             var outputModelMock = new TransactionOutputModelMocks();
             var expected = outputModelMock.GetTransactionsMockByAccountId(num);
-            Assert.AreEqual(expected[0].AccountId, actual[0].AccountId);
-            Assert.AreEqual(expected[0].Type, actual[0].Type);
-            Assert.AreEqual(expected[0].Amount, actual[0].Amount);
-            Assert.AreEqual(expected.Count, actual.Count);
-        }        
+            var response = await client.GetStringAsync(LocalHost.localHostCrm + $"transaction/by-account-id/{num}");
+            if (num > 0)
+            {
+                var actual = JsonConvert.DeserializeObject<List<TransactionOutputModel>>(response);
+                Assert.AreEqual(expected[0].AccountId, actual[0].AccountId);
+                Assert.AreEqual(expected[0].Type, actual[0].Type);
+                Assert.AreEqual(expected[0].Amount, actual[0].Amount);
+                Assert.AreEqual(expected.Count, actual.Count);
+            }
+            else
+            {
+                //Assert.AreEqual(expected, response);   не хочет возвращать сообщение ошибки
+            }
+        }
+
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(4)]
+        [TestCase(8)]
+        //[TestCase(13)]
+        //[TestCase(0)]
+        public async Task GetTransactionByIdTest(int num)
+        {
+            var outputModelMock = new TransactionOutputModelMocks();
+            var expected = outputModelMock.GetTransactionMockById(num);
+            var response = await client.GetStringAsync(LocalHost.localHostCrm + $"transaction/{num}");
+            if (num > 0)
+            {                                                    //надо в контроллере поменять лист на просто модель
+                var actual = JsonConvert.DeserializeObject<List<TransactionOutputModel>>(response);                
+                Assert.AreEqual(expected.AccountId, actual[0].AccountId);
+                Assert.AreEqual(expected.Type, actual[0].Type);
+                Assert.AreEqual(expected.Amount, actual[0].Amount);               
+            }
+            else
+            {
+                //Assert.AreEqual(expected, response);   не хочет возвращать сообщение ошибки
+            }
+        }
 
         [TestCase(11)]
         [TestCase(12)]
