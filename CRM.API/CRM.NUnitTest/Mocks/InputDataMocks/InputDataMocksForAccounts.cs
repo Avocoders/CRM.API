@@ -4,10 +4,52 @@ namespace CRM.NUnitTest
 {
     public class InputDataMocksForAccounts
     {
-        public AccountInputModel GetAccountInputModelMock(int num)    //done
+        public AccountInputModel GetAccountInputModelMock(int num)    
         {
             return num switch
             {
+                7 => new AccountInputModel()
+                {
+                    Id = 7,
+                    LeadId = 3,
+                    CurrencyId = 2
+
+                },
+                8 => new AccountInputModel()
+                {
+                    Id = 8,
+                    LeadId = 4,
+                    CurrencyId = 1
+
+                },
+                9 => new AccountInputModel()
+                {
+                    Id = 9,
+                    LeadId = 5,
+                    CurrencyId = 3
+
+                },
+                10 => new AccountInputModel()
+                {
+                    Id = 10,
+                    LeadId = 6,
+                    CurrencyId = 3
+
+                },
+                11 => new AccountInputModel()
+                {
+                    Id = 11,
+                    LeadId = 6,
+                    CurrencyId = 4
+
+                },
+                12 => new AccountInputModel()
+                {
+                    Id = 12,
+                    LeadId = 6,
+                    CurrencyId = 3
+
+                },
                 18 => new AccountInputModel()
                 {
                     LeadId = 10,
@@ -40,50 +82,6 @@ namespace CRM.NUnitTest
                 },                
                 _ => new AccountInputModel(),
             };
-        }
-
-        public AccountInputModel UpdateAccountMock(int num)
-        {
-            switch (num)
-            {
-                case 1:
-                    return new AccountInputModel()
-                    {
-                        Id = 8,
-                        LeadId = 8,
-                        CurrencyId = 2
-
-                    }; break;
-
-                case 2:
-                    return new AccountInputModel()
-                    {
-                        Id = 11,
-                        LeadId = 2,
-                        CurrencyId = 1
-
-                    }; break;
-                case 3:
-
-                    return new AccountInputModel()
-                    {
-                        Id = 88,
-                        LeadId = 10,
-                        CurrencyId = 1
-
-                    }; break;
-
-                case 4:
-
-                    return new AccountInputModel()
-                    {
-                        Id = 9,
-                        LeadId = 375,
-                        CurrencyId = 3
-
-                    }; break;
-            }
-            return new AccountInputModel();
-        }
+        }        
     }
 }

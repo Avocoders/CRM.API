@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using RestSharp;
 using Microsoft.Extensions.Options;
 using CRM.Core;
+using System;
 
 namespace CRM.API.Controllers
 {
@@ -17,12 +18,11 @@ namespace CRM.API.Controllers
     {        
         private readonly RestClient _restClient;
         private readonly ILeadRepository _repo;
-        private readonly string _transactionStoreUrl;
+      
         public TransactionController(ILeadRepository repo, IOptions<APIOptions> options)
-        {            
-            _restClient = new RestClient(_transactionStoreUrl);
-            _repo = repo;
-            _transactionStoreUrl = options.Value.TransactionStoreAPIUrl;
+        {                        
+            _repo = repo;            
+            _restClient = new RestClient(options.Value.TransactionStoreAPIUrl);
         }
         
         /// <summary>

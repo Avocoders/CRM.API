@@ -5,7 +5,7 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
 {
     public class OutputDataMocksForTransactions
     {
-        public dynamic GetIdDepositMock(int num)  //done
+        public dynamic GetIdDepositMock(int num) 
         {
             return num switch
             {
@@ -19,7 +19,7 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
             };
         }
 
-        public dynamic GetIdsTransferMock(int num)  //done
+        public dynamic GetIdsTransferMock(int num)  
         {
             return num switch
             {
@@ -33,7 +33,7 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
             };
         }                                                //когда у Акк нет денег, он не выводит badRequest, выводит либо "0", либо ""
 
-        public dynamic GetIdWithdrawMock(int num)   //done
+        public dynamic GetIdWithdrawMock(int num)   
         {
             return num switch
             {
@@ -47,7 +47,59 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
             };
         }
 
-        public dynamic GetTransactionsMockByAccountId(int num)
+        public dynamic GetBalanceMockByAccountId(int num)  
+        {
+            return num switch
+            {
+                1 => 0.0000M,
+                2 => 4000.0000M,
+                3 => 324500.0000M,
+                4 => 3616.4123M,
+                5 => 422.2117M,
+                256 => 0,   //"Account was not found" должно быть
+                _ => -1,
+            };
+        }
+
+        public dynamic GetTransactionMockById(int num) 
+        {
+            return num switch
+            {
+                1 => new TransactionOutputModel()
+                {
+                    Id = 1,
+                    AccountId = 1,
+                    Type = "Deposit",
+                    Amount = 800000,
+                },
+                2 => new TransactionOutputModel()
+                {
+                    Id = 2,
+                    AccountId = 2,
+                    Type = "Deposit",
+                    Amount = 5000,
+                },
+                4 => new TransactionOutputModel()
+                {
+                    Id = 4,
+                    AccountId = 1,
+                    Type = "Transfer",
+                    Amount = -500000,
+                },
+                8 => new TransactionOutputModel()
+                {
+                    Id = 8,
+                    AccountId = 4,
+                    Type = "Transfer",
+                    Amount = -500.0000M
+                },
+                13 => new TransactionOutputModel(),
+                0 => "Transactions were not found",
+                _ => -1,
+            };
+        }
+
+        public dynamic GetTransactionsMockByAccountId(int num)  
         {
             switch (num)
             {
@@ -164,58 +216,6 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
                     }
             }
             return new List<TransactionOutputModel>();
-        }
-
-        public dynamic GetTransactionMockById(int num)
-        {
-            return num switch
-            {
-                1 => new TransactionOutputModel()
-                {
-                    Id = 1,
-                    AccountId = 1,
-                    Type = "Deposit",
-                    Amount = 800000,
-                },
-                2 => new TransactionOutputModel()
-                {
-                    Id = 2,
-                    AccountId = 2,
-                    Type = "Deposit",
-                    Amount = 5000,
-                },
-                4 => new TransactionOutputModel()
-                {
-                    Id = 4,
-                    AccountId = 1,
-                    Type = "Transfer",
-                    Amount = -500000,
-                },
-                8 => new TransactionOutputModel()
-                {
-                    Id = 8,
-                    AccountId = 4,
-                    Type = "Transfer",
-                    Amount = -500.0000M
-                },
-                13 => new TransactionOutputModel(),
-                0 => "Transactions were not found",
-                _ => -1,
-            };
-        }
-
-        public dynamic GetBalanceMockByAccountId(int num)
-        {
-            return num switch
-            {
-                1 => 0.0000M,
-                2 => 4000.0000M,
-                3 => 324500.0000M,
-                4 => 435453.2006M,                
-                5 => 344.0721M,
-                256 => 0,   //"Account was not found" должно быть
-                _ => -1,
-            };
         }
     }
 }

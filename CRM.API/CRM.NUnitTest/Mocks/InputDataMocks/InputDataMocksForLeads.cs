@@ -5,24 +5,102 @@ namespace CRM.NUnitTest
 {
     public class InputDataMocksForLeads
     {      
-        public LeadInputModel GetLeadInputModelMock(int num)   //done
+        public LeadInputModel GetLeadInputModelMock(int num)   
         {
             return num switch
             {
                 1 => new LeadInputModel()
-                {                 
-                    FirstName = "Anna",
-                    LastName = "Yazikova",
+                {
+                    FirstName = "Alena",
+                    LastName = "Nuratova",
                     Patronymic = "Ivannova",
-                    Login = "annayazikova2456388",
+                    Login = "Pupsik7464",
                     Password = "Samolettu356",
-                    Phone = "+79314554545",
+                    Phone = "+793145545457",
                     Email = "annayazikova2456388@gmail.com",
                     CityId = 11,
                     Address = "Malaya Konyushennaya Ulitsa229",
                     BirthDate = "16.05.1991"
                 },
                 2 => new LeadInputModel()
+                {
+                    FirstName = "Pavel",
+                    LastName = "Muratov",
+                    Patronymic = "Nikolaevich",
+                    Login = "PavelPavel94",
+                    Password = "AnMuNi867594",
+                    Phone = "+79762457628",
+                    Email = "annamurashova@gmail.com",
+                    CityId = 14,
+                    Address = "Kaliningradskaya, 35, 15",
+                    BirthDate = "17.03.1990"
+                },
+                3 => new LeadInputModel()
+                {
+                    FirstName = "Elenka",
+                    LastName = "Galich",
+                    Patronymic = "Nikolaevna",
+                    Login = "Pupsichek7464",      
+                    Password = "Zena867594",
+                    Phone = "+79762457633",
+                    Email = "zena7639@gmail.com",
+                    CityId = 14,
+                    Address = "Kaliningradskaya, 35, 15",
+                    BirthDate = "17.03.1998"
+                },
+                4 => new LeadInputModel()
+                {
+                    FirstName = "Ivan",
+                    LastName = "",                 
+                    Patronymic = "Nikolaevna",
+                    Login = "Ivago948",
+                    Password = "Zena867594",
+                    Phone = "+79762457633",
+                    Email = "zena7639@gmail.com",
+                    CityId = 14,
+                    Address = "Kaliningradskaya, 35, 15",
+                    BirthDate = "17.03.1998"
+                },
+                5 => new LeadInputModel()
+                {
+                    FirstName = "Sergei",
+                    LastName = "Piratov",
+                    Patronymic = "Nikolaevna",
+                    Login = "Sergooo937",
+                    Password = "Zena867594",
+                    Phone = "+79762457633",
+                    Email = "zena7639@gmail.com",
+                    CityId = 14,
+                    Address = "Kaliningradskaya, 35, 15",
+                    BirthDate = ""               
+                },
+                6 => new LeadInputModel()
+                {
+                    FirstName = "Zena",
+                    LastName = "Koroleva",
+                    Patronymic = "Nikolaevna",
+                    Login = "Pupsik7464",    
+                    Password = "Zena867594",
+                    Phone = "+79762457633",
+                    Email = "zena7639@gmail.com",
+                    CityId = 14,
+                    Address = "Kaliningradskaya, 35, 15",
+                    BirthDate = "17.03.1998"
+                },
+                11 => new LeadInputModel()
+                {                 
+                    FirstName = "Daria",
+                    LastName = "Piratova",
+                    Patronymic = "Ivannova",
+                    Login = "dashunya7363",
+                    Password = "Samolettu356",
+                    Phone = "+79314647493",
+                    Email = "annayazikova2456388@gmail.com",
+                    CityId = 11,
+                    Address = "Malaya Konyushennaya Ulitsa229",
+                    BirthDate = "16.05.1991"
+                },
+                12 => new LeadInputModel()
                 {
                     FirstName = "Milena",
                     LastName = "Murashova",
@@ -35,7 +113,7 @@ namespace CRM.NUnitTest
                     Address = "Kaliningradskaya, 35, 15",
                     BirthDate = "17.03.1990"
                 },
-                3 => new LeadInputModel()
+                13 => new LeadInputModel()
                 {
                     FirstName = "Zena",
                     LastName = "Koroleva",
@@ -48,7 +126,7 @@ namespace CRM.NUnitTest
                     Address = "Kaliningradskaya, 35, 15",
                     BirthDate = "17.03.1998"
                 },
-                4 => new LeadInputModel()
+                14 => new LeadInputModel()
                 {
                     FirstName = "",
                     LastName = "Ivleeva",
@@ -61,7 +139,7 @@ namespace CRM.NUnitTest
                     Address = "Kaliningradskaya, 30, 6",
                     BirthDate = "17.03.1989"
                 },
-                5 => new LeadInputModel()
+                15 => new LeadInputModel()
                 {
                     FirstName = "Alberta",
                     LastName = "Koval",
@@ -74,7 +152,7 @@ namespace CRM.NUnitTest
                     Address = "Kaliningradskaya, 35, 10",
                     BirthDate = "17.03.1993"
                 },
-                6 => new LeadInputModel()
+                16 => new LeadInputModel()
                 {
                     FirstName = "Ida",
                     LastName = "Galich",
@@ -91,7 +169,7 @@ namespace CRM.NUnitTest
             };
         }
 
-        public SearchParametersInputModel SearchInputMock(int num)  //done
+        public SearchParametersInputModel SearchInputMock(int num)  
         {
             
             return num switch
@@ -127,55 +205,8 @@ namespace CRM.NUnitTest
                 _ => new SearchParametersInputModel(),
             };
         }
-        public LeadInputModel UpdateLeadMock(int num)
-        {
-            return num switch
-            {
-                11 => new LeadInputModel()
-                {
 
-                    FirstName = "Anna",
-                    LastName = "Yazikova",
-                    Patronymic = "Ivannova",
-                    Login = "annayazikova2456388",
-                    Password = "Samolettu356",
-                    Phone = "+79314554545",
-                    Email = "annayazikova2456388@gmail.com",
-                    CityId = 11,
-                    Address = "Malaya Konyushennaya Ulitsa229",
-                    BirthDate = "16.05.1991"
-                },
-                12 => new LeadInputModel()
-                {
-                    FirstName = "Milena",
-                    LastName = "Murashova",
-                    Patronymic = "Nikolaevna",
-                    Login = "AnnaMurashka7639",
-                    Password = "AnMuNi867594",
-                    Phone = "+79762457628",
-                    Email = "annamurashova@gmail.com",
-                    CityId = 14,
-                    Address = "Kaliningradskaya, 35, 15",
-                    BirthDate = "17.03.1990"
-                },
-                13 => new LeadInputModel()
-                {
-                    FirstName = "Zena",
-                    LastName = "Koroleva",
-                    Patronymic = "Nikolaevna",
-                    Login = "Zena7639",
-                    Password = "Zena867594",
-                    Phone = "+79762457633",
-                    Email = "zena7639@gmail.com",
-                    CityId = 14,
-                    Address = "Kaliningradskaya, 35, 15",
-                    BirthDate = "17.03.1998"
-                },
-                _ => new LeadInputModel(),
-            };
-        }
-
-        public EmailInputModel GetEmailInputModelByLeadId(int num)
+        public EmailInputModel GetEmailInputModelMockByLeadId(int num) 
         {
             return num switch
             {
@@ -197,7 +228,7 @@ namespace CRM.NUnitTest
                 6 => new EmailInputModel()
                 {
                     Id = 6,
-                    Email = "voron6@gmail.com"
+                    Email = "voron5@gmail.com"
                 },
                 7 => new EmailInputModel()
                 {
@@ -209,16 +240,8 @@ namespace CRM.NUnitTest
                     Id = 8,
                     Email = "gjfjhfjvjkvfkjvfmail.com"
                 },
-                10 => new EmailInputModel()
-                {
-                    Id = 10,
-                    Email = "oksimiron@gmail.com"
-                },
                 _ => new EmailInputModel(),
             };
         }
-       
-        
     }
-
 }
