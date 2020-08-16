@@ -129,8 +129,8 @@ namespace CRM.API.Controllers
         [HttpDelete("{leadId}")]
         public ActionResult DeleteLeadById(long leadId)    // тесты есть
         {
-            DataWrapper<LeadDto> dataWrapper = _repo.GetById(leadId);
-            if (dataWrapper.Data.Id == null) return BadRequest("Lead was not found");
+            DataWrapper<LeadDto> dataWrapper = _repo.GetById(leadId);     //зачем??? мы выбираем лида и его удаляем, то есть айди всегда есть
+            if (dataWrapper.Data == null) return BadRequest("Lead was not found");
             _repo.Delete(leadId);
             return Ok("Successfully deleted");
         }
@@ -195,8 +195,9 @@ namespace CRM.API.Controllers
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpPost("account")]
-        public ActionResult<LeadWithAccountsOutputModel> AddAccount(AccountInputModel account)
+        public ActionResult<LeadWithAccountsOutputModel> AddAccount(AccountInputModel account)  
         {
+            if (account.CurrencyId == null) return BadRequest("Choose currency");
             DataWrapper<LeadDto> dataWrapper = _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));
             return MakeResponse(dataWrapper, _mapper.Map<LeadWithAccountsOutputModel>);
         }

@@ -11,7 +11,7 @@ namespace CRM.API.Models.Input
 		
 		public long LeadId { get; set; }
 				
-		public byte CurrencyId { get; set; }
+		public byte? CurrencyId { get; set; }
 	
 
 

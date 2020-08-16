@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CRM.Core
+﻿namespace CRM.Core
 {
     public enum CurrenciesCode
     {
@@ -17,5 +13,12 @@ namespace CRM.Core
         USDollar,
         Euro,
         Yen
+    }
+
+    public enum SearchMode
+    {
+        ExactValue = 1,
+        ContainsValue,
+        StartWithValue
     }
 }

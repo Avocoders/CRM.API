@@ -14,7 +14,7 @@ namespace CRM.Data
     {
         private readonly IDbConnection _connection;
 
-        public LeadRepository(IOptions<StorageOptions> options)
+        public LeadRepository(IOptions<DatabaseOptions> options)
         {
             _connection = new SqlConnection(options.Value.DBConnectionString);
         }

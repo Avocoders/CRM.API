@@ -1,5 +1,4 @@
-﻿using System;
-namespace CRM.NUnitTest
+﻿namespace CRM.NUnitTest
 {
 	public static class Queries
 	{
@@ -28,23 +27,28 @@ namespace CRM.NUnitTest
 				('Vladimir','Galich','Ivanovich','GalichVladimir1965','9b18947ad9854ce3f6c5264081fd49e394888986f3ce26bbfbe0db90dbb6da10','+79268888888','galivova@gmail.com',11,'Stroitelei, 13, 78','1965-04-11',3,'2020-01-01','2020-01-01', 0),
 				('Oksana','Galich','Dmitrievna','GalichOksana1965','9b18947ad9854ce3f6c5264081fd49e394888986f3ce26bbfbe0db90dbb6da10','+79269999999','galichvova@gmail.com',11,'Stroitelei, 13, 78','1965-04-11',3,'2020-01-01','2020-01-01', 0),
 				('Vlada','Gala','Ivanovna','GalaVlada1969','9b18947ad9854ce3f6c5264081fd49e394888986f3ce26bbfbe0db90dbb6da10','+79268888887','gala@gmail.com',11,'Stroitelei, 13, 9','1969-04-11',3,'2020-01-02','2020-01-02', 0),
-				('Oksi','Miron','Dmitrievich','Oksi1965','9b18947ad9854ce3f6c5264081fd49e394888986f3ce26bbfbe0db90dbb6da10','+79269999955','oksimiron@gmail.com',11,'Stroitelei, 13, 70','1965-04-12',3,'2020-01-01','2020-01-01', 0)     
+				('Oksi','Miron','Dmitrievich','Oksi1965','9b18947ad9854ce3f6c5264081fd49e394888986f3ce26bbfbe0db90dbb6da10','+79269999955','oksimiron@gmail.com',11,'Stroitelei, 13, 70','1965-04-12',3,'2020-01-01','2020-01-01', 0)
 
 				insert into [dbo].Account 
 				(LeadId, CurrencyId) 
 				Values 
 				(1, 1),
+				(1, 2),
+				(1, 2),
 				(2, 2),
+				(2, 3),
 				(3, 3),
+				(3, 4),
 				(4, 4),
 				(5, 1),
 				(6, 2),
+				(6, 3),
+				(6, 4),
 				(7, 3),
+				(7, 1),
 				(8, 4),
 				(9, 1),
-				(10, 2),
-				(2, 3),
-				(3, 4)";
+				(9, 4)";
 
 		public const string clearTestBase =
 			@"truncate table [dbo].Account 

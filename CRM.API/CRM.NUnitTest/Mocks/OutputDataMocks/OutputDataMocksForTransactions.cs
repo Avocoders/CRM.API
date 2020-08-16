@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace CRM.NUnitTest.Mocks.OutputModelMocks
 {
-    public class TransactionOutputModelMocks
+    public class OutputDataMocksForTransactions
     {
-        public dynamic GetIdDeposit(int num)
+        public dynamic GetIdDepositMock(int num)  //done
         {
             return num switch
             {
@@ -18,7 +18,8 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
                 _ => -1,
             };
         }
-        public dynamic GetIdsTransfer(int num)
+
+        public dynamic GetIdsTransferMock(int num)  //done
         {
             return num switch
             {
@@ -27,11 +28,12 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
                 3 => new List<int>() { 8, 9 },
                 4 => "The account of receiver is not found",
                 5 => "The amount is missing",
-                6 => "",           //"Not enough money"      
+                6 => "",               //"Not enough money"   должно быть   
                 _ => new List<int>(),
             };
         }                                                //когда у Акк нет денег, он не выводит badRequest, выводит либо "0", либо ""
-        public dynamic GetIdWithdraw(int num)
+
+        public dynamic GetIdWithdrawMock(int num)   //done
         {
             return num switch
             {
@@ -39,7 +41,7 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
                 2 => 11,
                 3 => 12,
                 4 => "The amount is missing",
-                5 => "0",     //"Not enough money"
+                5 => "0",          //"Not enough money"    должно быть
                 6 => "The account is not found",
                 _ => -1,
             };
