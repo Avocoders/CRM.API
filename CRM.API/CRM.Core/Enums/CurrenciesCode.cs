@@ -3,9 +3,9 @@
     public enum CurrenciesCode
     {
         RUB = 1,
-     	USD,
-   	    EUR,
-    	JPY	
+        USD,
+        EUR,
+        JPY
     }
     public enum CurrenciesName
     {
@@ -21,4 +21,12 @@
         ContainsValue,
         StartWithValue
     }
+
+    public enum TransactionType
+    {
+        Deposit = 1,
+        Withdraw,
+        Transfer
+    }
+
 }

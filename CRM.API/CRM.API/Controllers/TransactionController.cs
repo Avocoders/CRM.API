@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using RestSharp;
 using Microsoft.Extensions.Options;
 using CRM.Core;
+using System;
 
 namespace CRM.API.Controllers
 {
@@ -17,14 +18,29 @@ namespace CRM.API.Controllers
     {        
         private readonly RestClient _restClient;
         private readonly ILeadRepository _repo;
-        private readonly string _transactionStoreUrl;
+        
         public TransactionController(ILeadRepository repo, IOptions<APIOptions> options)
         {            
-            _restClient = new RestClient(_transactionStoreUrl);
+            _restClient = new RestClient(options.Value.TransactionStoreAPIUrl);
             _repo = repo;
-            _transactionStoreUrl = options.Value.TransactionStoreAPIUrl;
+           
         }
-        
+
+        /// <summary>
+        /// refers to TransactionStore to get balance by leadId and currencyId
+        /// </summary>
+        /// <param name="accountId"></param>
+        /// <returns></returns>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpGet("{accountId}/balance")]
+        public async Task<ActionResult<decimal>> GetBalanceByAccountIdInCurrency(long accountId)
+        {
+            if (accountId <= 0) return BadRequest("Account was not found");
+            var restRequest = new RestRequest($"transaction/{accountId}/balance", Method.GET, DataFormat.Json);
+            return MakeResponse<decimal>(_restClient, restRequest);
+        }
+
         /// <summary>
         /// refers to TransactionStore to create a transfer transaction
         /// </summary>
@@ -42,8 +58,8 @@ namespace CRM.API.Controllers
             transactionModel.ReceiverCurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountIdReceiver).Data;            
             var restRequest = new RestRequest("transaction/transfer", Method.POST, DataFormat.Json);
             restRequest.AddJsonBody(transactionModel);
-            restRequest.OnBeforeDeserialization = r => { r.ContentType = "application/json"; }; 
-            return _restClient.Execute<List<long>>(restRequest).Data; 
+            restRequest.OnBeforeDeserialization = r => { r.ContentType = "application/json"; };
+            return MakeResponse<List<long>>(_restClient, restRequest);
         }
 
         /// <summary>
@@ -57,12 +73,14 @@ namespace CRM.API.Controllers
         public async Task<ActionResult<long>> CreateWithdrawTransaction([FromBody] TransactionInputModel transactionModel)
         {
             if (_repo.GetAccountById(transactionModel.AccountId).Data is null) return BadRequest("The account is not found");
+        //    var balance = GetBalanceByAccountIdInCurrency(transactionModel.AccountId);
+            
             if (transactionModel.Amount <= 0) return BadRequest("The amount is missing");
             transactionModel.CurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountId).Data;            
             var restRequest = new RestRequest("transaction/withdraw", Method.POST, DataFormat.Json);
             restRequest.AddJsonBody(transactionModel);
             restRequest.OnBeforeDeserialization = r => { r.ContentType = "application/json"; };
-            return _restClient.Execute<long>(restRequest).Data;
+            return MakeResponse<long>(_restClient, restRequest);
         }
 
         /// <summary>
@@ -81,7 +99,7 @@ namespace CRM.API.Controllers
             var restRequest = new RestRequest("transaction/deposit", Method.POST, DataFormat.Json);
             restRequest.AddJsonBody(transactionModel);
             restRequest.OnBeforeDeserialization = r => { r.ContentType = "application/json"; };
-            return _restClient.Execute<long>(restRequest).Data; ;
+            return MakeResponse<long>(_restClient, restRequest);
         }
 
         /// <summary>
@@ -96,7 +114,7 @@ namespace CRM.API.Controllers
         {
             if (accountId <= 0) return BadRequest("Account was not found");            
             var restRequest = new RestRequest($"transaction/by-account-id/{accountId}", Method.GET, DataFormat.Json);
-            return _restClient.Execute<List<TransactionOutputModel>>(restRequest).Data;
+            return MakeResponse<List<TransactionOutputModel>>(_restClient, restRequest);
         }
 
         /// <summary>
@@ -111,23 +129,23 @@ namespace CRM.API.Controllers
         {
             if (id <= 0) return BadRequest("Transaction was not found");            
             var restRequest = new RestRequest($"transaction/{id}", Method.GET, DataFormat.Json);
-            var a = _restClient.Execute<List<TransactionOutputModel>>(restRequest).Data;
-            return a;
+            return MakeResponse<List<TransactionOutputModel>>(_restClient, restRequest);
+            
         }
 
-        /// <summary>
-        /// refers to TransactionStore to get balance by leadId and currencyId
-        /// </summary>
-        /// <param name="accountId"></param>
-        /// <returns></returns>
+        
+
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [HttpGet("{accountId}/balance")]
-        public async Task<ActionResult<decimal>> GetBalanceByAccountIdInCurrency(long accountId)
+        [HttpPost("search")]
+        public ActionResult<List<TransactionOutputModel>> GetTransactionSearchParameters([FromBody] TransactionSearchInputModel transactionSearchInputModel)
         {
-            if (accountId <= 0) return BadRequest("Account was not found");            
-            var restRequest = new RestRequest($"transaction/{accountId}/balance", Method.GET, DataFormat.Json);
-            return _restClient.Execute<decimal>(restRequest).Data;
+            if (transactionSearchInputModel.Type == (byte)TransactionType.Withdraw) transactionSearchInputModel.AmountBegin *= -1;
+            if (transactionSearchInputModel.Type == (byte)TransactionType.Withdraw) transactionSearchInputModel.AmountEnd *= -1;
+            var restRequest = new RestRequest("transaction/search", Method.POST, DataFormat.Json);
+            restRequest.AddJsonBody(transactionSearchInputModel);
+            restRequest.OnBeforeDeserialization = r => { r.ContentType = "application/json"; };
+            return MakeResponse<List<TransactionOutputModel>>(_restClient, restRequest);
         }
 
 
@@ -136,14 +154,14 @@ namespace CRM.API.Controllers
             try
             {
                 var result = restClient.Execute<T>(restRequest);
-                return Ok(result.Data); 
+                return Ok(result.Data);
             }
 
-            catch(Exception e)
+            catch (Exception e)
             {
                 return BadRequest(e.Message);
-            }                
-            
+            }
+
         }
     }
 }
