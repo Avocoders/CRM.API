@@ -1,6 +1,7 @@
 ﻿using CRM.API.Models.Input;
 using CRM.Data;
 using System.Text.RegularExpressions;
+using TransactionStore.API.Models.Input;
 
 namespace CRM.API
 {
@@ -21,6 +22,18 @@ namespace CRM.API
             if (string.IsNullOrWhiteSpace(leadModel.Address)) return ("Enter the address");
             if (string.IsNullOrWhiteSpace(leadModel.BirthDate)) return ("Enter the date of birth");
             return "";
-        }        
+        }
+        //public string ValidateTransactionInputModel(TransactionInputModel transactionModel)
+        //{
+        //    DataWrapper<string> dataWrapper;
+        //    if (_repo.GetAccountById(transactionModel.AccountId).Data is null)
+        //    {
+        //        return BadRequest("The account is not found");
+        //    }
+        //    if (_repo.GetAccountById(transactionModel.AccountId).Data is null) return BadRequest("The account is not found");
+        //    if (_repo.GetAccountById(transactionModel.AccountIdReceiver).Data is null) return BadRequest("The account of re
+        //    if (transactionModel.Amount <= 0) return BadRequest("The amount is missing");
+        //}
+        //return "";
     }
 }
