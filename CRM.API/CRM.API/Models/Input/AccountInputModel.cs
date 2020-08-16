@@ -7,6 +7,7 @@ namespace CRM.API.Models.Input
 {
     public class AccountInputModel
     {
+<<<<<<< HEAD
 		public long? Id { get; set; }
 		
 		public long LeadId { get; set; }
@@ -15,5 +16,10 @@ namespace CRM.API.Models.Input
 	
 
 
+=======
+		public long? Id { get; set; }		
+		public long LeadId { get; set; }				
+		public byte CurrencyId { get; set; }
+>>>>>>> Accountcontrollers
     }
 }

@@ -22,22 +22,13 @@ namespace CRM.Data
         public LeadRepository()
         { }
 
-        public DataWrapper<LeadDto> GetAccountById(long Id)  
+        public DataWrapper<AccountVsLeadDTO> GetAccountById(long Id)  
         { 
-            var result = new DataWrapper<LeadDto>();
+            var result = new DataWrapper<AccountVsLeadDTO>();
             try
             {
-                result.Data = _connection.Query<LeadDto, AccountDto, LeadDto>(
-                    "Account_GetById",
-                    (lead,account) =>
-                    {
-                        LeadDto leadEntry;
-                        leadEntry = lead;
-                        leadEntry.Accounts = new List<AccountDto>();
-                        leadEntry.Accounts.Add(account);
-                        return leadEntry;
-                    },
-                    new { Id }, splitOn: "Id",
+                result.Data = _connection.Query<AccountVsLeadDTO>(
+                    "Account_GetById",new { Id },                 
                     commandType: CommandType.StoredProcedure).FirstOrDefault();
                 result.IsOk = true;
             }
@@ -115,29 +106,17 @@ namespace CRM.Data
             return result;
         }
 
-        public DataWrapper<LeadDto> AddOrUpdateAccount(AccountDto accountDto)
+        public DataWrapper<AccountVsLeadDTO> AddOrUpdateAccount(AccountDto accountDto)
         {
-            var result = new DataWrapper<LeadDto>();
+            var result = new DataWrapper<AccountVsLeadDTO>();
             try
             {
-                result.Data = _connection.Query<LeadDto,AccountDto,LeadDto>( 
-                    "Account_Add_Or_Update ",
-                     (lead, account) =>
-                     {
-                         LeadDto leadEntry;
-                         leadEntry = lead;
-                         leadEntry.Accounts = new List<AccountDto>();
-                         leadEntry.Accounts.Add(account);
-                         return leadEntry;
-                     },
-
-                       new
-                       {
-                           accountDto.Id,
-                           accountDto.LeadId,
-                           accountDto.CurrencyId
-                       }, splitOn: "Id", commandType: CommandType.StoredProcedure).FirstOrDefault();
-            
+                result.Data = _connection.Query<AccountVsLeadDTO>("Account_Add_Or_Update",  new 
+                       { 
+                           accountDto.Id, 
+                           accountDto.LeadId, 
+                           accountDto.CurrencyId 
+                       }, commandType: CommandType.StoredProcedure).FirstOrDefault();           
                 result.IsOk = true;
             }
             catch (Exception e)
@@ -146,8 +125,7 @@ namespace CRM.Data
             }
             return result;
         }
-
-
+      
         public void Delete(long id)
         {
             _connection.Execute("Lead_Delete", new { id }, commandType: CommandType.StoredProcedure);
@@ -155,29 +133,12 @@ namespace CRM.Data
       
         public DataWrapper<LeadDto> GetById(long leadId)
         {
-            var leadDictionary = new Dictionary<long, LeadDto>();
             var result = new DataWrapper<LeadDto>();
             try
             {
-                result.Data = _connection.Query<LeadDto, RoleDto, CityDto, AccountDto, LeadDto>(
+                result.Data = _connection.Query<LeadDto>(
                     "Lead_GetById",
-                    (lead, role, city, account) =>
-                    {
-                        LeadDto leadEntry;
-                        if (!leadDictionary.TryGetValue(lead.Id.Value, out leadEntry))
-                        {
-                            leadEntry = lead;
-                            leadEntry.Accounts = new List<AccountDto>();
-                            leadDictionary.Add(leadEntry.Id.Value, leadEntry);
-                            leadEntry.Role = role;
-                            leadEntry.City = city;
-                            
-                        }
-                        leadEntry.Accounts.Add(account);
-                        return leadEntry;
-                    },
                     new { leadId },
-                    splitOn: "Id",
                     commandType: CommandType.StoredProcedure).FirstOrDefault();
                 result.IsOk = true;
 

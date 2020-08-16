@@ -69,7 +69,7 @@ namespace CRM.API.Controllers
         //[Authorize()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet("{leadId}")]
-        public ActionResult<LeadOutputModel> GetLeadById(long leadId) // тесты готовы
+        public ActionResult<LeadOutputModel> GetLeadById(long leadId) // тесты готовы 
         {
             DataWrapper<LeadDto> dataWrapper = _repo.GetById(leadId);
             return MakeResponse(dataWrapper, _mapper.Map<LeadOutputModel>);
@@ -127,7 +127,7 @@ namespace CRM.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpDelete("{leadId}")]
-        public ActionResult DeleteLeadById(long leadId)    // тесты есть
+        public ActionResult DeleteLeadById(long leadId)    // тесты есть 
         {
             DataWrapper<LeadDto> dataWrapper = _repo.GetById(leadId);     //зачем??? мы выбираем лида и его удаляем, то есть айди всегда есть
             if (dataWrapper.Data == null) return BadRequest("Lead was not found");
@@ -178,10 +178,10 @@ namespace CRM.API.Controllers
         //[Authorize()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet("account/{Id}")]
-        public ActionResult<LeadWithAccountsOutputModel> GetAccountById(long Id) //accountWithLeadOutputModel с основной инфой о лиде
+        public ActionResult<AccountWithLeadOutputModel> GetAccountById(long Id) //accountWithLeadOutputModel с основной инфой о лиде
         {
-            DataWrapper<LeadDto> dataWrapper = _repo.GetAccountById(Id);
-            return MakeResponse(dataWrapper, _mapper.Map<LeadWithAccountsOutputModel>);
+            DataWrapper<AccountVsLeadDTO> dataWrapper = _repo.GetAccountById(Id);
+            return MakeResponse(dataWrapper, _mapper.Map<AccountWithLeadOutputModel>);
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -192,23 +192,29 @@ namespace CRM.API.Controllers
             return MakeResponse(dataWrapper, _mapper.Map<List<AccountOutputModel>>);
         }
 
-
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpPost("account")]
+<<<<<<< HEAD
         public ActionResult<LeadWithAccountsOutputModel> AddAccount(AccountInputModel account)  
         {
             if (account.CurrencyId == null) return BadRequest("Choose currency");
             DataWrapper<LeadDto> dataWrapper = _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));
             return MakeResponse(dataWrapper, _mapper.Map<LeadWithAccountsOutputModel>);
+=======
+        public ActionResult<AccountWithLeadOutputModel> AddAccount(AccountInputModel account)
+        {
+            DataWrapper<AccountVsLeadDTO> dataWrapper = _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));
+            return MakeResponse(dataWrapper, _mapper.Map<AccountWithLeadOutputModel>);
+>>>>>>> Accountcontrollers
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpPut("account")]
-        public ActionResult<LeadWithAccountsOutputModel> UpdateAccount(AccountInputModel account)
+        public ActionResult<AccountWithLeadOutputModel> UpdateAccount(AccountInputModel account)
         {
 
-            DataWrapper<LeadDto> dataWrapper = _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));
-            return MakeResponse(dataWrapper, _mapper.Map<LeadWithAccountsOutputModel>);
+            DataWrapper<AccountVsLeadDTO> dataWrapper = _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));
+            return MakeResponse(dataWrapper, _mapper.Map<AccountWithLeadOutputModel>);
         }
 
 
