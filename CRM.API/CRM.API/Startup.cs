@@ -10,6 +10,10 @@ using CRM.API.Configuration;
 using Microsoft.OpenApi.Models;
 using AutoMapper;
 using CRM.Core;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using CRM.API.Logger;
 
 namespace CRM.API
 {
@@ -74,7 +78,7 @@ namespace CRM.API
         { }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -99,7 +103,16 @@ namespace CRM.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-            });         
+            });
+
+            loggerFactory.AddFile(Path.Combine(Directory.GetCurrentDirectory(), "Logger/logger.txt"));
+            var logger = loggerFactory.CreateLogger("FileLogger");
+
+            app.Run(async (context) =>
+            {
+                logger.LogInformation($"Processing request {context.Request.Path}");
+                await context.Response.WriteAsync("Hello World!");
+            });
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
