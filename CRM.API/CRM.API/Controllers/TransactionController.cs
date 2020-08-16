@@ -129,5 +129,21 @@ namespace CRM.API.Controllers
             var restRequest = new RestRequest($"transaction/{accountId}/balance", Method.GET, DataFormat.Json);
             return _restClient.Execute<decimal>(restRequest).Data;
         }
+
+
+        private ActionResult<T> MakeResponse<T>(RestClient restClient, RestRequest restRequest)
+        {
+            try
+            {
+                var result = restClient.Execute<T>(restRequest);
+                return Ok(result.Data); 
+            }
+
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }                
+            
+        }
     }
 }

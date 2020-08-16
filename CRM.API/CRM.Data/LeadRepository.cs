@@ -49,29 +49,15 @@ namespace CRM.Data
         }
 
 
-        public DataWrapper <LeadDto> GetAccountByLeadId(long leadId)  
+        public DataWrapper <List<AccountDto>> GetAccountByLeadId(long leadId)  
         {
-            var leadDictionary = new Dictionary<long, LeadDto>();
-            var result = new DataWrapper <LeadDto>();
+            var result = new DataWrapper <List<AccountDto>>();
             try
             {               
-                    result.Data = _connection.Query<LeadDto, AccountDto, LeadDto>(
+                    result.Data = _connection.Query<AccountDto>(
                     "Account_GetByLeadId",
-                    (lead, account) =>
-                    {
-                    LeadDto leadEntry;
-                    if (!leadDictionary.TryGetValue(lead.Id.Value, out leadEntry))
-                        {
-                            leadEntry = lead;
-                            leadEntry.Accounts = new List<AccountDto>();
-                            leadDictionary.Add(leadEntry.Id.Value, leadEntry);
-                        }
-                        leadEntry.Accounts.Add(account);
-                        return leadEntry;
-  
-                    },
-                    new { leadId }, splitOn: "Id",
-                    commandType: CommandType.StoredProcedure).FirstOrDefault();
+                    new { leadId },
+                    commandType: CommandType.StoredProcedure).ToList();
                 result.IsOk = true;
             }
             catch (Exception e)

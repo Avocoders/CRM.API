@@ -10,15 +10,12 @@ namespace CRM.Data
         void Delete(long id);
         DataWrapper<int> CheckEmail(string email);
         DataWrapper<int> FindLeadByLogin(string login);
-        //DataWrapper<List<LeadDto>> GetAll();
         DataWrapper<LeadDto> GetById(long leadId);
         DataWrapper<AuthorizationDto> GetByLogin(string login);
         DataWrapper<List<LeadDto>> SearchLeads(LeadSearchParameters searchParameters);
-       // DataWrapper<LeadDto> Update(LeadDto leadDto);
-        DataWrapper<string> UpdateEmailByLeadId(long? id, string email);
-        
+        DataWrapper<string> UpdateEmailByLeadId(long? id, string email);    
         DataWrapper<LeadDto> AddOrUpdateAccount(AccountDto accountDto);
-        DataWrapper<LeadDto> GetAccountByLeadId(long leadId);
+        DataWrapper<List<AccountDto>> GetAccountByLeadId(long leadId);
         DataWrapper<byte> GetCurrencyByAccountId(long accountId);
 
     }

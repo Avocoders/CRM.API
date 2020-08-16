@@ -186,10 +186,10 @@ namespace CRM.API.Controllers
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet("{leadId}/accounts")]
-        public ActionResult<LeadWithAccountsOutputModel> GetAccountsByLeadId(long leadId)  //другую outputmodel вставить, просто список акк
+        public ActionResult<List<AccountOutputModel>> GetAccountsByLeadId(long leadId)  //другую outputmodel вставить, просто список акк
         {
-            DataWrapper<LeadDto> dataWrapper = _repo.GetAccountByLeadId(leadId);
-            return MakeResponse(dataWrapper, _mapper.Map<LeadWithAccountsOutputModel>);
+            DataWrapper<List<AccountDto>> dataWrapper = _repo.GetAccountByLeadId(leadId);
+            return MakeResponse(dataWrapper, _mapper.Map<List<AccountOutputModel>>);
         }
 
 
