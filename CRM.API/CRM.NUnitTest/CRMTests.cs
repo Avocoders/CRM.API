@@ -62,13 +62,15 @@ namespace CRM.NUnitTest
             var jsonContent = new StringContent(JsonConvert.SerializeObject(inputmodel), Encoding.UTF8, "application/json");
             var response = await _client.PostAsync(_crmUrl + EndpointUrl.accountUrl, jsonContent);
             var result = await response.Content.ReadAsStringAsync();
-            if (num < 6)
+            
+            if (num < 23)
             {
                 var actual = JsonConvert.DeserializeObject<LeadWithAccountsOutputModel>(result);
                 Assert.AreEqual(expected, actual);
             }
             else
             {
+               
                 Assert.AreEqual(expected, result);
             }
         }
@@ -198,7 +200,7 @@ namespace CRM.NUnitTest
         {
             var response = await _client.DeleteAsync(_crmUrl + EndpointUrl.leadUrl + $"{num}");            
             var actual = await response.Content.ReadAsStringAsync();
-            if (num != 20)
+            if (num < 14)
                 Assert.AreEqual("Successfully deleted", actual);
             else               
                 Assert.AreEqual("Lead was not found", actual);
@@ -426,7 +428,7 @@ namespace CRM.NUnitTest
         [OneTimeTearDown]
         public void Teardown()
         {
-            _connection.Execute(Queries.clearTestBase);
+           // _connection.Execute(Queries.clearTestBase);
             _server.Dispose();
             _client.Dispose();
         }

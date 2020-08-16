@@ -164,6 +164,7 @@ namespace CRM.API.Controllers
         /// <param name="searchparameters"></param>        
         //[Authorize()]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost("search")]
         public ActionResult<List<LeadOutputModel>> SearchLead(SearchParametersInputModel searchparameters)  // тесты есть
         {

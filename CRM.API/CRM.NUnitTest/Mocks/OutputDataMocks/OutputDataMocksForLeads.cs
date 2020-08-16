@@ -132,12 +132,14 @@ namespace CRM.NUnitTest
                 11 => new LeadOutputModel()
                 {
                     Id = 11,
-                    FirstName = "Anna",
-                    LastName = "Yazikova",
-                    Login = "annayazikova2456388",
-                    Phone = "+79314554545",                 
-                    City = "Saratov",                    
-                    BirthDate = "16.05.1991"                    
+                    FirstName = "Daria",
+                    LastName = "Piratova",
+                    Login = "dashunya7363",                   
+                    Phone = "+79314647493",
+                    City = "Saratov",                  
+                    Address = "Malaya Konyushennaya Ulitsa229",
+                    BirthDate = "16.05.1991"
+                                       
                 },
                 12 => new LeadOutputModel()
                 {
