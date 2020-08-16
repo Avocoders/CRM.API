@@ -10,7 +10,7 @@ namespace CRM.API.Configuration
         {
             builder.RegisterType<LeadRepository>().As<ILeadRepository>();
             builder.RegisterType<DatabaseOptions>().As<IDatabaseOptions>();
-            builder.RegisterType<UrlOptions>().As<IUrlOptions>();
+            builder.RegisterType<APIOptions>().As<IUrlOptions>();
         }
     }
 }

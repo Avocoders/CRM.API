@@ -7,7 +7,7 @@ namespace CRM.NUnitTest
 {
     public class OutputDataMocksForAccounts
     {
-        public dynamic GetAccountOutputModelMockById(int num)
+        public dynamic GetAccountOutputModelMockById(int num)  //done
         {
             return num switch
             {
@@ -101,25 +101,8 @@ namespace CRM.NUnitTest
                     },
                     IsDeleted = false
                 },
-                6 => new LeadWithAccountsOutputModel()
-                {
-                    Id = 4,
-                    FirstName = "Ivan",
-                    LastName = "Piratov",
-                    BirthDate = "01.12.1997",
-                    Accounts = new List<AccountOutputModel>()
-                    {
-                        new AccountOutputModel()
-                        {
-                            Id = 23,
-                            IsDeleted = false,
-                            CurrencyCode = "RUB",
-                            CurrencyName = "RussianRubble"
-                        },
-                    },
-                    IsDeleted = false
-                },
-                _ => new LeadWithAccountsOutputModel(),
+                6 => "Choose currency",
+                _ => -1,
             };
         }
 

@@ -5,7 +5,7 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
 {
     public class OutputDataMocksForTransactions
     {
-        public dynamic GetIdDepositMock(int num)
+        public dynamic GetIdDepositMock(int num)  //done
         {
             return num switch
             {
@@ -19,7 +19,7 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
             };
         }
 
-        public dynamic GetIdsTransferMock(int num)
+        public dynamic GetIdsTransferMock(int num)  //done
         {
             return num switch
             {
@@ -33,7 +33,7 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
             };
         }                                                //когда у Акк нет денег, он не выводит badRequest, выводит либо "0", либо ""
 
-        public dynamic GetIdWithdrawMock(int num)
+        public dynamic GetIdWithdrawMock(int num)   //done
         {
             return num switch
             {

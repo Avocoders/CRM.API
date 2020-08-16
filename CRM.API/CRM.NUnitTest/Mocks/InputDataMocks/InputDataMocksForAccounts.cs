@@ -4,7 +4,7 @@ namespace CRM.NUnitTest
 {
     public class InputDataMocksForAccounts
     {
-        public dynamic GetAccountInputModelMock(int num)
+        public AccountInputModel GetAccountInputModelMock(int num)    //done
         {
             return num switch
             {
@@ -47,7 +47,7 @@ namespace CRM.NUnitTest
                 {
 
                     LeadId = 4,
-                    CurrencyId = 1
+                    CurrencyId = null
 
                 },                
                 _ => new AccountInputModel(),

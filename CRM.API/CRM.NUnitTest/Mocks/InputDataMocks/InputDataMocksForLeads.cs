@@ -1,10 +1,11 @@
 ﻿using CRM.API.Models.Input;
+using CRM.Core;
 
 namespace CRM.NUnitTest
 {
     public class InputDataMocksForLeads
-    {
-        public dynamic GetLeadInputModelMock(int num)
+    {      
+        public LeadInputModel GetLeadInputModelMock(int num)   //done
         {
             return num switch
             {
@@ -49,7 +50,7 @@ namespace CRM.NUnitTest
                 },
                 4 => new LeadInputModel()
                 {
-                    FirstName = "Nastya",
+                    FirstName = "",
                     LastName = "Ivleeva",
                     Patronymic = "Petrovna",
                     Login = "NastyshaAgon7639",
@@ -66,7 +67,7 @@ namespace CRM.NUnitTest
                     LastName = "Koval",
                     Patronymic = "Nikolaevna",
                     Login = "Berta435",
-                    Password = "Berta435533",
+                    Password = "berta",
                     Phone = "+79762457634",
                     Email = "bertalove4@gmail.com",
                     CityId = 14,
@@ -81,7 +82,7 @@ namespace CRM.NUnitTest
                     Login = "Galichchch7463",
                     Password = "Idonchikchik648",
                     Phone = "+79762457493",
-                    Email = "idagalich9473@gmail.com",
+                    Email = "zena7639@gmail.com",
                     CityId = 14,
                     Address = "Kaliningradskaya, 5, 5",
                     BirthDate = "17.05.1968"
@@ -90,6 +91,42 @@ namespace CRM.NUnitTest
             };
         }
 
+        public SearchParametersInputModel SearchInputMock(int num)  //done
+        {
+            
+            return num switch
+            {
+                1 => new SearchParametersInputModel()
+                {
+                    FirstNameSearchMode = (int)SearchMode.ExactValue, 
+                    FirstName = "Alena"
+                },
+                2 => new SearchParametersInputModel()
+                {
+                    PhoneSearchMode = (int)SearchMode.StartWithValue,
+                    Phone = "+793244"
+                },
+                3 => new SearchParametersInputModel()
+                {
+                    LoginSearchMode = (int)SearchMode.ContainsValue,
+                    Login = "Galich"
+                },
+                4 => new SearchParametersInputModel()
+                {
+                    BirthDateBegin = "01.01.1969",
+                    BirthDateEnd = "11.01.1970"
+                },
+                5 => new SearchParametersInputModel() 
+                {
+                    AccountId = 5
+                },
+                6 => new SearchParametersInputModel()
+                {
+                    CurrencyId = 1
+                },
+                _ => new SearchParametersInputModel(),
+            };
+        }
         public LeadInputModel UpdateLeadMock(int num)
         {
             return num switch
@@ -180,38 +217,7 @@ namespace CRM.NUnitTest
                 _ => new EmailInputModel(),
             };
         }
-        public SearchParametersInputModel SearchInputMock(int num)  // вынести в отдельный класс
-        {
-            return num switch
-            {
-                1 => new SearchParametersInputModel()
-                {
-                    FirstNameSearchMode = 1, //перекинуть на enum searchmode
-                    FirstName = "Alena"
-
-
-                },
-                2 => new SearchParametersInputModel()
-                {
-                    PhoneSearchMode = 3,
-                    Phone = "+793244"
-
-                },
-                3 => new SearchParametersInputModel()
-                {
-                    LoginSearchMode = 2,
-                    Login = "Galich"
-
-                },
-                4 => new SearchParametersInputModel()
-                {
-                    BirthDateBegin = "01.01.1969",
-                    BirthDateEnd = "11.01.1970"
-
-                },
-                _ => new SearchParametersInputModel(),// добавить поиск по лида по аккаунту
-            };
-        }
+       
         
     }
 

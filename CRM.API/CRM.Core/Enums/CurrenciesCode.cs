@@ -14,4 +14,11 @@
         Euro,
         Yen
     }
+
+    public enum SearchMode
+    {
+        ExactValue = 1,
+        ContainsValue,
+        StartWithValue
+    }
 }

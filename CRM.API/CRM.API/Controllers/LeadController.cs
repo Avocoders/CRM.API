@@ -197,6 +197,7 @@ namespace CRM.API.Controllers
         [HttpPost("account")]
         public ActionResult<LeadWithAccountsOutputModel> AddAccount(AccountInputModel account)  
         {
+            if (account.CurrencyId == null) return BadRequest("Choose currency");
             DataWrapper<LeadDto> dataWrapper = _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));
             return MakeResponse(dataWrapper, _mapper.Map<LeadWithAccountsOutputModel>);
         }

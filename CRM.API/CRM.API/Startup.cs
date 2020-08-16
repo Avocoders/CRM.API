@@ -54,7 +54,7 @@ namespace CRM.API
             services.AddControllers();
             ConfigureDependencies(services);
             services.Configure<DatabaseOptions>(Configuration);
-            services.Configure<UrlOptions>(Configuration);
+            services.Configure<APIOptions>(Configuration);
 
             services.AddSwaggerGen(c =>
             {
