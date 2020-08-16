@@ -13,6 +13,114 @@ namespace CRM.NUnitTest
             {
                 1 => new LeadWithAccountsOutputModel()
                 {
+                    Id = 3,
+                    FirstName = "Alena",
+                    LastName = "Nuratova",
+                    BirthDate = "01.01.1970",
+                    Accounts = new List<AccountOutputModel>()
+                    {
+                        new AccountOutputModel()
+                        {
+                            Id = 1,
+                            IsDeleted = false,
+                            CurrencyCode = "RUB",
+                            CurrencyName = "RussiaRubble"
+                        },
+                    },
+                    IsDeleted = false
+                },
+                2 => new LeadWithAccountsOutputModel()
+                {
+                    Id = 3,
+                    FirstName = "Alena",
+                    LastName = "Nuratova",
+                    BirthDate = "01.01.1970",
+                    Accounts = new List<AccountOutputModel>()
+                    {
+                        new AccountOutputModel()
+                        {
+                            Id = 2,
+                            IsDeleted = false,
+                            CurrencyCode = "USD",
+                            CurrencyName = "USDollar"
+                        },
+                    },
+                    IsDeleted = false
+                },
+                3 => new LeadWithAccountsOutputModel()
+                {
+                    Id = 3,
+                    FirstName = "Alena",
+                    LastName = "Nuratova",
+                    BirthDate = "01.01.1970",
+                    Accounts = new List<AccountOutputModel>()
+                    {
+                        new AccountOutputModel()
+                        {
+                            Id = 2,
+                            IsDeleted = false,
+                            CurrencyCode = "USD",
+                            CurrencyName = "USDollar"
+                        },
+                    },
+                    IsDeleted = false
+                },
+                4 => new LeadWithAccountsOutputModel()
+                {
+                    Id = 3,
+                    FirstName = "Pavel",
+                    LastName = "Muratov",
+                    BirthDate = "01.08.1995",
+                    Accounts = new List<AccountOutputModel>()
+                    {
+                        new AccountOutputModel()
+                        {
+                            Id = 4,
+                            IsDeleted = false,
+                            CurrencyCode = "USD",
+                            CurrencyName = "USDollar"
+                        },
+                    },
+                    IsDeleted = false
+                },
+                5 => new LeadWithAccountsOutputModel()
+                {
+                    Id = 3,
+                    FirstName = "Pavel",
+                    LastName = "Muratov",
+                    BirthDate = "01.08.1995",
+                    Accounts = new List<AccountOutputModel>()
+                    {
+                        new AccountOutputModel()
+                        {
+                            Id = 4,
+                            IsDeleted = false,
+                            CurrencyCode = "EUR",
+                            CurrencyName = "Euro"
+                        },
+                    },
+                    IsDeleted = false
+                },
+                6 => new LeadWithAccountsOutputModel()
+                {
+                    Id = 11,
+                    FirstName = "Elena",
+                    LastName = "Galich",
+                    BirthDate = "11.04.1980",
+                    Accounts = new List<AccountOutputModel>()
+                    {
+                        new AccountOutputModel()
+                        {
+                            Id = 6,
+                            IsDeleted = false,
+                            CurrencyCode = "EUR",
+                            CurrencyName = "Euro"
+                        },
+                    },
+                    IsDeleted = false
+                },
+                18 => new LeadWithAccountsOutputModel()
+                {
                     Id = 10,
                     FirstName = "Oksi",
                     LastName = "Miron",
@@ -29,7 +137,7 @@ namespace CRM.NUnitTest
                     },
                     IsDeleted = false
                 },
-                2 => new LeadWithAccountsOutputModel()
+                19 => new LeadWithAccountsOutputModel()
                 {
                     Id = 2,
                     FirstName = "Pavel",
@@ -47,7 +155,7 @@ namespace CRM.NUnitTest
                     },
                     IsDeleted = false
                 },
-                3 => new LeadWithAccountsOutputModel()
+                20 => new LeadWithAccountsOutputModel()
                 {
                     Id = 5,
                     FirstName = "Sergei",
@@ -65,7 +173,7 @@ namespace CRM.NUnitTest
                     },
                     IsDeleted = false
                 },
-                4 => new LeadWithAccountsOutputModel()
+                21 => new LeadWithAccountsOutputModel()
                 {
                     Id = 1,
                     FirstName = "Alena",
@@ -83,7 +191,7 @@ namespace CRM.NUnitTest
                     },
                     IsDeleted = false
                 },
-                5 => new LeadWithAccountsOutputModel()
+                22 => new LeadWithAccountsOutputModel()
                 {
                     Id = 6,
                     FirstName = "Daria",
@@ -101,7 +209,7 @@ namespace CRM.NUnitTest
                     },
                     IsDeleted = false
                 },
-                6 => "Choose currency",
+                23 => "Choose currency",
                 _ => -1,
             };
         }
@@ -170,7 +278,7 @@ namespace CRM.NUnitTest
             };
         }
 
-        public LeadWithAccountsOutputModel GetAccountByLeadOfLeadMock(int num)
+        public LeadWithAccountsOutputModel GetListOfAccountOutputModelsMock(int num)
         {
             switch (num)
             {

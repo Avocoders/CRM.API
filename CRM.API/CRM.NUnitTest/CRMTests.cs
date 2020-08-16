@@ -51,12 +51,12 @@ namespace CRM.NUnitTest
         }
 
 
-        [TestCase(1)]
-        [TestCase(2)]
-        [TestCase(3)]
-        [TestCase(4)]
-        [TestCase(5)]
-        [TestCase(6)]             
+        [TestCase(18)]
+        [TestCase(19)]
+        [TestCase(20)]
+        [TestCase(21)]
+        [TestCase(22)]
+        [TestCase(23)]             
         public async Task AddAccountTest(int num)    //done   (перестал работать, контроллер выводит лажу)
         {
             var outputData = new OutputDataMocksForAccounts();
@@ -64,7 +64,7 @@ namespace CRM.NUnitTest
             var inputData = new InputDataMocksForAccounts();
             var inputmodel = inputData.GetAccountInputModelMock(num);
             var jsonContent = new StringContent(JsonConvert.SerializeObject(inputmodel), Encoding.UTF8, "application/json");
-            var response = await _client.PostAsync(_crmUrl + EndpointUrl.additionAccountUrl, jsonContent);
+            var response = await _client.PostAsync(_crmUrl + EndpointUrl.accountUrl, jsonContent);
             var result = await response.Content.ReadAsStringAsync();
             if (num < 6)
             {
@@ -91,7 +91,7 @@ namespace CRM.NUnitTest
             var inputData = new InputDataMocksForLeads();
             var inputmodel = inputData.GetLeadInputModelMock(num);
             var jsonContent = new StringContent(JsonConvert.SerializeObject(inputmodel), Encoding.UTF8, "application/json");
-            var response = await _client.PostAsync(_crmUrl + EndpointUrl.leadController, jsonContent);
+            var response = await _client.PostAsync(_crmUrl + EndpointUrl.leadUrl, jsonContent);
             var result = await response.Content.ReadAsStringAsync();
             if (num < 4)
             {
@@ -200,7 +200,7 @@ namespace CRM.NUnitTest
         [TestCase(20)]        
         public async Task DeleteLeadByIdTest(int num)   //done
         {
-            var response = await _client.DeleteAsync(_crmUrl + EndpointUrl.leadController + $"{num}");            
+            var response = await _client.DeleteAsync(_crmUrl + EndpointUrl.leadUrl + $"{num}");            
             var actual = await response.Content.ReadAsStringAsync();
             if (num != 20)
                 Assert.AreEqual("Successfully deleted", actual);
@@ -220,7 +220,7 @@ namespace CRM.NUnitTest
             var inputModelMock = new InputDataMocksForLeads();
             var inputmodel = inputModelMock.SearchInputMock(num);
             var jsonContent = new StringContent(JsonConvert.SerializeObject(inputmodel), Encoding.UTF8, "application/json");
-            var response = await _client.PostAsync(_crmUrl + EndpointUrl.searchLeads, jsonContent);              
+            var response = await _client.PostAsync(_crmUrl + EndpointUrl.searchLeadsUrl, jsonContent);              
             var actual = JsonConvert.DeserializeObject<List<LeadOutputModel>>(await response.Content.ReadAsStringAsync());
             var outputModelMock = new OutputDataMocksForLeads();
             var expected = outputModelMock.GetListOfLeadOutputModelsMockById(num);
@@ -239,10 +239,42 @@ namespace CRM.NUnitTest
         [TestCase(3)]
         [TestCase(4)]
         [TestCase(5)]
+        [TestCase(6)]
+        public async Task GetAccountByIdTest(int num)  //done (контроллер выводит неправильные ID Lead-а)
+        {
+            var response = await _client.GetStringAsync(_crmUrl + EndpointUrl.accountUrl + $"{num}");
+            var actual = JsonConvert.DeserializeObject<LeadWithAccountsOutputModel>(response);
+            var outputMock = new OutputDataMocksForAccounts();
+            var expected = outputMock.GetAccountOutputModelMockById(num);
+            Assert.AreEqual(expected, actual);
+        }
+
+
+        [TestCase(1)]
+        [TestCase(3)]
+        [TestCase(4)]
+        [TestCase(78)]
+        [TestCase(4)]
+        [TestCase(78)]
+        public async Task GetAccountsByLeadIdTest(int num)  //done (ждет переделки контроллера)
+        {
+            var response = await _client.GetStringAsync(LocalHost.localHostCrm + $"lead/{num}/accounts");
+            var actual = JsonConvert.DeserializeObject<LeadWithAccountsOutputModel>(response);
+            var outputMock = new OutputDataMocksForAccounts();
+            var expected = outputMock.GetListOfAccountOutputModelsMock(num);
+            Assert.AreEqual(expected, actual);
+        }
+
+
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(3)]
+        [TestCase(4)]
+        [TestCase(5)]
         [TestCase(6)]        
         public async Task GetLeadByIdTest(int num)
         {
-            string response = await _client.GetStringAsync(_crmUrl + EndpointUrl.leadController + $"{num}");  
+            string response = await _client.GetStringAsync(_crmUrl + EndpointUrl.leadUrl + $"{num}");  
             var actual = JsonConvert.DeserializeObject<LeadOutputModel>(response);
             OutputDataMocksForLeads test = new OutputDataMocksForLeads();
             LeadOutputModel expected = test.GetLeadOutputModelMockById(num);
@@ -271,33 +303,9 @@ namespace CRM.NUnitTest
             string expected = result.GetEmailByLeadId(num);
             Assert.AreEqual(expected, actual);
         }
-        [TestCase(1)]
-        [TestCase(3)]
-        [TestCase(4)]
-        [TestCase(78)]
+        
 
-        public async Task GetAccountByIdTest(int num) 
-        {
-            string result = await _client.GetStringAsync(LocalHost.localHostCrm + $"lead/account/{num}");
-            var actual = JsonConvert.DeserializeObject<LeadWithAccountsOutputModel>(result);
-            var mockGetter = new OutputDataMocksForAccounts();
-            var expected = mockGetter.GetAccountOutputModelMockById(num);
-            Assert.AreEqual(expected, actual);
-        }
-
-        [TestCase(1)]
-        [TestCase(3)]
-        [TestCase(4)]
-        [TestCase(78)]
-
-        public async Task GetAccountByLeadIdTest(int num) 
-        {
-            string result = await _client.GetStringAsync(LocalHost.localHostCrm + $"lead/{num}/accounts");
-            var actual = JsonConvert.DeserializeObject<LeadWithAccountsOutputModel>(result);
-            var accountMocksGetter = new OutputDataMocksForAccounts();
-            var expected = accountMocksGetter.GetAccountByLeadOfLeadMock(num);
-            Assert.AreEqual(expected, actual);
-        }
+       
 
         
 

@@ -8,47 +8,35 @@ namespace CRM.NUnitTest
         {
             return num switch
             {
-                1 => new AccountInputModel()
+                18 => new AccountInputModel()
                 {
-
                     LeadId = 10,
                     CurrencyId = 2
-
                 },
-                2 => new AccountInputModel()
+                19 => new AccountInputModel()
                 {
-
                     LeadId = 2,
                     CurrencyId = 4
-
                 },
-                3 => new AccountInputModel()
+                20 => new AccountInputModel()
                 {
-
                     LeadId = 5,
                     CurrencyId = 1
-
                 },
-                4 => new AccountInputModel()
+                21 => new AccountInputModel()
                 {
-
                     LeadId = 1,
                     CurrencyId = 3
-
                 },
-                5 => new AccountInputModel()
+                22 => new AccountInputModel()
                 {
-
                     LeadId = 6,
                     CurrencyId = 2
-
                 },
-                6 => new AccountInputModel()
+                23 => new AccountInputModel()
                 {
-
                     LeadId = 4,
                     CurrencyId = null
-
                 },                
                 _ => new AccountInputModel(),
             };
