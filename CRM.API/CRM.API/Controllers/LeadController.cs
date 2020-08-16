@@ -192,22 +192,21 @@ namespace CRM.API.Controllers
             return MakeResponse(dataWrapper, _mapper.Map<List<AccountOutputModel>>);
         }
 
-
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpPost("account")]
-        public ActionResult<LeadWithAccountsOutputModel> AddAccount(AccountInputModel account)
+        public ActionResult<AccountWithLeadOutputModel> AddAccount(AccountInputModel account)
         {
-            DataWrapper<LeadDto> dataWrapper = _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));
-            return MakeResponse(dataWrapper, _mapper.Map<LeadWithAccountsOutputModel>);
+            DataWrapper<AccountVsLeadDTO> dataWrapper = _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));
+            return MakeResponse(dataWrapper, _mapper.Map<AccountWithLeadOutputModel>);
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpPut("account")]
-        public ActionResult<LeadWithAccountsOutputModel> UpdateAccount(AccountInputModel account)
+        public ActionResult<AccountWithLeadOutputModel> UpdateAccount(AccountInputModel account)
         {
 
-            DataWrapper<LeadDto> dataWrapper = _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));
-            return MakeResponse(dataWrapper, _mapper.Map<LeadWithAccountsOutputModel>);
+            DataWrapper<AccountVsLeadDTO> dataWrapper = _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));
+            return MakeResponse(dataWrapper, _mapper.Map<AccountWithLeadOutputModel>);
         }
 
 

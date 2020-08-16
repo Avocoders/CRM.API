@@ -6,7 +6,8 @@ namespace CRM.Data.DTO
 {
     public class AccountVsLeadDTO
     {
-        public long? Id { get; set; }
+        public long? AccountId { get; set; }
+        public long Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Patronymic { get; set; }

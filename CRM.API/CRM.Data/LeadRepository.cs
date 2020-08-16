@@ -106,29 +106,17 @@ namespace CRM.Data
             return result;
         }
 
-        public DataWrapper<LeadDto> AddOrUpdateAccount(AccountDto accountDto)
+        public DataWrapper<AccountVsLeadDTO> AddOrUpdateAccount(AccountDto accountDto)
         {
-            var result = new DataWrapper<LeadDto>();
+            var result = new DataWrapper<AccountVsLeadDTO>();
             try
             {
-                result.Data = _connection.Query<LeadDto,AccountDto,LeadDto>( 
-                    "Account_Add_Or_Update ",
-                     (lead, account) =>
-                     {
-                         LeadDto leadEntry;
-                         leadEntry = lead;
-                         leadEntry.Accounts = new List<AccountDto>();
-                         leadEntry.Accounts.Add(account);
-                         return leadEntry;
-                     },
-
-                       new
-                       {
-                           accountDto.Id,
-                           accountDto.LeadId,
-                           accountDto.CurrencyId
-                       }, splitOn: "Id", commandType: CommandType.StoredProcedure).FirstOrDefault();
-            
+                result.Data = _connection.Query<AccountVsLeadDTO>("Account_Add_Or_Update",  new 
+                       { 
+                           accountDto.Id, 
+                           accountDto.LeadId, 
+                           accountDto.CurrencyId 
+                       }, commandType: CommandType.StoredProcedure).FirstOrDefault();           
                 result.IsOk = true;
             }
             catch (Exception e)
