@@ -17,11 +17,6 @@ namespace CRM.API.Configuration
                  .ForPath(dest => dest.CurrencyCode, o => o.MapFrom(src => Enum.GetName(typeof(CurrenciesCode), src.CurrencyId)))
                  .ForPath(dest => dest.CurrencyName, o => o.MapFrom(src => Enum.GetName(typeof(CurrenciesName), src.CurrencyId)));
 
-            CreateMap<LeadDto, LeadWithAccountsOutputModel>()
-                  .ForPath(dest => dest.BirthDate, o => o.MapFrom(src => src.BirthDate.ToString("dd.MM.yyyy")))
-                  .ForPath(dest => dest.Accounts, o => o.MapFrom(src => src.Accounts));
-                
-
             CreateMap<LeadInputModel, LeadDto>()
                  .ForPath(dest => dest.City.Id, o => o.MapFrom(src => src.CityId))
                  .ForPath(dest => dest.BirthDate, o => o.MapFrom(src => DateTime.ParseExact(src.BirthDate, "dd.MM.yyyy", CultureInfo.InvariantCulture)));                  
@@ -41,7 +36,11 @@ namespace CRM.API.Configuration
                  .ForPath(dest => dest.BirthDateBegin, o => o.MapFrom(src => DateTime.ParseExact(src.BirthDateBegin, "dd.MM.yyyy", CultureInfo.InvariantCulture)));
 
             CreateMap<AccountInputModel, AccountDto>();
-              
+
+            CreateMap<AccountVsLeadDTO, AccountWithLeadOutputModel>()
+                 .ForMember(dest => dest.BirthDate, o => o.MapFrom(src => src.BirthDate.ToString("dd.MM.yyyy")))
+                 .ForMember(dest => dest.CurrencyCode, o => o.MapFrom(src => Enum.GetName(typeof(CurrenciesCode), src.CurrencyId)))
+                 .ForMember(dest => dest.CurrencyName, o => o.MapFrom(src => Enum.GetName(typeof(CurrenciesName), src.CurrencyId)));
         }
     }
 }

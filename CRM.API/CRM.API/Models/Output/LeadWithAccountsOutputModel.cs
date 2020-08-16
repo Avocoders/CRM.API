@@ -5,14 +5,17 @@ namespace CRM.API.Models.Output
 {
     public class LeadWithAccountsOutputModel   
     {
-        public long Id { get; set; }        
+        public long? Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-       
+        public string Patronymic { get; set; }
+        public string Phone { get; set; }
+        public string Address { get; set; }
         public string BirthDate { get; set; }
-       
+        public string City { get; set; }
         public List<AccountOutputModel> Accounts { get; set; }
         public bool IsDeleted { get; set; }
+
 
         public override bool Equals(object obj)
         {
