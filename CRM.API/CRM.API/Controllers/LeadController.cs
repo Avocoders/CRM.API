@@ -194,25 +194,18 @@ namespace CRM.API.Controllers
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpPost("account")]
-<<<<<<< HEAD
-        public ActionResult<LeadWithAccountsOutputModel> AddAccount(AccountInputModel account)  
-        {
-            if (account.CurrencyId == null) return BadRequest("Choose currency");
-            DataWrapper<LeadDto> dataWrapper = _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));
-            return MakeResponse(dataWrapper, _mapper.Map<LeadWithAccountsOutputModel>);
-=======
+
         public ActionResult<AccountWithLeadOutputModel> AddAccount(AccountInputModel account)
         {
+            if (account.CurrencyId == null) return BadRequest("Choose currency");
             DataWrapper<AccountVsLeadDTO> dataWrapper = _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));
             return MakeResponse(dataWrapper, _mapper.Map<AccountWithLeadOutputModel>);
->>>>>>> Accountcontrollers
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpPut("account")]
         public ActionResult<AccountWithLeadOutputModel> UpdateAccount(AccountInputModel account)
         {
-
             DataWrapper<AccountVsLeadDTO> dataWrapper = _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));
             return MakeResponse(dataWrapper, _mapper.Map<AccountWithLeadOutputModel>);
         }
