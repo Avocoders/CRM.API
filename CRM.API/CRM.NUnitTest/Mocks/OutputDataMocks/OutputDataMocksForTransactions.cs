@@ -18,7 +18,6 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
                 _ => -1,
             };
         }
-
         public dynamic GetIdsTransferMock(int num)  
         {
             return num switch
@@ -28,10 +27,10 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
                 3 => new List<int>() { 8, 9 },
                 4 => "The account of receiver is not found",
                 5 => "The amount is missing",
-                6 => "",               //"Not enough money"   должно быть   
+                6 => "",               
                 _ => new List<int>(),
             };
-        }                                                //когда у Акк нет денег, он не выводит badRequest, выводит либо "0", либо ""
+        }                                              
 
         public dynamic GetIdWithdrawMock(int num)   
         {
@@ -41,7 +40,7 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
                 2 => 11,
                 3 => 12,
                 4 => "The amount is missing",
-                5 => "0",          //"Not enough money"    должно быть
+                5 => "0",         
                 6 => "The account is not found",
                 _ => -1,
             };
@@ -56,7 +55,7 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
                 3 => 324500.0000M,
                 4 => 3616.4123M,
                 5 => 422.2117M,
-                256 => 0,   //"Account was not found" должно быть
+                256 => 0,  
                 _ => -1,
             };
         }

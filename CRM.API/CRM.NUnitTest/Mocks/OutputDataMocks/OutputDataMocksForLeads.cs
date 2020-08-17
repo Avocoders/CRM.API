@@ -36,7 +36,7 @@ namespace CRM.NUnitTest
                 {
                     Id = 2,
                     FirstName = "Pavel",
-                    LastName = "Pavel",
+                    LastName = "Muratov",
                     Login = "PashkaNurashka7639",
                     Phone = "+79322222222",
                     City = "Moscow",

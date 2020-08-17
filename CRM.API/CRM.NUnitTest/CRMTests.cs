@@ -46,14 +46,13 @@ namespace CRM.NUnitTest
             _connection.Execute(Queries.fillTestBase);
         }
 
-
         [TestCase(18)]
         [TestCase(19)]
         [TestCase(20)]
         [TestCase(21)]
         [TestCase(22)]
         [TestCase(23)]
-        public async Task AddAccountTest(int num)   //  (перестал работать, контроллер выводит лажу)
+        public async Task AddAccountTest(int num)
         {
             var outputData = new OutputDataMocksForAccounts();
             var expected = outputData.GetAccountOutputModelMockById(num);
@@ -62,7 +61,6 @@ namespace CRM.NUnitTest
             var jsonContent = new StringContent(JsonConvert.SerializeObject(inputmodel), Encoding.UTF8, "application/json");
             var response = await _client.PostAsync(_crmUrl + EndpointUrl.accountUrl, jsonContent);
             var result = await response.Content.ReadAsStringAsync();
-
             if (num < 23)
             {
                 var actual = JsonConvert.DeserializeObject<LeadWithAccountsOutputModel>(result);
@@ -70,11 +68,9 @@ namespace CRM.NUnitTest
             }
             else
             {
-
                 Assert.AreEqual(expected, result);
             }
         }
-
 
         [TestCase(11)]
         [TestCase(12)]
@@ -108,14 +104,13 @@ namespace CRM.NUnitTest
             }
         }
 
-
         [TestCase(1)]
         [TestCase(2)]
         [TestCase(3)]
         [TestCase(4)]
         [TestCase(5)]
         [TestCase(6)]
-        public async Task CreateDepositTest(int num)       //сделала, но хз, как будем удалять их из базы
+        public async Task CreateDepositTest(int num) 
         {
             var outputData = new OutputDataMocksForTransactions();
             var expected = outputData.GetIdDepositMock(num);
@@ -135,14 +130,13 @@ namespace CRM.NUnitTest
             }
         }
 
-
         [TestCase(1)]
         [TestCase(2)]
         [TestCase(3)]
         [TestCase(4)]
         [TestCase(5)]
         [TestCase(6)]
-        public async Task CreateTransferTest(int num)         //сделала, но хз, как будем удалять их из базы
+        public async Task CreateTransferTest(int num) 
         {
             var outputData = new OutputDataMocksForTransactions();
             var expected = outputData.GetIdsTransferMock(num);
@@ -162,14 +156,13 @@ namespace CRM.NUnitTest
             }
         }
 
-
         [TestCase(1)]
         [TestCase(2)]
         [TestCase(3)]
         [TestCase(4)]
         [TestCase(5)]
         [TestCase(6)]
-        public async Task CreateWithdrawTest(int num)               //сделала, но хз, как будем удалять их из базы
+        public async Task CreateWithdrawTest(int num) 
         {
             var outputData = new OutputDataMocksForTransactions();
             var expected = outputData.GetIdWithdrawMock(num);
@@ -195,7 +188,7 @@ namespace CRM.NUnitTest
         [TestCase(4)]
         [TestCase(5)]
         [TestCase(6)]
-        public async Task FindLeadsBySearchParametersTest(int num)      // (�� ��������� ������� ������(����������� ����)) 
+        public async Task FindLeadsBySearchParametersTest(int num) 
         {
             var inputData = new InputDataMocksForLeads();
             var inputmodel = inputData.SearchInputMock(num);
@@ -213,7 +206,6 @@ namespace CRM.NUnitTest
            
         }
 
-
         [TestCase(1)]
         [TestCase(2)]
         [TestCase(3)]
@@ -229,7 +221,6 @@ namespace CRM.NUnitTest
             Assert.AreEqual(expected, actual);
         }
 
-
         [TestCase(1)]
         [TestCase(3)]
         [TestCase(70)]
@@ -241,7 +232,6 @@ namespace CRM.NUnitTest
             var expected = outputData.GetListOfAccountOutputModelsMock(num);
             Assert.AreEqual(expected, actual);
         }
-
 
         [TestCase(1)]
         [TestCase(2)]
@@ -257,7 +247,6 @@ namespace CRM.NUnitTest
             var actual = JsonConvert.DeserializeObject<decimal>(response);
             Assert.AreEqual(expected, actual);
         }
-
 
         [TestCase(1)]
         [TestCase(2)]
@@ -278,7 +267,6 @@ namespace CRM.NUnitTest
             Assert.AreEqual(expected.BirthDate, actual.BirthDate);
             Assert.AreEqual(expected.Phone, actual.Phone);
             Assert.AreEqual(expected.City, actual.City);
-            Assert.AreEqual(expected.Accounts.Count, actual.Accounts.Count);
         }
 
 
@@ -286,23 +274,17 @@ namespace CRM.NUnitTest
         [TestCase(2)]
         [TestCase(4)]
         [TestCase(8)]
-        //[TestCase(13)] 
-        //[TestCase(0)] 
         public async Task GetTransactionByIdTest(int num)
         {
             var outputData = new OutputDataMocksForTransactions();
             var expected = outputData.GetTransactionMockById(num);
             var response = await _client.GetStringAsync(_crmUrl + EndpointUrl.transactionUrl + $"{num}");
             if (num > 0)
-            {                                                    //���� � ����������� �������� ���� �� ������ ������ 
+            {                                                  
                 var actual = JsonConvert.DeserializeObject<List<TransactionOutputModel>>(response);
                 Assert.AreEqual(expected.AccountId, actual[0].AccountId);
                 Assert.AreEqual(expected.Type, actual[0].Type);
                 Assert.AreEqual(expected.Amount, actual[0].Amount);
-            }
-            else
-            {
-                //Assert.AreEqual(expected, response);   �� ����� ���������� ��������� ������ 
             }
         }
 
@@ -310,7 +292,6 @@ namespace CRM.NUnitTest
         [TestCase(1)]
         [TestCase(2)]
         [TestCase(3)]
-        //[TestCase(0)] 
         [TestCase(6)]
         [TestCase(4)]
         public async Task GetTransactionsByAccountIdTest(int num)
@@ -325,10 +306,6 @@ namespace CRM.NUnitTest
                 Assert.AreEqual(expected[0].Type, actual[0].Type);
                 Assert.AreEqual(expected[0].Amount, actual[0].Amount);
                 Assert.AreEqual(expected.Count, actual.Count);
-            }
-            else
-            {
-                //Assert.AreEqual(expected, response);   �� ����� ���������� ��������� ������ 
             }
         }
         [TestCase(11)]
@@ -347,7 +324,6 @@ namespace CRM.NUnitTest
                 Assert.AreEqual("Lead was not found", actual);
         }
 
-
         [TestCase(7)]
         [TestCase(8)]
         [TestCase(9)]
@@ -365,7 +341,6 @@ namespace CRM.NUnitTest
             var expected = outputData.GetAccountOutputModelMockById(num);
             Assert.AreEqual(expected, actual);
         }
-
 
         [TestCase(2)]
         [TestCase(3)]
@@ -389,7 +364,7 @@ namespace CRM.NUnitTest
         [OneTimeTearDown]
         public void Teardown()
         {
-            //_connection.Execute(Queries.clearTestBase);
+            _connection.Execute(Queries.clearTestBase);
             _server.Dispose();
             _client.Dispose();
         }
