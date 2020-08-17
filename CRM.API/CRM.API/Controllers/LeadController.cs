@@ -27,7 +27,11 @@ namespace CRM.API.Controllers
             _mapper = mapper;
             _repo = repo;
         }
-
+        /// <summary>
+        /// 
+        ///checking the login for compliance and creating it
+        /// </summary>
+        /// <returns></returns>
         private string CreateLogin()
         {
             DataWrapper<int> dataWrapper;
@@ -184,7 +188,12 @@ namespace CRM.API.Controllers
             DataWrapper<AccountVsLeadDTO> dataWrapper = _repo.GetAccountById(Id);
             return MakeResponse(dataWrapper, _mapper.Map<AccountWithLeadOutputModel>);
         }
-
+        /// <summary>
+        /// 
+        ///withdrawing invoices by id lead
+        /// </summary>
+        /// <param name="leadId"></param>
+        /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet("{leadId}/accounts")]
         public ActionResult<List<AccountOutputModel>> GetAccountsByLeadId(long leadId)  //другую outputmodel вставить, просто список акк
@@ -192,17 +201,25 @@ namespace CRM.API.Controllers
             DataWrapper<List<AccountDto>> dataWrapper = _repo.GetAccountByLeadId(leadId);
             return MakeResponse(dataWrapper, _mapper.Map<List<AccountOutputModel>>);
         }
-
+        /// <summary>
+        /// 
+        ///creating an invoice for lead in the required currency
+        /// </summary>
+        /// <param name="account"></param>
+        /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpPost("account")]
-
         public ActionResult<AccountWithLeadOutputModel> AddAccount(AccountInputModel account)
         {
             if (account.CurrencyId == null) return BadRequest("Choose currency");
             DataWrapper<AccountVsLeadDTO> dataWrapper = _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));
             return MakeResponse(dataWrapper, _mapper.Map<AccountWithLeadOutputModel>);
         }
-
+        /// <summary>
+        /// change of account currency
+        /// </summary>
+        /// <param name="account"></param>
+        /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpPut("account")]
         public ActionResult<AccountWithLeadOutputModel> UpdateAccount(AccountInputModel account)
