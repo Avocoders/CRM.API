@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CRM.Data.DTO
 {
-    public class AccountVsLeadDTO
+    public class AccountWithLeadDto
     {
         public long? AccountId { get; set; }
         public long Id { get; set; }

@@ -28,6 +28,12 @@
             </summary>
             <param name="leadId"></param>        
         </member>
+        <member name="M:CRM.API.Controllers.LeadController.UpdatePassword(CRM.API.Models.Input.PasswordInputModel)">
+            <summary>
+            updates password for lead
+            </summary>
+            <param name="passwordModel"></param>       
+        </member>
         <member name="M:CRM.API.Controllers.LeadController.UpdateEmailByLeadId(CRM.API.Models.Input.EmailInputModel)">
             <summary>
             edits lead's email by leadId 

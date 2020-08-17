@@ -22,12 +22,12 @@ namespace CRM.Data
         public LeadRepository()
         { }
 
-        public DataWrapper<AccountVsLeadDTO> GetAccountById(long Id)  
+        public DataWrapper<AccountWithLeadDto> GetAccountById(long Id)  
         { 
-            var result = new DataWrapper<AccountVsLeadDTO>();
+            var result = new DataWrapper<AccountWithLeadDto>();
             try
             {
-                result.Data = _connection.Query<AccountVsLeadDTO>(
+                result.Data = _connection.Query<AccountWithLeadDto>(
                     "Account_GetById",new { Id },                 
                     commandType: CommandType.StoredProcedure).FirstOrDefault();
                 result.IsOk = true;
@@ -106,12 +106,18 @@ namespace CRM.Data
             return result;
         }
 
-        public DataWrapper<AccountVsLeadDTO> AddOrUpdateAccount(AccountDto accountDto)
+        public void UpdatePassword(PasswordDto passwordDto)
         {
-            var result = new DataWrapper<AccountVsLeadDTO>();
+            _connection.Execute("UpdatePassword", new { passwordDto.Id, passwordDto.Password }, 
+                    commandType: CommandType.StoredProcedure);
+        }
+
+        public DataWrapper<AccountWithLeadDto> AddOrUpdateAccount(AccountDto accountDto)
+        {
+            var result = new DataWrapper<AccountWithLeadDto>();
             try
             {
-                result.Data = _connection.Query<AccountVsLeadDTO>("Account_Add_Or_Update",  new 
+                result.Data = _connection.Query<AccountWithLeadDto>("Account_Add_Or_Update",  new 
                        { 
                            accountDto.Id, 
                            accountDto.LeadId, 

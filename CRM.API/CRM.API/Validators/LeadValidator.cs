@@ -41,6 +41,12 @@ namespace CRM.API
             if (string.IsNullOrWhiteSpace(leadModel.BirthDate)) return ("Enter the date of birth");
             return "";
         }
+        
+        public string ValidatePasswordInputModel(PasswordInputModel passwordModel)
+        { 
+            if (!Regex.IsMatch(passwordModel.Password, passwordPattern)) return ("Password have to be between 8 and 20 characters long and contain lowercase, uppercase and number, possible characters: @#$%^&+=*.-_");
+            return "";
+        }
 
         public string ValidateLoginInfo(LeadInputModel leadModel)
         {

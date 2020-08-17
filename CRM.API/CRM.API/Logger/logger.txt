@@ -9,3 +9,9 @@ Application started. Press Ctrl+C to shut down.
 Hosting environment: Testing
 Content root path: C:\Users\Сергей\source\repos\crm-api\CRM.API\CRM.API
 Create new lead with Id: 11
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Testing
+Content root path: C:\Users\Сергей\source\repos\crm-api\CRM.API\CRM.API
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Testing
+Content root path: C:\Users\Сергей\source\repos\crm-api\CRM.API\CRM.API
