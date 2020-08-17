@@ -42,8 +42,8 @@ namespace CRM.API.Controllers
             transactionModel.ReceiverCurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountIdReceiver).Data;            
             var restRequest = new RestRequest("transaction/transfer", Method.POST, DataFormat.Json);
             restRequest.AddJsonBody(transactionModel);
-            restRequest.OnBeforeDeserialization = r => { r.ContentType = "application/json"; }; 
-            return _restClient.Execute<List<long>>(restRequest).Data; 
+            restRequest.OnBeforeDeserialization = r => { r.ContentType = "application/json"; };            
+            return MakeResponse<List<long>>(_restClient, restRequest); ;
         }
 
         /// <summary>
@@ -62,7 +62,13 @@ namespace CRM.API.Controllers
             var restRequest = new RestRequest("transaction/withdraw", Method.POST, DataFormat.Json);
             restRequest.AddJsonBody(transactionModel);
             restRequest.OnBeforeDeserialization = r => { r.ContentType = "application/json"; };
-            return _restClient.Execute<long>(restRequest).Data;
+            var result = MakeResponse<long>(_restClient, restRequest);
+            if (result.Value == 0)
+            {
+                return BadRequest("Not enough money on the account");
+            }
+            return result;
+
         }
 
         /// <summary>
@@ -81,7 +87,7 @@ namespace CRM.API.Controllers
             var restRequest = new RestRequest("transaction/deposit", Method.POST, DataFormat.Json);
             restRequest.AddJsonBody(transactionModel);
             restRequest.OnBeforeDeserialization = r => { r.ContentType = "application/json"; };
-            return _restClient.Execute<long>(restRequest).Data; ;
+            return MakeResponse<long>(_restClient, restRequest);
         }
 
         /// <summary>
@@ -96,7 +102,7 @@ namespace CRM.API.Controllers
         {
             if (accountId <= 0) return BadRequest("Account was not found");            
             var restRequest = new RestRequest($"transaction/by-account-id/{accountId}", Method.GET, DataFormat.Json);
-            return _restClient.Execute<List<TransactionOutputModel>>(restRequest).Data;
+            return MakeResponse<List<TransactionOutputModel>>(_restClient, restRequest);
         }
 
         /// <summary>
@@ -111,8 +117,7 @@ namespace CRM.API.Controllers
         {
             if (id <= 0) return BadRequest("Transaction was not found");            
             var restRequest = new RestRequest($"transaction/{id}", Method.GET, DataFormat.Json);
-            var a = _restClient.Execute<List<TransactionOutputModel>>(restRequest).Data;
-            return a;
+            return MakeResponse<List<TransactionOutputModel>>(_restClient, restRequest); 
         }
 
         /// <summary>
@@ -127,7 +132,7 @@ namespace CRM.API.Controllers
         {
             if (accountId <= 0) return BadRequest("Account was not found");            
             var restRequest = new RestRequest($"transaction/{accountId}/balance", Method.GET, DataFormat.Json);
-            return _restClient.Execute<decimal>(restRequest).Data;
+            return  MakeResponse<decimal>(_restClient, restRequest);
         }
 
 
@@ -136,6 +141,14 @@ namespace CRM.API.Controllers
             try
             {
                 var result = restClient.Execute<T>(restRequest);
+                if (result.Content == "")
+                {
+                   return BadRequest("not connecting to the server");
+                }
+                if (result.Data is null)
+                {
+                    return BadRequest("Not enough money on the account");
+                }
                 return Ok(result.Data); 
             }
 
