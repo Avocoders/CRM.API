@@ -130,20 +130,35 @@ namespace CRM.Data
         {
             _connection.Execute("Lead_Delete", new { id }, commandType: CommandType.StoredProcedure);
         }
-      
+
         public DataWrapper<LeadDto> GetById(long leadId)
         {
+            var leadDictionary = new Dictionary<long, LeadDto>();
             var result = new DataWrapper<LeadDto>();
             try
             {
-                result.Data = _connection.Query<LeadDto>(
+                result.Data = _connection.Query<LeadDto, RoleDto, CityDto, AccountDto, LeadDto>(
                     "Lead_GetById",
+                    (lead, role, city, account) =>
+                    {
+                        LeadDto leadEntry;
+                        if (!leadDictionary.TryGetValue(lead.Id.Value, out leadEntry))
+                        {
+                            leadEntry = lead;
+                            leadEntry.Accounts = new List<AccountDto>();
+                            leadDictionary.Add(leadEntry.Id.Value, leadEntry);
+                            leadEntry.Role = role;
+                            leadEntry.City = city;
+
+                        }
+                        leadEntry.Accounts.Add(account);
+                        return leadEntry;
+                    },
                     new { leadId },
+                    splitOn: "Id",
                     commandType: CommandType.StoredProcedure).FirstOrDefault();
                 result.IsOk = true;
-
-
-                }
+            }
             catch (Exception e)
             {
                 result.ExceptionMessage = e.Message;

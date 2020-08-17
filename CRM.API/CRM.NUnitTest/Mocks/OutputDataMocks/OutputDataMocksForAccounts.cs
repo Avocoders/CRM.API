@@ -7,7 +7,7 @@ namespace CRM.NUnitTest
 {
     public class OutputDataMocksForAccounts
     {
-        public dynamic GetAccountOutputModelMockById(int num)  
+        public dynamic GetAccountOutputModelMockById(int num)
         {
             return num switch
             {
@@ -320,7 +320,7 @@ namespace CRM.NUnitTest
                 23 => "Choose currency",
                 _ => -1,
             };
-        }       
+        }
 
         public List<AccountOutputModel> GetListOfAccountOutputModelsMock(int num)  
         {
@@ -349,6 +349,14 @@ namespace CRM.NUnitTest
                         CurrencyCode = "USD",
                         CurrencyName = "USDollar"
                     },
+                     new AccountOutputModel()
+                     {
+                         Id = 21,
+                         IsDeleted = false,
+                         CurrencyCode = "EUR",
+                         CurrencyName = "Euro"
+                     },
+
                 },
                 3 => new List<AccountOutputModel>()
                 {
@@ -414,6 +422,124 @@ namespace CRM.NUnitTest
                 70 => new List<AccountOutputModel>() { },
                 _ => new List<AccountOutputModel>(),
             };
-        }  
+        }
+
+        public dynamic GetAccountWithLeadOutputModelMockById(int num)
+        {
+
+            return num switch
+            {
+                1 => new AccountWithLeadOutputModel()
+                {
+                    Id = 1,
+                    FirstName = "Alena",
+                    LastName = "Nuratova",
+                    Patronymic = "Nikolaevna",
+                    Phone = "+79261111111",
+                    Address = "Kaliningradskaya, 25, 5",
+                    BirthDate = "01.01.1970",
+                    CityName = "Moscow",
+                    IsDeleted = false,
+                    CurrencyCode = "RUB",
+                    CurrencyName = "RussianRuble",
+                    StateAccount = false                   
+                },
+                2 => new AccountWithLeadOutputModel()
+                {
+                    Id = 1,
+                    FirstName = "Alena",
+                    LastName = "Nuratova",
+                    Patronymic = "Nikolaevna",
+                    Phone = "+79261111111",
+                    Address = "Kaliningradskaya, 25, 5",
+                    BirthDate = "01.01.1970",
+                    CityName = "Moscow",
+                    IsDeleted = false,
+                    CurrencyCode = "USD",
+                    CurrencyName = "USDollar",
+                    StateAccount = false
+
+                },
+                3 => new AccountWithLeadOutputModel()
+                {
+
+                    Id = 1,
+                    FirstName = "Alena",
+                    LastName = "Nuratova",
+                    Patronymic = "Nikolaevna",
+                    Phone = "+79261111111",
+                    Address = "Kaliningradskaya, 25, 5",
+                    BirthDate = "01.01.1970",
+                    CityName = "Moscow",
+                    IsDeleted = false,
+                    CurrencyCode = "USD",
+                    CurrencyName = "USDollar",
+                    StateAccount = false
+                },
+                4 => new AccountWithLeadOutputModel()
+                {
+                    Id = 2,
+                    FirstName = "Pavel",
+                    LastName = "Muratov",
+                    Patronymic = "Nikolaevich",
+                    Phone = "+79322222222",
+                    Address = "Kaliningradskaya, 25, 10",
+                    BirthDate = "01.08.1995",
+                    CityName = "Moscow",
+                    IsDeleted = false,
+                    CurrencyCode = "USD",
+                    CurrencyName = "USDollar",
+                    StateAccount = false
+
+                },
+                5 => new AccountWithLeadOutputModel()
+                {
+
+                    Id = 2,
+                    FirstName = "Pavel",
+                    LastName = "Muratov",
+                    Patronymic = "Nikolaevich",
+                    Phone = "+79322222222",
+                    Address = "Kaliningradskaya, 25, 10",
+                    BirthDate = "01.08.1995",
+                    CityName = "Moscow",
+                    IsDeleted = false,
+                    CurrencyCode = "EUR",
+                    CurrencyName = "Euro",
+                    StateAccount = false
+
+                },
+                6 => new AccountWithLeadOutputModel()
+                {
+                    Id = 3,
+                    FirstName = "Elena",
+                    LastName = "Galich",
+                    Patronymic = "Ivanovna",
+                    Phone = "+79263333333",
+                    Address = "Stroitelei, 13, 78",
+                    BirthDate = "11.04.1980",
+                    CityName = "Saratov",
+                    IsDeleted = false,
+                    CurrencyCode = "EUR",
+                    CurrencyName = "Euro",
+                    StateAccount = false
+                },
+                21 => new AccountWithLeadOutputModel()
+                {
+                    Id = 1,
+                    FirstName = "Alena",
+                    LastName = "Nuratova",
+                    Patronymic = "Nikolaevna",
+                    Phone = "+79261111111",
+                    Address = "Kaliningradskaya, 25, 5",
+                    BirthDate = "01.01.1970",
+                    CityName = "Moscow",
+                    IsDeleted = false,
+                    CurrencyCode = "EUR",
+                    CurrencyName = "Euro",
+                    StateAccount = false
+                },
+            };
+        }
     }
 }
