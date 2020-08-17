@@ -7,7 +7,7 @@ namespace CRM.NUnitTest
 {
     public class OutputDataMocksForAccounts
     {
-        public dynamic GetAccountOutputModelMockById(int num)  
+        public dynamic GetAccountOutputModelMockById(int num)
         {
             return num switch
             {
@@ -320,7 +320,7 @@ namespace CRM.NUnitTest
                 23 => "Choose currency",
                 _ => -1,
             };
-        }       
+        }
 
         public List<AccountOutputModel> GetListOfAccountOutputModelsMock(int num)  
         {
@@ -349,6 +349,14 @@ namespace CRM.NUnitTest
                         CurrencyCode = "USD",
                         CurrencyName = "USDollar"
                     },
+                     new AccountOutputModel()
+                     {
+                         Id = 21,
+                         IsDeleted = false,
+                         CurrencyCode = "EUR",
+                         CurrencyName = "Euro"
+                     },
+
                 },
                 3 => new List<AccountOutputModel>()
                 {
@@ -435,8 +443,7 @@ namespace CRM.NUnitTest
                     IsDeleted = false,
                     CurrencyCode = "RUB",
                     CurrencyName = "RussianRuble",
-                    StateAccount = false
-
+                    StateAccount = false                   
                 },
                 2 => new AccountWithLeadOutputModel()
                 {
@@ -513,6 +520,21 @@ namespace CRM.NUnitTest
                     Address = "Stroitelei, 13, 78",
                     BirthDate = "11.04.1980",
                     CityName = "Saratov",
+                    IsDeleted = false,
+                    CurrencyCode = "EUR",
+                    CurrencyName = "Euro",
+                    StateAccount = false
+                },
+                21 => new AccountWithLeadOutputModel()
+                {
+                    Id = 1,
+                    FirstName = "Alena",
+                    LastName = "Nuratova",
+                    Patronymic = "Nikolaevna",
+                    Phone = "+79261111111",
+                    Address = "Kaliningradskaya, 25, 5",
+                    BirthDate = "01.01.1970",
+                    CityName = "Moscow",
                     IsDeleted = false,
                     CurrencyCode = "EUR",
                     CurrencyName = "Euro",
