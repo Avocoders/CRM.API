@@ -137,7 +137,7 @@ namespace CRM.API.Controllers
             {
                 return BadRequest("not connecting to the server");
             }
-            if (result.Data is null)
+            if (result.Content == "\"Not enough money\"")
             {
                 return BadRequest("Not enough money on the account");
             }
