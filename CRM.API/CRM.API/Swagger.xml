@@ -4,6 +4,13 @@
         <name>CRM.API</name>
     </assembly>
     <members>
+        <member name="M:CRM.API.Controllers.LeadController.CreateLogin">
+             <summary>
+             
+            checking the login for compliance and creating it
+             </summary>
+             <returns></returns>
+        </member>
         <member name="M:CRM.API.Controllers.LeadController.GetLeadById(System.Int64)">
             <summary>
             gets the lead by Id with all information
@@ -45,6 +52,29 @@
             gets the account by Id with all information
             </summary>
             <param name="Id"></param>       
+        </member>
+        <member name="M:CRM.API.Controllers.LeadController.GetAccountsByLeadId(System.Int64)">
+             <summary>
+             
+            withdrawing invoices by id lead
+             </summary>
+             <param name="leadId"></param>
+             <returns></returns>
+        </member>
+        <member name="M:CRM.API.Controllers.LeadController.AddAccount(CRM.API.Models.Input.AccountInputModel)">
+             <summary>
+             
+            creating an invoice for lead in the required currency
+             </summary>
+             <param name="account"></param>
+             <returns></returns>
+        </member>
+        <member name="M:CRM.API.Controllers.LeadController.UpdateAccount(CRM.API.Models.Input.AccountInputModel)">
+            <summary>
+            change of account currency
+            </summary>
+            <param name="account"></param>
+            <returns></returns>
         </member>
         <member name="M:CRM.API.Controllers.TransactionController.CreateTransferTransaction(TransactionStore.API.Models.Input.TransferInputModel)">
             <summary>
