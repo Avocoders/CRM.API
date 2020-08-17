@@ -9,6 +9,7 @@ using RestSharp;
 using Microsoft.Extensions.Options;
 using CRM.Core;
 using System;
+using Microsoft.Extensions.Logging;
 
 namespace CRM.API.Controllers
 {
@@ -18,11 +19,13 @@ namespace CRM.API.Controllers
     {        
         private readonly RestClient _restClient;
         private readonly ILeadRepository _repo;
+        private readonly ILogger _logger;
       
-        public TransactionController(ILeadRepository repo, IOptions<APIOptions> options)
+        public TransactionController(ILeadRepository repo, IOptions<APIOptions> options, ILogger logger)
         {                        
             _repo = repo;            
             _restClient = new RestClient(options.Value.TransactionStoreAPIUrl);
+            _logger = logger;
         }
         
         /// <summary>
@@ -42,7 +45,10 @@ namespace CRM.API.Controllers
             transactionModel.ReceiverCurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountIdReceiver).Data;            
             var restRequest = new RestRequest("transaction/transfer", Method.POST, DataFormat.Json);
             restRequest.AddJsonBody(transactionModel);
-            restRequest.OnBeforeDeserialization = r => { r.ContentType = "application/json"; }; 
+            restRequest.OnBeforeDeserialization = r => { r.ContentType = "application/json"; };
+            string code = Convert.ToString((CurrenciesCode)transactionModel.CurrencyId.Value);
+            _logger.LogInformation($"Create new TransferTransaction from Account {transactionModel.AccountId} to Account {transactionModel.AccountIdReceiver}: " +
+                                   $"{transactionModel.Amount} {code}");
             return _restClient.Execute<List<long>>(restRequest).Data; 
         }
 
@@ -62,6 +68,9 @@ namespace CRM.API.Controllers
             var restRequest = new RestRequest("transaction/withdraw", Method.POST, DataFormat.Json);
             restRequest.AddJsonBody(transactionModel);
             restRequest.OnBeforeDeserialization = r => { r.ContentType = "application/json"; };
+            string code = Convert.ToString((CurrenciesCode)transactionModel.CurrencyId.Value);
+            _logger.LogInformation($"Create new WithdrawTransaction for Account {transactionModel.AccountId}: " +
+                                   $"{transactionModel.Amount} {code}");
             return _restClient.Execute<long>(restRequest).Data;
         }
 
@@ -81,6 +90,9 @@ namespace CRM.API.Controllers
             var restRequest = new RestRequest("transaction/deposit", Method.POST, DataFormat.Json);
             restRequest.AddJsonBody(transactionModel);
             restRequest.OnBeforeDeserialization = r => { r.ContentType = "application/json"; };
+            string code = Convert.ToString((CurrenciesCode)transactionModel.CurrencyId.Value);
+            _logger.LogInformation($"Create new DepositTransaction for Account {transactionModel.AccountId}: " +
+                                   $"{transactionModel.Amount} {code}");
             return _restClient.Execute<long>(restRequest).Data; ;
         }
 

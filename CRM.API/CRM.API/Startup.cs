@@ -17,9 +17,20 @@ using CRM.API.Logger;
 
 namespace CRM.API
 {
+    /// <summary>
+    /// Startup
+    /// </summary>
     public class Startup
     {
-        public IConfiguration Configuration { get; set; }
+        /// <summary>
+        /// Configuration
+        /// </summary>
+        private IConfiguration Configuration { get; set; }
+        
+        /// <summary>
+        /// Startup
+        /// </summary>
+        /// <param name="env"></param>
         public Startup(IWebHostEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -34,6 +45,10 @@ namespace CRM.API
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
+        /// <summary>
+        /// ConfigureServices
+        /// </summary>
+        /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
@@ -111,7 +126,7 @@ namespace CRM.API
             app.Run(async (context) =>
             {
                 logger.LogInformation($"Processing request {context.Request.Path}");
-                await context.Response.WriteAsync("Hello World!");
+                await context.Response.WriteAsync("Message"); // Some message
             });
         }
 

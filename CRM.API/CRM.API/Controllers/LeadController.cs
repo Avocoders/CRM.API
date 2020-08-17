@@ -89,8 +89,8 @@ namespace CRM.API.Controllers
             var leadId = _repo.GetById(leadModel.Id.Value);
             if (leadId == null) return BadRequest("Lead was not found");
             LeadValidator validation = new LeadValidator(_repo);
-            string badRequest = validation.ValidateLeadInputModel(leadModel);
-            if (!string.IsNullOrWhiteSpace(badRequest)) return BadRequest(badRequest);
+            string check = validation.ValidateLeadInputModel(leadModel);
+            if (!string.IsNullOrWhiteSpace(check)) return BadRequest(check);
             leadModel.Password = new PasswordEncryptor().EncryptPassword(leadModel.Password); // нельзя поменять пароль в обычном update, сделать отдельно
             DataWrapper<LeadDto> newDataWrapper = _repo.AddOrUpdateLead(_mapper.Map<LeadDto>(leadModel));
             _logger.LogInformation($"Update lead info with Id: {newDataWrapper.Data.Id}");

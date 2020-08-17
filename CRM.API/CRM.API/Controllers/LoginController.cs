@@ -11,10 +11,18 @@ using CRM.Data;
 
 namespace CRM.API.Controllers
 {
+    /// <summary>
+    /// LoginController
+    /// </summary>
     [Route("[controller]")]
     [ApiController]
     public class LoginController : Controller
     {
+        /// <summary>
+        /// Authorization
+        /// </summary>
+        /// <param name="auth"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult Authorization([FromBody] AuthorizeInputModel auth)
         {
