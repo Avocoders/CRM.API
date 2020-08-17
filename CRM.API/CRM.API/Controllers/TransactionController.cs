@@ -61,14 +61,8 @@ namespace CRM.API.Controllers
             transactionModel.CurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountId).Data;            
             var restRequest = new RestRequest("transaction/withdraw", Method.POST, DataFormat.Json);
             restRequest.AddJsonBody(transactionModel);
-            restRequest.OnBeforeDeserialization = r => { r.ContentType = "application/json"; };
-            var result = MakeResponse<long>(_restClient, restRequest);
-            if (result.Value == 0)
-            {
-                return BadRequest("Not enough money on the account");
-            }
-            return result;
-
+            restRequest.OnBeforeDeserialization = r => { r.ContentType = "application/json"; };          
+            return MakeResponse<long>(_restClient, restRequest);
         }
 
         /// <summary>
@@ -138,25 +132,16 @@ namespace CRM.API.Controllers
 
         private ActionResult<T> MakeResponse<T>(RestClient restClient, RestRequest restRequest)
         {
-            try
+            var result = restClient.Execute<T>(restRequest);
+            if (result.Content == "")
             {
-                var result = restClient.Execute<T>(restRequest);
-                if (result.Content == "")
-                {
-                   return BadRequest("not connecting to the server");
-                }
-                if (result.Data is null)
-                {
-                    return BadRequest("Not enough money on the account");
-                }
-                return Ok(result.Data); 
+                return BadRequest("not connecting to the server");
             }
-
-            catch(Exception e)
+            if (result.Data is null)
             {
-                return BadRequest(e.Message);
-            }                
-            
+                return BadRequest("Not enough money on the account");
+            }
+            return Ok(result.Data);
         }
     }
 }
