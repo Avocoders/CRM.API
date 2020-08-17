@@ -4,6 +4,19 @@
         <name>CRM.API</name>
     </assembly>
     <members>
+        <member name="T:CRM.API.Controllers.LeadController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CRM.API.Controllers.LeadController.#ctor(Microsoft.Extensions.Logging.ILogger{CRM.API.Controllers.LeadController},CRM.Data.ILeadRepository,AutoMapper.IMapper)">
+            <summary>
+            
+            </summary>
+            <param name="logger"></param>
+            <param name="repo"></param>
+            <param name="mapper"></param>
+        </member>
         <member name="M:CRM.API.Controllers.LeadController.GetLeadById(System.Int64)">
             <summary>
             gets the lead by Id with all information
@@ -28,6 +41,12 @@
             </summary>
             <param name="leadId"></param>        
         </member>
+        <member name="M:CRM.API.Controllers.LeadController.UpdatePassword(CRM.API.Models.Input.PasswordInputModel)">
+            <summary>
+            updates password for lead
+            </summary>
+            <param name="passwordModel"></param>       
+        </member>
         <member name="M:CRM.API.Controllers.LeadController.UpdateEmailByLeadId(CRM.API.Models.Input.EmailInputModel)">
             <summary>
             edits lead's email by leadId 
@@ -44,7 +63,40 @@
             <summary>
             gets the account by Id with all information
             </summary>
-            <param name="Id"></param>       
+            <param name="id"></param>       
+        </member>
+        <member name="M:CRM.API.Controllers.LeadController.GetAccountsByLeadId(System.Int64)">
+            <summary>
+            GetAccountsByLeadId
+            </summary>
+            <param name="leadId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CRM.API.Controllers.LeadController.CreateAccount(CRM.API.Models.Input.AccountInputModel)">
+            <summary>
+            CreateAccount
+            </summary>
+            <param name="account"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CRM.API.Controllers.LeadController.UpdateAccount(CRM.API.Models.Input.AccountInputModel)">
+            <summary>
+            Update account
+            </summary>
+            <param name="account"></param>
+            <returns></returns>
+        </member>
+        <member name="T:CRM.API.Controllers.LoginController">
+            <summary>
+            LoginController
+            </summary>
+        </member>
+        <member name="M:CRM.API.Controllers.LoginController.Authorization(CRM.API.Models.Input.AuthorizeInputModel)">
+            <summary>
+            Authorization
+            </summary>
+            <param name="auth"></param>
+            <returns></returns>
         </member>
         <member name="M:CRM.API.Controllers.TransactionController.CreateTransferTransaction(TransactionStore.API.Models.Input.TransferInputModel)">
             <summary>
@@ -87,6 +139,28 @@
             </summary>
             <param name="accountId"></param>
             <returns></returns>
+        </member>
+        <member name="T:CRM.API.Startup">
+            <summary>
+            Startup
+            </summary>
+        </member>
+        <member name="P:CRM.API.Startup.Configuration">
+            <summary>
+            Configuration
+            </summary>
+        </member>
+        <member name="M:CRM.API.Startup.#ctor(Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+            <summary>
+            Startup
+            </summary>
+            <param name="env"></param>
+        </member>
+        <member name="M:CRM.API.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            ConfigureServices
+            </summary>
+            <param name="services"></param>
         </member>
     </members>
 </doc>

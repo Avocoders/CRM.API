@@ -10,12 +10,27 @@ using CRM.API.Configuration;
 using Microsoft.OpenApi.Models;
 using AutoMapper;
 using CRM.Core;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using CRM.API.Logger;
 
 namespace CRM.API
 {
+    /// <summary>
+    /// Startup
+    /// </summary>
     public class Startup
     {
-        public IConfiguration Configuration { get; set; }
+        /// <summary>
+        /// Configuration
+        /// </summary>
+        private IConfiguration Configuration { get; set; }
+        
+        /// <summary>
+        /// Startup
+        /// </summary>
+        /// <param name="env"></param>
         public Startup(IWebHostEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -30,6 +45,10 @@ namespace CRM.API
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
+        /// <summary>
+        /// ConfigureServices
+        /// </summary>
+        /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
@@ -74,7 +93,7 @@ namespace CRM.API
         { }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -99,7 +118,16 @@ namespace CRM.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-            });         
+            });
+
+            loggerFactory.AddFile(Path.Combine(Directory.GetCurrentDirectory(), "Logger/logger.txt"));
+            var logger = loggerFactory.CreateLogger("FileLogger");
+
+            app.Run(async (context) =>
+            {
+                logger.LogInformation($"Processing request {context.Request.Path}");
+                await context.Response.WriteAsync("Message"); // Some message
+            });
         }
 
         public void ConfigureContainer(ContainerBuilder builder)

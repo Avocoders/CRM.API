@@ -61,6 +61,17 @@ create procedure Account_Add_Or_Update
 		else exec Account_GetById @inserted
 	end
 go
+create procedure [dbo].[UpdatePassword]
+@Id			bigint,
+@Password	nvarchar(64)
+       
+as
+begin
+update dbo.[Lead]
+	set [Password]=@Password
+	where ID = @Id and IsDeleted=0
+end;
+go
 create procedure Account_GetByLeadId
 		@leadId bigint
 		as
