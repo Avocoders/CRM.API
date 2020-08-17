@@ -39,7 +39,7 @@ namespace CRM.NUnitTest
             _server = new TestServer(_webHostBuilder);
             var lifetimeScope = _server.Services.GetAutofacRoot();
             _client = _server.CreateClient();
-            var urlOptions = lifetimeScope.Resolve<IOptions<APIOptions>>();
+            var urlOptions = lifetimeScope.Resolve<IOptions<UrlOptions>>();
             _crmUrl = urlOptions.Value.CrmAPIUrl;
             var databaseOptions = lifetimeScope.Resolve<IOptions<DatabaseOptions>>();
             _connection = new SqlConnection(databaseOptions.Value.DBConnectionString);
@@ -61,6 +61,7 @@ namespace CRM.NUnitTest
             var jsonContent = new StringContent(JsonConvert.SerializeObject(inputmodel), Encoding.UTF8, "application/json");
             var response = await _client.PostAsync(_crmUrl + EndpointUrl.accountUrl, jsonContent);
             var result = await response.Content.ReadAsStringAsync();
+            //задать переменную, при которой будет провальный результат = 23
             if (num < 23)
             {
                 var actual = JsonConvert.DeserializeObject<LeadWithAccountsOutputModel>(result);
@@ -68,7 +69,7 @@ namespace CRM.NUnitTest
             }
             else
             {
-                Assert.AreEqual(expected, result);
+                Assert.AreEqual(expected, result);  //проверка статус кода, что не успех             
             }
         }
 
@@ -80,7 +81,7 @@ namespace CRM.NUnitTest
         [TestCase(16)]
         public async Task AddLeadTest(int num)
         {
-            var outputData = new OutputDataMocksForLeads();
+            var outputData = new OutputDataMocksForLeads();    //вынести как поле
             var expected = outputData.GetLeadOutputModelMockById(num);
             var inputData = new InputDataMocksForLeads();
             var inputmodel = inputData.GetLeadInputModelMock(num);
