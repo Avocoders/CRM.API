@@ -19,5 +19,31 @@ namespace CRM.API.Models.Output
         public string CurrencyCode { get; set; }
         public string CurrencyName { get; set; }
         public bool StateAccount { get; set; }
+        public override bool Equals(object obj)
+        {
+            AccountWithLeadOutputModel lom = (AccountWithLeadOutputModel)obj;
+            if (Id.Value == lom.Id.Value &&
+                FirstName == lom.FirstName &&
+                LastName == lom.LastName &&
+                Patronymic == lom.Patronymic &&
+                Phone == lom.Phone &&
+                Address == lom.Address &&
+                BirthDate == lom.BirthDate &&
+                CityName == lom.CityName &&
+                IsDeleted == lom.IsDeleted &&
+                CurrencyCode == lom.CurrencyCode &&
+                CurrencyName == lom.CurrencyName &&
+                StateAccount == lom.StateAccount)
+                return true;
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
     }
+
 }
