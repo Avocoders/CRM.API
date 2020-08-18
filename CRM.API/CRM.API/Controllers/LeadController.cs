@@ -189,12 +189,12 @@ namespace CRM.API.Controllers
         [HttpGet("account/{Id}")]
         public ActionResult<AccountWithLeadOutputModel> GetAccountById(long id) // переделать в OutputModel с AccId, LeadId, CurrId, Balance 
         {
-            DataWrapper<AccountWithLeadDto> dataWrapper = _repo.GetAccountById(id);
+            DataWrapper<AccountDto> dataWrapper = _repo.GetAccountById(Id);
             return MakeResponse(dataWrapper, _mapper.Map<AccountWithLeadOutputModel>);
         }
-
         /// <summary>
-        /// GetAccountsByLeadId
+        /// 
+        ///withdrawing invoices by id lead
         /// </summary>
         /// <param name="leadId"></param>
         /// <returns></returns>
@@ -202,28 +202,26 @@ namespace CRM.API.Controllers
         [HttpGet("{leadId}/accounts")]
         public ActionResult<List<AccountOutputModel>> GetAccountsByLeadId(long leadId)  //другую outputmodel вставить, просто список акк
         {
-            DataWrapper<List<AccountDto>> dataWrapper = _repo.GetAccountByLeadId(leadId);
+            DataWrapper<List<AccountDto>> dataWrapper = _repo.GetAccountsByLeadId(leadId);
             return MakeResponse(dataWrapper, _mapper.Map<List<AccountOutputModel>>);
         }
-
         /// <summary>
-        /// CreateAccount
+        /// 
+        ///creating an invoice for lead in the required currency
         /// </summary>
         /// <param name="account"></param>
         /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpPost("account")]
-
         public ActionResult<AccountWithLeadOutputModel> CreateAccount(AccountInputModel account)
         {
             if (account.CurrencyId == null) return BadRequest("Choose currency");
-            DataWrapper<AccountWithLeadDto> dataWrapper = _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));
+            DataWrapper<AccountDto> dataWrapper = _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));
             _logger.LogInformation($"Create new account with Id: {dataWrapper.Data.AccountId}");
             return MakeResponse(dataWrapper, _mapper.Map<AccountWithLeadOutputModel>);
         }
-
         /// <summary>
-        /// Update account
+        /// change of account currency
         /// </summary>
         /// <param name="account"></param>
         /// <returns></returns>
@@ -231,7 +229,7 @@ namespace CRM.API.Controllers
         [HttpPut("account")]
         public ActionResult<AccountWithLeadOutputModel> UpdateAccount(AccountInputModel account)
         {
-            DataWrapper<AccountWithLeadDto> dataWrapper = _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));
+            DataWrapper<AccountDto> dataWrapper = _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));
             _logger.LogInformation($"Update account with Id: {dataWrapper.Data.AccountId}");
             return MakeResponse(dataWrapper, _mapper.Map<AccountWithLeadOutputModel>);
         }

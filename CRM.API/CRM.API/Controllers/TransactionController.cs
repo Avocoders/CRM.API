@@ -38,9 +38,10 @@ namespace CRM.API.Controllers
         [HttpPost("transfer")]
         public async Task<ActionResult<List<long>>> CreateTransferTransaction([FromBody] TransferInputModel transactionModel)
         {
-            if (_repo.GetAccountById(transactionModel.AccountId).Data is null) return BadRequest("The account is not found");
-            if (_repo.GetAccountById(transactionModel.AccountIdReceiver).Data is null) return BadRequest("The account of receiver is not found");
-            if (transactionModel.Amount <= 0) return BadRequest("The amount is missing");
+            if (_repo.GetAccountById(transactionModel.AccountId).Data is null) return BadRequest("The account is not found");//
+            if (_repo.GetAccountById(transactionModel.AccountIdReceiver).Data is null) return BadRequest("The account of receiver is not found");//
+            if (transactionModel.Amount <= 0) return BadRequest("The amount is missing"); //validatetransactionmodel
+
             transactionModel.CurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountId).Data;
             transactionModel.ReceiverCurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountIdReceiver).Data;            
             var restRequest = new RestRequest("transaction/transfer", Method.POST, DataFormat.Json);
@@ -62,8 +63,8 @@ namespace CRM.API.Controllers
         [HttpPost("withdraw")]
         public async Task<ActionResult<long>> CreateWithdrawTransaction([FromBody] TransactionInputModel transactionModel)
         {
-            if (_repo.GetAccountById(transactionModel.AccountId).Data is null) return BadRequest("The account is not found");
-            if (transactionModel.Amount <= 0) return BadRequest("The amount is missing");
+            if (_repo.GetAccountById(transactionModel.AccountId).Data is null) return BadRequest("The account is not found");//validate
+            if (transactionModel.Amount <= 0) return BadRequest("The amount is missing");//validate
             transactionModel.CurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountId).Data;            
             var restRequest = new RestRequest("transaction/withdraw", Method.POST, DataFormat.Json);
             restRequest.AddJsonBody(transactionModel);
@@ -106,10 +107,10 @@ namespace CRM.API.Controllers
         [HttpGet("by-account-id/{accountId}")]
         public async Task<ActionResult<List<TransactionOutputModel>>> GetTransactionsByAccountId(long accountId)
         {
-            if (accountId <= 0) return BadRequest("Account was not found");            
+           // if (accountId <= 0) return BadRequest("Account was not found");   проверку  аккаунт есть и он не удален      
             var restRequest = new RestRequest($"transaction/by-account-id/{accountId}", Method.GET, DataFormat.Json);
-            return _restClient.Execute<List<TransactionOutputModel>>(restRequest).Data;
-        }
+            var result = _restClient.Execute<List<TransactionOutputModel>>(restRequest);
+            return MakeResponse<List<TransactionOutputModel>>(result);        }
 
         /// <summary>
         /// refers to TransactionStore to get transaction by Id
@@ -121,10 +122,10 @@ namespace CRM.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<List<TransactionOutputModel>>> GetTransactionById(long id)
         {
-            if (id <= 0) return BadRequest("Transaction was not found");            
+           // if (id <= 0) return BadRequest("Transaction was not found");            
             var restRequest = new RestRequest($"transaction/{id}", Method.GET, DataFormat.Json);
-            var a = _restClient.Execute<List<TransactionOutputModel>>(restRequest).Data;
-            return a;
+            var result = _restClient.Execute<List<TransactionOutputModel>>(restRequest);
+            return MakeResponse<List<TransactionOutputModel>>(result);
         }
 
         /// <summary>
@@ -137,25 +138,23 @@ namespace CRM.API.Controllers
         [HttpGet("{accountId}/balance")]
         public async Task<ActionResult<decimal>> GetBalanceByAccountIdInCurrency(long accountId)
         {
-            if (accountId <= 0) return BadRequest("Account was not found");            
+            if (accountId <= 0) return BadRequest("Account was not found");       //переделать как в предыдущем // проверку  аккаунт есть и он не удален    
             var restRequest = new RestRequest($"transaction/{accountId}/balance", Method.GET, DataFormat.Json);
-            return _restClient.Execute<decimal>(restRequest).Data;
+            var result = _restClient.Execute<decimal>(restRequest);
+            return  MakeResponse<decimal>(result);
         }
-
-
-        private ActionResult<T> MakeResponse<T>(RestClient restClient, RestRequest restRequest)
-        {
-            try
+        
+        private ActionResult<T> MakeResponse<T>(IRestResponse<T> result)
+        {           
+            if (result.StatusCode == 0)
             {
-                var result = restClient.Execute<T>(restRequest);
-                return Ok(result.Data); 
+                return Problem(result.ErrorException.InnerException?.Message ?? result.ErrorException.Message, statusCode: 503); 
             }
-
-            catch(Exception e)
+            if ((int)result.StatusCode == 418 )// придумать код согласовано с TS
             {
-                return BadRequest(e.Message);
-            }                
-            
+                return Problem("Not enough money on the account", statusCode: 520); 
+            }
+            return Ok(result.Data);
         }
     }
 }

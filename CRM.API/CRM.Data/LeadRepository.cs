@@ -22,13 +22,22 @@ namespace CRM.Data
         public LeadRepository()
         { }
 
-        public DataWrapper<AccountWithLeadDto> GetAccountById(long Id)  
-        { 
-            var result = new DataWrapper<AccountWithLeadDto>();
+        public DataWrapper<AccountDto> GetAccountById(long Id)  
+        {
+            var result = new DataWrapper<AccountDto>();
             try
             {
-                result.Data = _connection.Query<AccountWithLeadDto>(
-                    "Account_GetById",new { Id },                 
+                result.Data = _connection.Query<AccountDto, LeadDto, CityDto, AccountDto>(
+                    "Account_GetById",
+                    (account, lead, city) =>
+                    {
+                        AccountDto accoutEntry;
+                        accoutEntry = account;
+                        accoutEntry.Lead = lead;
+                        accoutEntry.Lead.City = city;
+                        return accoutEntry;
+                    },
+                    new {Id}, splitOn: "Id",
                     commandType: CommandType.StoredProcedure).FirstOrDefault();
                 result.IsOk = true;
             }
@@ -40,7 +49,7 @@ namespace CRM.Data
         }
 
 
-        public DataWrapper <List<AccountDto>> GetAccountByLeadId(long leadId)  
+        public DataWrapper <List<AccountDto>> GetAccountsByLeadId(long leadId)  
         {
             var result = new DataWrapper <List<AccountDto>>();
             try
@@ -106,23 +115,30 @@ namespace CRM.Data
             return result;
         }
 
+        public DataWrapper<AccountDto> AddOrUpdateAccount(AccountDto accountDto)
         public void UpdatePassword(PasswordDto passwordDto)
         {
+            var result = new DataWrapper<AccountDto>();
             _connection.Execute("UpdatePassword", new { passwordDto.Id, passwordDto.Password }, 
                     commandType: CommandType.StoredProcedure);
         }
-
-        public DataWrapper<AccountWithLeadDto> AddOrUpdateAccount(AccountDto accountDto)
-        {
-            var result = new DataWrapper<AccountWithLeadDto>();
             try
             {
-                result.Data = _connection.Query<AccountWithLeadDto>("Account_Add_Or_Update",  new 
+                result.Data = _connection.Query<AccountDto, LeadDto, CityDto, AccountDto>("Account_Add_Or_Update",
+                    (account, lead, city) =>
+                    {
+                        AccountDto accoutEntry;
+                        accoutEntry = account;
+                        accoutEntry.Lead = lead;
+                        accoutEntry.Lead.City = city;
+                        return accoutEntry;
+                    },
+                    new 
                        { 
                            accountDto.Id, 
                            accountDto.LeadId, 
                            accountDto.CurrencyId 
-                       }, commandType: CommandType.StoredProcedure).FirstOrDefault();           
+                       }, splitOn: "Id", commandType: CommandType.StoredProcedure).FirstOrDefault();           
                 result.IsOk = true;
             }
             catch (Exception e)
