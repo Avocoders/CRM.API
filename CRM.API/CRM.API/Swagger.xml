@@ -9,13 +9,14 @@
             
             </summary>
         </member>
-        <member name="M:CRM.API.Controllers.LeadController.#ctor(Microsoft.Extensions.Logging.ILogger{CRM.API.Controllers.LeadController},CRM.Data.ILeadRepository,AutoMapper.IMapper)">
+        <member name="M:CRM.API.Controllers.LeadController.#ctor(Microsoft.Extensions.Logging.ILogger{CRM.API.Controllers.LeadController},CRM.Data.ILeadRepository,AutoMapper.IMapper,CRM.API.Controllers.ResponseWrapper)">
             <summary>
             
             </summary>
             <param name="logger"></param>
             <param name="repo"></param>
             <param name="mapper"></param>
+            <param name="validator"></param>
         </member>
         <member name="M:CRM.API.Controllers.LeadController.GetLeadById(System.Int64)">
             <summary>

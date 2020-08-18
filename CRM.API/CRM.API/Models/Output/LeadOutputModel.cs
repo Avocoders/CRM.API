@@ -1,5 +1,4 @@
-﻿using CRM.Data.DTO;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace CRM.API.Models.Output
 {
@@ -39,8 +38,8 @@ namespace CRM.API.Models.Output
                 City == lom.City &&
                 IsDeleted == lom.IsDeleted)
                 return true;
-
-            return false;
+            else
+                return false;
         }
 
         public override int GetHashCode()

@@ -212,32 +212,32 @@ namespace CRM.NUnitTest
             {
                 2 => new EmailInputModel()
                 {
-                    Id = 2,
+                    LeadId = 2,
                     Email = "voron2@gmail.com"
                 },
                 3 => new EmailInputModel()
                 {
-                    Id = 3,
+                    LeadId = 3,
                     Email = "voron3@gmail.com"
                 },
                 5 => new EmailInputModel()
                 {
-                    Id = 5,
+                    LeadId = 5,
                     Email = "voron5@gmail.com"
                 },
                 6 => new EmailInputModel()
                 {
-                    Id = 6,
+                    LeadId = 6,
                     Email = "voron5@gmail.com"
                 },
                 7 => new EmailInputModel()
                 {
-                    Id = 7,
+                    LeadId = 7,
                     Email = ""
                 },
                 8 => new EmailInputModel()
                 {
-                    Id = 8,
+                    LeadId = 8,
                     Email = "gjfjhfjvjkvfkjvfmail.com"
                 },
                 _ => new EmailInputModel(),

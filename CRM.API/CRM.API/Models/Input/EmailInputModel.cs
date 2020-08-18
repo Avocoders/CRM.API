@@ -2,7 +2,7 @@
 {
     public class EmailInputModel
     {
-        public long? Id { get; set; }
+        public long LeadId { get; set; }
         public string Email { get; set; }        
     }
 }

@@ -16,7 +16,7 @@ namespace CRM.API.Controllers
     /// <summary>
     /// 
     /// </summary>
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("[controller]")]
     public class LeadController : Controller
@@ -24,6 +24,7 @@ namespace CRM.API.Controllers
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
         private readonly ILeadRepository _repo;
+        private readonly ResponseWrapper _wrapper;
 
         /// <summary>
         /// 
@@ -31,11 +32,13 @@ namespace CRM.API.Controllers
         /// <param name="logger"></param>
         /// <param name="repo"></param>
         /// <param name="mapper"></param>
-        public LeadController(ILogger<LeadController> logger, ILeadRepository repo, IMapper mapper)
+        /// <param name="validator"></param>
+        public LeadController(ILogger<LeadController> logger, ILeadRepository repo, IMapper mapper, ResponseWrapper wrapper)
         {
             _logger = logger;
             _mapper = mapper;
             _repo = repo;
+            _wrapper = wrapper;
         }
 
         /// <summary>
@@ -59,17 +62,18 @@ namespace CRM.API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost]
-        public ActionResult<LeadOutputModel> CreateLead(LeadInputModel leadModel)   //поменять названия переменных
+        public ActionResult<LeadOutputModel> CreateLead(LeadInputModel leadModel)
         {
-            LeadValidator validation = new LeadValidator(_repo);
-            string validationResult = validation.ValidateLeadInputModel(leadModel);
-            if (!string.IsNullOrWhiteSpace(validationResult)) return BadRequest(validationResult);
-            string loginValidationResult = validation.ValidateLoginInfo(leadModel);
-            if (!string.IsNullOrWhiteSpace(loginValidationResult)) return BadRequest(loginValidationResult);
-            leadModel.Password = new PasswordEncryptor().EncryptPassword(leadModel.Password);  //возможно не в контроллере должна быть, в автомап
-            DataWrapper<LeadDto> newDataWrapper = _repo.AddOrUpdateLead(_mapper.Map<LeadDto>(leadModel));
-            _logger.LogInformation($"Create new lead with Id: {newDataWrapper.Data.Id}");
-            return MakeResponse(newDataWrapper, _mapper.Map<LeadOutputModel>);
+            var message = _wrapper.CreateLeadRW(leadModel);
+            if (string.IsNullOrWhiteSpace(message))
+            {
+                leadModel.Password = new PasswordEncryptor().EncryptPassword(leadModel.Password);  //возможно не в контроллере должна быть, в автомап !!!
+                DataWrapper<LeadDto> newDataWrapper = _repo.AddOrUpdateLead(_mapper.Map<LeadDto>(leadModel));
+                _logger.LogInformation($"Create new lead with Id: {newDataWrapper.Data.Id}");
+                return MakeResponse(newDataWrapper, _mapper.Map<LeadOutputModel>);
+            }
+            else
+                return BadRequest(message);
         }
 
         /// <summary>
@@ -82,32 +86,29 @@ namespace CRM.API.Controllers
         [HttpPut]
         public ActionResult<LeadOutputModel> UpdateLead(LeadInputModel leadModel)
         {
-            if (!leadModel.Id.HasValue)
+            var message = _wrapper.UpdateLeadRW(leadModel);
+            if (string.IsNullOrWhiteSpace(message))
             {
-                return BadRequest("ID is empty");
+                leadModel.Password = new PasswordEncryptor().EncryptPassword(leadModel.Password); // нельзя поменять пароль в обычном update, сделать отдельно !!!
+                DataWrapper<LeadDto> newDataWrapper = _repo.AddOrUpdateLead(_mapper.Map<LeadDto>(leadModel));
+                _logger.LogInformation($"Update lead info with Id: {newDataWrapper.Data.Id}");
+                return MakeResponse(newDataWrapper, _mapper.Map<LeadOutputModel>);
             }
-            var leadId = _repo.GetById(leadModel.Id.Value);
-            if (leadId == null) return BadRequest("Lead was not found");
-            LeadValidator validation = new LeadValidator(_repo);
-            string check = validation.ValidateLeadInputModel(leadModel);
-            if (!string.IsNullOrWhiteSpace(check)) return BadRequest(check);
-            leadModel.Password = new PasswordEncryptor().EncryptPassword(leadModel.Password); // нельзя поменять пароль в обычном update, сделать отдельно
-            DataWrapper<LeadDto> newDataWrapper = _repo.AddOrUpdateLead(_mapper.Map<LeadDto>(leadModel));
-            _logger.LogInformation($"Update lead info with Id: {newDataWrapper.Data.Id}");
-            return MakeResponse(newDataWrapper, _mapper.Map<LeadOutputModel>);
+            else
+                return BadRequest(message);
         }
 
         /// <summary>
         /// deletes the lead by Id
         /// </summary>
         /// <param name="leadId"></param>        
-        //[Authorize()]              // сделать токен вечным!!!!!!!!, а потом после тестирования обычным
+        //[Authorize()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpDelete("{leadId}")]
-        public ActionResult DeleteLeadById(long leadId)    // тесты есть 
+        public ActionResult DeleteLeadById(long leadId)
         {
-            DataWrapper<LeadDto> dataWrapper = _repo.GetById(leadId);     //зачем??? мы выбираем лида и его удаляем, то есть айди всегда есть
+            DataWrapper<LeadDto> dataWrapper = _repo.GetById(leadId);
             if (dataWrapper.Data == null) return BadRequest("Lead was not found");
             _repo.Delete(leadId);
             _logger.LogInformation($"Delete lead with Id: {dataWrapper.Data.Id}");
@@ -124,19 +125,16 @@ namespace CRM.API.Controllers
         [HttpPut("change-password")]
         public ActionResult UpdatePassword(PasswordInputModel passwordModel)
         {
-            if (!passwordModel.Id.HasValue)
+            var message = _wrapper.UpdatePasswordRW(passwordModel);
+            if (string.IsNullOrWhiteSpace(message))
             {
-                return BadRequest("ID is empty");
+                passwordModel.Password = new PasswordEncryptor().EncryptPassword(passwordModel.Password);
+                _repo.UpdatePassword(_mapper.Map<PasswordDto>(passwordModel));
+                _logger.LogInformation($"Update password for lead with Id: {passwordModel.Id}");
+                return Ok("Successfully updated");
             }
-            var leadId = _repo.GetById(passwordModel.Id.Value);
-            if (leadId == null) return BadRequest("Lead was not found");
-            LeadValidator validation = new LeadValidator(_repo);
-            string check = validation.ValidatePasswordInputModel(passwordModel);
-            if (!string.IsNullOrWhiteSpace(check)) return BadRequest(check);
-            passwordModel.Password = new PasswordEncryptor().EncryptPassword(passwordModel.Password);
-            _repo.UpdatePassword(_mapper.Map<PasswordDto>(passwordModel));
-            _logger.LogInformation($"Update password for lead with Id: {passwordModel.Id}");
-            return Ok("Successfully updated");
+            else
+                return BadRequest(message);
         }
 
         /// <summary>
@@ -147,23 +145,17 @@ namespace CRM.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost("email")]
-        public ActionResult<string> UpdateEmailByLeadId(EmailInputModel emailModel) //тесты есть
+        public ActionResult<string> UpdateEmailByLeadId(EmailInputModel emailModel)
         {
-            if (string.IsNullOrWhiteSpace(emailModel.Email))
+            var message = _wrapper.UpdateEmailRW(emailModel);
+            if (string.IsNullOrWhiteSpace(message))
             {
-                return BadRequest("Enter the email");
-            }
-            if ((!Regex.IsMatch(emailModel.Email, LeadValidator.emailPattern))) return BadRequest("The Email is incorrect");
-            if (emailModel.Id != null)
-            {
-                var leadId = _repo.GetById(emailModel.Id.Value);
-                if (leadId == null) return BadRequest("Lead was not found");
-                DataWrapper<int> dataWrapper = _repo.CheckEmail(emailModel.Email);
-                if (dataWrapper.Data != 0) return BadRequest("User with this email already exists");
-                _logger.LogInformation($"Update e-mail for lead with Id: {leadId} - {emailModel.Email} ");
+                _repo.UpdateEmailByLeadId(_mapper.Map<EmailDto>(emailModel));
+                _logger.LogInformation($"Update e-mail for lead with Id: {emailModel.LeadId} - {emailModel.Email} ");
                 return Ok("E-mail was updated");
             }
-            return BadRequest("The Email is incorrect");
+            else
+                return BadRequest(message);
         }
 
         /// <summary>
@@ -174,7 +166,7 @@ namespace CRM.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost("search")]
-        public ActionResult<List<LeadOutputModel>> SearchLead(SearchParametersInputModel searchparameters)  // тесты есть
+        public ActionResult<List<LeadOutputModel>> SearchLead(SearchParametersInputModel searchparameters)
         {
             DataWrapper<List<LeadDto>> dataWrapper = _repo.SearchLeads(_mapper.Map<LeadSearchParameters>(searchparameters));
             return MakeResponse(dataWrapper, _mapper.Map<List<LeadOutputModel>>);
@@ -189,7 +181,7 @@ namespace CRM.API.Controllers
         [HttpGet("account/{Id}")]
         public ActionResult<AccountWithLeadOutputModel> GetAccountById(long id) // переделать в OutputModel с AccId, LeadId, CurrId, Balance 
         {
-            DataWrapper<AccountDto> dataWrapper = _repo.GetAccountById(id);
+            DataWrapper<AccountWithLeadDto> dataWrapper = _repo.GetAccountById(id);
             return MakeResponse(dataWrapper, _mapper.Map<AccountWithLeadOutputModel>);
         }
         /// <summary>
@@ -200,7 +192,7 @@ namespace CRM.API.Controllers
         /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet("{leadId}/accounts")]
-        public ActionResult<List<AccountOutputModel>> GetAccountsByLeadId(long leadId)  //другую outputmodel вставить, просто список акк
+        public ActionResult<List<AccountOutputModel>> GetAccountsByLeadId(long leadId)
         {
             DataWrapper<List<AccountDto>> dataWrapper = _repo.GetAccountsByLeadId(leadId);
             return MakeResponse(dataWrapper, _mapper.Map<List<AccountOutputModel>>);
@@ -216,7 +208,7 @@ namespace CRM.API.Controllers
         public ActionResult<AccountWithLeadOutputModel> CreateAccount(AccountInputModel account)
         {
             if (account.CurrencyId == null) return BadRequest("Choose currency");
-            DataWrapper<AccountDto> dataWrapper = _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));
+            DataWrapper<AccountWithLeadDto> dataWrapper = _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));
             _logger.LogInformation($"Create new account with Id: {dataWrapper.Data.Id}");
             return MakeResponse(dataWrapper, _mapper.Map<AccountWithLeadOutputModel>);
         }
@@ -229,11 +221,11 @@ namespace CRM.API.Controllers
         [HttpPut("account")]
         public ActionResult<AccountWithLeadOutputModel> UpdateAccount(AccountInputModel account)
         {
-            DataWrapper<AccountDto> dataWrapper = _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));
+            DataWrapper<AccountWithLeadDto> dataWrapper = _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));
             _logger.LogInformation($"Update account with Id: {dataWrapper.Data.Id}");
             return MakeResponse(dataWrapper, _mapper.Map<AccountWithLeadOutputModel>);
         }
-        
+
         private delegate T DtoConverter<T, K>(K dto);
 
         private ActionResult<T> MakeResponse<T>(DataWrapper<T> dataWrapper)

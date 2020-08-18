@@ -18,6 +18,13 @@ namespace CRM.API.Controllers
     [ApiController]
     public class LoginController : Controller
     {
+        private readonly ILeadRepository _repo;
+
+        public LoginController(ILeadRepository repo)
+        {
+            _repo = repo;
+        }
+
         /// <summary>
         /// Authorization
         /// </summary>
@@ -53,8 +60,7 @@ namespace CRM.API.Controllers
 
         private ClaimsIdentity GetIdentity(string login, string password)
         {
-            LeadRepository leadRepository = new LeadRepository();
-            DataWrapper<AuthorizationDto> authorizationDto = leadRepository.GetByLogin(login);
+            DataWrapper<AuthorizationDto> authorizationDto = _repo.GetByLogin(login);
             PasswordEncryptor encryptor = new PasswordEncryptor();
 
             if (authorizationDto != null)

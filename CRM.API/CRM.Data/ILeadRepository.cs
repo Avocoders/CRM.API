@@ -6,7 +6,7 @@ namespace CRM.Data
     public interface ILeadRepository
     {
         void UpdatePassword(PasswordDto passwordDto);
-        DataWrapper<AccountDto> GetAccountById(long Id);
+        DataWrapper<AccountWithLeadDto> GetAccountById(long Id);
         DataWrapper<LeadDto> AddOrUpdateLead(LeadDto leadDto);
         void Delete(long id);
         DataWrapper<int> CheckEmail(string email);
@@ -14,9 +14,9 @@ namespace CRM.Data
         DataWrapper<LeadDto> GetById(long leadId);
         DataWrapper<AuthorizationDto> GetByLogin(string login);
         DataWrapper<List<LeadDto>> SearchLeads(LeadSearchParameters searchParameters);
-        DataWrapper<string> UpdateEmailByLeadId(long? id, string email);
-        DataWrapper<AccountDto> AddOrUpdateAccount(AccountDto accountDto);
-        DataWrapper<List<AccountDto>> GetAccountsByLeadId(long leadId);
+        DataWrapper<string> UpdateEmailByLeadId(EmailDto emailDto);
+        DataWrapper<AccountWithLeadDto> AddOrUpdateAccount(AccountDto accountDto);
+        DataWrapper<List<AccountDto>> GetAccountsByLeadId(long leadId);
         DataWrapper<byte> GetCurrencyByAccountId(long accountId);
     }
 }

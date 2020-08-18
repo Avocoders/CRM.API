@@ -120,7 +120,7 @@ namespace CRM.API
                 endpoints.MapControllers();
             });
 
-            loggerFactory.AddFile(Path.Combine(Directory.GetCurrentDirectory(), "Logger/logger.txt"));
+            loggerFactory.AddFile(Path.Combine(Directory.GetCurrentDirectory(), "./logger.txt"));
             var logger = loggerFactory.CreateLogger("FileLogger");
 
             app.Run(async (context) =>
