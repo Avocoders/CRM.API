@@ -436,13 +436,13 @@ namespace CRM.NUnitTest
                     LastName = "Nuratova",
                     Patronymic = "Nikolaevna",
                     Phone = "+79261111111",
+                    City = "Moscow",
                     Address = "Kaliningradskaya, 25, 5",
                     BirthDate = "01.01.1970",
-                    CityName = "Moscow",
-                    IsDeleted = false,
+                    LeadIsDeleted = false,
                     CurrencyCode = "RUB",
                     CurrencyName = "RussianRuble",
-                    StateAccount = false                   
+                    IsDeleted = false                   
                 },
                 2 => new AccountWithLeadOutputModel()
                 {
@@ -451,13 +451,13 @@ namespace CRM.NUnitTest
                     LastName = "Nuratova",
                     Patronymic = "Nikolaevna",
                     Phone = "+79261111111",
+                    City = "Moscow",
                     Address = "Kaliningradskaya, 25, 5",
                     BirthDate = "01.01.1970",
-                    CityName = "Moscow",
-                    IsDeleted = false,
+                    LeadIsDeleted = false,
                     CurrencyCode = "USD",
                     CurrencyName = "USDollar",
-                    StateAccount = false
+                    IsDeleted = false
 
                 },
                 3 => new AccountWithLeadOutputModel()
@@ -468,13 +468,13 @@ namespace CRM.NUnitTest
                     LastName = "Nuratova",
                     Patronymic = "Nikolaevna",
                     Phone = "+79261111111",
+                    City = "Moscow",
                     Address = "Kaliningradskaya, 25, 5",
                     BirthDate = "01.01.1970",
-                    CityName = "Moscow",
-                    IsDeleted = false,
+                    LeadIsDeleted = false,
                     CurrencyCode = "USD",
                     CurrencyName = "USDollar",
-                    StateAccount = false
+                    IsDeleted = false
                 },
                 4 => new AccountWithLeadOutputModel()
                 {
@@ -483,13 +483,13 @@ namespace CRM.NUnitTest
                     LastName = "Muratov",
                     Patronymic = "Nikolaevich",
                     Phone = "+79322222222",
+                    City = "Moscow",
                     Address = "Kaliningradskaya, 25, 10",
                     BirthDate = "01.08.1995",
-                    CityName = "Moscow",
-                    IsDeleted = false,
+                    LeadIsDeleted = false,
                     CurrencyCode = "USD",
                     CurrencyName = "USDollar",
-                    StateAccount = false
+                    IsDeleted = false
 
                 },
                 5 => new AccountWithLeadOutputModel()
@@ -500,13 +500,13 @@ namespace CRM.NUnitTest
                     LastName = "Muratov",
                     Patronymic = "Nikolaevich",
                     Phone = "+79322222222",
+                    City = "Moscow",
                     Address = "Kaliningradskaya, 25, 10",
                     BirthDate = "01.08.1995",
-                    CityName = "Moscow",
-                    IsDeleted = false,
+                    LeadIsDeleted = false,
                     CurrencyCode = "EUR",
                     CurrencyName = "Euro",
-                    StateAccount = false
+                    IsDeleted = false
 
                 },
                 6 => new AccountWithLeadOutputModel()
@@ -516,13 +516,13 @@ namespace CRM.NUnitTest
                     LastName = "Galich",
                     Patronymic = "Ivanovna",
                     Phone = "+79263333333",
+                    City = "Saratov",
                     Address = "Stroitelei, 13, 78",
                     BirthDate = "11.04.1980",
-                    CityName = "Saratov",
-                    IsDeleted = false,
+                    LeadIsDeleted = false,
                     CurrencyCode = "EUR",
                     CurrencyName = "Euro",
-                    StateAccount = false
+                    IsDeleted = false
                 },
                 21 => new AccountWithLeadOutputModel()
                 {
@@ -531,13 +531,13 @@ namespace CRM.NUnitTest
                     LastName = "Nuratova",
                     Patronymic = "Nikolaevna",
                     Phone = "+79261111111",
+                    City = "Moscow",
                     Address = "Kaliningradskaya, 25, 5",
                     BirthDate = "01.01.1970",
-                    CityName = "Moscow",
-                    IsDeleted = false,
+                    LeadIsDeleted = false,
                     CurrencyCode = "EUR",
                     CurrencyName = "Euro",
-                    StateAccount = false
+                    IsDeleted = false
                 },
             };
         }

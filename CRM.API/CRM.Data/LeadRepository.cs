@@ -116,12 +116,8 @@ namespace CRM.Data
         }
 
         public DataWrapper<AccountDto> AddOrUpdateAccount(AccountDto accountDto)
-        public void UpdatePassword(PasswordDto passwordDto)
         {
             var result = new DataWrapper<AccountDto>();
-            _connection.Execute("UpdatePassword", new { passwordDto.Id, passwordDto.Password }, 
-                    commandType: CommandType.StoredProcedure);
-        }
             try
             {
                 result.Data = _connection.Query<AccountDto, LeadDto, CityDto, AccountDto>("Account_Add_Or_Update",
@@ -133,12 +129,12 @@ namespace CRM.Data
                         accoutEntry.Lead.City = city;
                         return accoutEntry;
                     },
-                    new 
-                       { 
-                           accountDto.Id, 
-                           accountDto.LeadId, 
-                           accountDto.CurrencyId 
-                       }, splitOn: "Id", commandType: CommandType.StoredProcedure).FirstOrDefault();           
+                    new
+                    {
+                        accountDto.Id,
+                        accountDto.LeadId,
+                        accountDto.CurrencyId
+                    }, splitOn: "Id", commandType: CommandType.StoredProcedure).FirstOrDefault();
                 result.IsOk = true;
             }
             catch (Exception e)
@@ -147,7 +143,7 @@ namespace CRM.Data
             }
             return result;
         }
-      
+
         public void Delete(long id)
         {
             _connection.Execute("Lead_Delete", new { id }, commandType: CommandType.StoredProcedure);
@@ -310,6 +306,12 @@ namespace CRM.Data
                 result.ExceptionMessage = e.Message;
             }
             return result;
+        }
+
+        public void UpdatePassword(PasswordDto passwordDto)
+        {
+            _connection.Execute("UpdatePassword", new { passwordDto.Id, passwordDto.Password },
+                    commandType: CommandType.StoredProcedure);
         }
     }
 }
