@@ -22,30 +22,31 @@ namespace CRM.API.Models.Output
         public bool IsDeleted { get; set; }
 
 
-        //public override bool Equals(object obj)
-        //{
-        //    AccountWithLeadOutputModel lom = (AccountWithLeadOutputModel)obj;
-        //    if (Id.Value == lom.Id.Value &&
-        //        FirstName == lom.FirstName &&
-        //        LastName == lom.LastName &&
-        //        Patronymic == lom.Patronymic &&
-        //        Phone == lom.Phone &&
-        //        Address == lom.Address &&
-        //        BirthDate == lom.BirthDate &&
-        //        CityName == lom.CityName &&
-        //        IsDeleted == lom.IsDeleted &&
-        //        CurrencyCode == lom.CurrencyCode &&
-        //        CurrencyName == lom.CurrencyName &&
-        //        StateAccount == lom.StateAccount)
-        //        return true;
+        public override bool Equals(object obj)
+        {
+            AccountWithLeadOutputModel lom = (AccountWithLeadOutputModel)obj;
+            if (Id == lom.Id &&
+                LeadId== lom.LeadId &&
+                FirstName == lom.FirstName &&
+                LastName == lom.LastName &&
+                Patronymic == lom.Patronymic &&
+                Phone == lom.Phone &&
+                Address == lom.Address &&
+                BirthDate == lom.BirthDate &&
+                City == lom.City &&
+                LeadIsDeleted == lom.LeadIsDeleted &&
+                CurrencyCode == lom.CurrencyCode &&
+                CurrencyName == lom.CurrencyName &&
+                IsDeleted == lom.IsDeleted)
+                return true;
 
-        //    return false;
-        //}
+            return false;
+        }
 
-        //public override int GetHashCode()
-        //{
-        //    return base.GetHashCode();
-        //}
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
 
     }
 

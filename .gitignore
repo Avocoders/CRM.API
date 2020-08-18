@@ -350,3 +350,5 @@ MigrationBackup/
 .ionide/
 
 CRM.API/.idea/
+
+CRM.API/CRM.API/Logger/logger.txt
