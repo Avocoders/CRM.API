@@ -4,14 +4,14 @@ namespace CRM.API.Logger
 {
     public class FileLoggerProvider : ILoggerProvider
     {
-        private string path;
-        public FileLoggerProvider(string _path)
+        private string _path;
+        public FileLoggerProvider(string path)
         {
-            path = _path;
+            _path = path;
         }
         public ILogger CreateLogger(string categoryName)
         {
-            return new FileLogger(path);
+            return new FileLogger(_path);
         }
 
         public void Dispose()

@@ -23,9 +23,13 @@ namespace CRM.API.Configuration
             
             CreateMap<PasswordInputModel, PasswordDto>()
                  .ForPath(dest => dest.Id, o => o.MapFrom(src => src.Id))
-                 .ForPath(dest => dest.Password, o => o.MapFrom(src => src.Password));                  
+                 .ForPath(dest => dest.Password, o => o.MapFrom(src => src.Password));
 
-             CreateMap<LeadDto, LeadOutputModel>()
+            CreateMap<EmailInputModel, EmailDto>()
+                 .ForPath(dest => dest.LeadId, o => o.MapFrom(src => src.LeadId))
+                 .ForPath(dest => dest.Email, o => o.MapFrom(src => src.Email));
+
+            CreateMap<LeadDto, LeadOutputModel>()
                   .ForPath(dest => dest.City, o => o.MapFrom(src => src.City.Name))
                   .ForPath(dest => dest.Role, o => o.MapFrom(src => src.Role.Name))
                   .ForPath(dest => dest.BirthDate, o => o.MapFrom(src => src.BirthDate.ToString("dd.MM.yyyy")))
