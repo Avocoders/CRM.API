@@ -21,7 +21,7 @@ namespace CRM.API.Controllers
         private readonly ILeadRepository _repo;
         private readonly ILogger _logger;
       
-        public TransactionController(ILeadRepository repo, IOptions<APIOptions> options, ILogger logger)
+        public TransactionController(ILeadRepository repo, IOptions<UrlOptions> options, ILogger logger)
         {                        
             _repo = repo;            
             _restClient = new RestClient(options.Value.TransactionStoreAPIUrl);

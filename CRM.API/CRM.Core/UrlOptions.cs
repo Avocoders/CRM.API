@@ -1,6 +1,6 @@
 ﻿namespace CRM.Core
 {
-    public class APIOptions : IUrlOptions
+    public class UrlOptions : IUrlOptions
     {
         public string CrmAPIUrl { get; set; }
         public string TransactionStoreAPIUrl { get; set; }

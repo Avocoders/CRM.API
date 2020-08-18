@@ -31,9 +31,7 @@ namespace CRM.API.Models.Output
                 Phone == lom.Phone &&
                 Email == lom.Email &&
                 Address == lom.Address &&
-                BirthDate == lom.BirthDate &&
-                RegistrationDate == lom.RegistrationDate &&
-                ChangeDate == lom.ChangeDate &&
+                BirthDate == lom.BirthDate &&                
                 Role == lom.Role &&
                 City == lom.City &&
                 IsDeleted == lom.IsDeleted)
