@@ -6,5 +6,6 @@
         public long LeadId { get; set; }
         public byte CurrencyId { get; set; }
         public bool IsDeleted { get; set; }
+        public LeadDto Lead { get; set; }
     }
 }

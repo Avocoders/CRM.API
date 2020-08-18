@@ -22,13 +22,22 @@ namespace CRM.Data
         public LeadRepository()
         { }
 
-        public DataWrapper<AccountVsLeadDTO> GetAccountById(long Id)  
-        { 
-            var result = new DataWrapper<AccountVsLeadDTO>();
+        public DataWrapper<AccountDto> GetAccountById(long Id)  
+        {
+            var result = new DataWrapper<AccountDto>();
             try
             {
-                result.Data = _connection.Query<AccountVsLeadDTO>(
-                    "Account_GetById",new { Id },                 
+                result.Data = _connection.Query<AccountDto, LeadDto, CityDto, AccountDto>(
+                    "Account_GetById",
+                    (account, lead, city) =>
+                    {
+                        AccountDto accoutEntry;
+                        accoutEntry = account;
+                        accoutEntry.Lead = lead;
+                        accoutEntry.Lead.City = city;
+                        return accoutEntry;
+                    },
+                    new {Id}, splitOn: "Id",
                     commandType: CommandType.StoredProcedure).FirstOrDefault();
                 result.IsOk = true;
             }
@@ -40,7 +49,7 @@ namespace CRM.Data
         }
 
 
-        public DataWrapper <List<AccountDto>> GetAccountByLeadId(long leadId)  
+        public DataWrapper <List<AccountDto>> GetAccountsByLeadId(long leadId)  
         {
             var result = new DataWrapper <List<AccountDto>>();
             try
@@ -106,17 +115,26 @@ namespace CRM.Data
             return result;
         }
 
-        public DataWrapper<AccountVsLeadDTO> AddOrUpdateAccount(AccountDto accountDto)
+        public DataWrapper<AccountDto> AddOrUpdateAccount(AccountDto accountDto)
         {
-            var result = new DataWrapper<AccountVsLeadDTO>();
+            var result = new DataWrapper<AccountDto>();
             try
             {
-                result.Data = _connection.Query<AccountVsLeadDTO>("Account_Add_Or_Update",  new 
+                result.Data = _connection.Query<AccountDto, LeadDto, CityDto, AccountDto>("Account_Add_Or_Update",
+                    (account, lead, city) =>
+                    {
+                        AccountDto accoutEntry;
+                        accoutEntry = account;
+                        accoutEntry.Lead = lead;
+                        accoutEntry.Lead.City = city;
+                        return accoutEntry;
+                    },
+                    new 
                        { 
                            accountDto.Id, 
                            accountDto.LeadId, 
                            accountDto.CurrencyId 
-                       }, commandType: CommandType.StoredProcedure).FirstOrDefault();           
+                       }, splitOn: "Id", commandType: CommandType.StoredProcedure).FirstOrDefault();           
                 result.IsOk = true;
             }
             catch (Exception e)

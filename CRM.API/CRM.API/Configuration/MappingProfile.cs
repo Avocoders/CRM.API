@@ -37,8 +37,15 @@ namespace CRM.API.Configuration
 
             CreateMap<AccountInputModel, AccountDto>();
 
-            CreateMap<AccountVsLeadDTO, AccountWithLeadOutputModel>()
-                 .ForMember(dest => dest.BirthDate, o => o.MapFrom(src => src.BirthDate.ToString("dd.MM.yyyy")))
+            CreateMap<AccountDto, AccountWithLeadOutputModel>()
+                 .ForPath(dest => dest.LeadId, o => o.MapFrom(src => src.Lead.Id))
+                 .ForPath(dest => dest.FirstName, o => o.MapFrom(src => src.Lead.FirstName))
+                 .ForPath(dest => dest.LastName, o => o.MapFrom(src => src.Lead.LastName))
+                 .ForPath(dest => dest.Patronymic, o => o.MapFrom(src => src.Lead.Patronymic))
+                 .ForPath(dest => dest.Phone, o => o.MapFrom(src => src.Lead.Phone))
+                 .ForPath(dest => dest.Address, o => o.MapFrom(src => src.Lead.Address))
+                 .ForPath(dest => dest.BirthDate, o => o.MapFrom(src => src.Lead.BirthDate.ToString("dd.MM.yyyy")))
+                 .ForPath(dest => dest.City, o => o.MapFrom(src => src.Lead.City.Name))
                  .ForMember(dest => dest.CurrencyCode, o => o.MapFrom(src => Enum.GetName(typeof(CurrenciesCode), src.CurrencyId)))
                  .ForMember(dest => dest.CurrencyName, o => o.MapFrom(src => Enum.GetName(typeof(CurrenciesName), src.CurrencyId)));
         }

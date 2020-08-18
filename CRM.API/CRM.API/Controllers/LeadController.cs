@@ -185,7 +185,7 @@ namespace CRM.API.Controllers
         [HttpGet("account/{Id}")]
         public ActionResult<AccountWithLeadOutputModel> GetAccountById(long Id) //accountWithLeadOutputModel с основной инфой о лиде
         {
-            DataWrapper<AccountVsLeadDTO> dataWrapper = _repo.GetAccountById(Id);
+            DataWrapper<AccountDto> dataWrapper = _repo.GetAccountById(Id);
             return MakeResponse(dataWrapper, _mapper.Map<AccountWithLeadOutputModel>);
         }
         /// <summary>
@@ -198,7 +198,7 @@ namespace CRM.API.Controllers
         [HttpGet("{leadId}/accounts")]
         public ActionResult<List<AccountOutputModel>> GetAccountsByLeadId(long leadId)  //другую outputmodel вставить, просто список акк
         {
-            DataWrapper<List<AccountDto>> dataWrapper = _repo.GetAccountByLeadId(leadId);
+            DataWrapper<List<AccountDto>> dataWrapper = _repo.GetAccountsByLeadId(leadId);
             return MakeResponse(dataWrapper, _mapper.Map<List<AccountOutputModel>>);
         }
         /// <summary>
@@ -212,7 +212,7 @@ namespace CRM.API.Controllers
         public ActionResult<AccountWithLeadOutputModel> AddAccount(AccountInputModel account)
         {
             if (account.CurrencyId == null) return BadRequest("Choose currency");
-            DataWrapper<AccountVsLeadDTO> dataWrapper = _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));
+            DataWrapper<AccountDto> dataWrapper = _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));
             return MakeResponse(dataWrapper, _mapper.Map<AccountWithLeadOutputModel>);
         }
         /// <summary>
@@ -224,7 +224,7 @@ namespace CRM.API.Controllers
         [HttpPut("account")]
         public ActionResult<AccountWithLeadOutputModel> UpdateAccount(AccountInputModel account)
         {
-            DataWrapper<AccountVsLeadDTO> dataWrapper = _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));
+            DataWrapper<AccountDto> dataWrapper = _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));
             return MakeResponse(dataWrapper, _mapper.Map<AccountWithLeadOutputModel>);
         }
 
