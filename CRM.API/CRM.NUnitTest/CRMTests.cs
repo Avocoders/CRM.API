@@ -55,7 +55,7 @@ namespace CRM.NUnitTest
         public async Task AddAccountTest(int num)
         {
             var outputData = new OutputDataMocksForAccounts();
-            var expected = outputData.GetAccountOutputModelMockById(num);
+            var expected = outputData.GetAccountWithLeadOutputModelMockById(num);
             var inputData = new InputDataMocksForAccounts();
             var inputmodel = inputData.GetAccountInputModelMock(num);
             var jsonContent = new StringContent(JsonConvert.SerializeObject(inputmodel), Encoding.UTF8, "application/json");
@@ -63,7 +63,7 @@ namespace CRM.NUnitTest
             var result = await response.Content.ReadAsStringAsync();
             if (num < 23)
             {
-                var actual = JsonConvert.DeserializeObject<LeadWithAccountsOutputModel>(result);
+                var actual = JsonConvert.DeserializeObject<AccountWithLeadOutputModel>(result);
                 Assert.AreEqual(expected, actual);
             }
             else
@@ -336,9 +336,9 @@ namespace CRM.NUnitTest
             var inputmodel = inputData.GetAccountInputModelMock(num);
             var jsonContent = new StringContent(JsonConvert.SerializeObject(inputmodel), Encoding.UTF8, "application/json");
             var response = await _client.PutAsync(_crmUrl + EndpointUrl.accountUrl, jsonContent);
-            var actual = JsonConvert.DeserializeObject<LeadWithAccountsOutputModel>(await response.Content.ReadAsStringAsync());
+            var actual = JsonConvert.DeserializeObject<AccountWithLeadOutputModel>(await response.Content.ReadAsStringAsync());
             var outputData = new OutputDataMocksForAccounts();
-            var expected = outputData.GetAccountOutputModelMockById(num);
+            var expected = outputData.GetAccountWithLeadOutputModelMockById(num);
             Assert.AreEqual(expected, actual);
         }
 

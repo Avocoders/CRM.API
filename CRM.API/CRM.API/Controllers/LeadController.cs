@@ -16,7 +16,7 @@ namespace CRM.API.Controllers
     /// <summary>
     /// 
     /// </summary>
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("[controller]")]
     public class LeadController : Controller

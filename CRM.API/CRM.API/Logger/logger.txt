@@ -26,3 +26,6 @@ Now listening on: http://127.0.0.1:33240
 Application started. Press Ctrl+C to shut down.
 Hosting environment: Testing
 Content root path: C:\Users\Сергей\source\repos\crm-api\CRM.API\CRM.API
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Testing
+Content root path: D:\учеба\TransactionSystems\crm-api\CRM.API\CRM.API
