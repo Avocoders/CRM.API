@@ -1,8 +1,11 @@
-﻿namespace CRM.Core
+﻿using System;
+
+namespace CRM.Core
 {
     public class UrlOptions : IUrlOptions
     {
         public string CrmAPIUrl { get; set; }
         public string TransactionStoreAPIUrl { get; set; }
+        public Uri PayPalUrl { get; set; }
     }
 }
