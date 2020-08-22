@@ -19,13 +19,22 @@ namespace CRM.Data
             _connection = new SqlConnection(options.Value.DBConnectionString);
         }
 
-        public DataWrapper<AccountWithLeadDto> GetAccountById(long Id)  
-        { 
-            var result = new DataWrapper<AccountWithLeadDto>();
+        public DataWrapper<AccountDto> GetAccountById(long Id)
+        {
+            var result = new DataWrapper<AccountDto>();
             try
             {
-                result.Data = _connection.Query<AccountWithLeadDto>(
-                    StoredProcedures.AccountGetById, new { Id },                 
+                result.Data = _connection.Query<AccountDto, LeadDto, CityDto, AccountDto>(
+                    StoredProcedures.AccountGetById,
+                    (account, lead, city) =>
+                    {
+                        AccountDto accoutEntry;
+                        accoutEntry = account;
+                        accoutEntry.Lead = lead;
+                        accoutEntry.Lead.City = city;
+                        return accoutEntry;
+                    },
+                    new { Id }, splitOn: "Id",
                     commandType: CommandType.StoredProcedure).FirstOrDefault();
                 result.IsOk = true;
             }
@@ -36,15 +45,15 @@ namespace CRM.Data
             return result;
         }
 
-        public DataWrapper <List<AccountDto>> GetAccountsByLeadId(long leadId)  
+        public DataWrapper<List<AccountDto>> GetAccountsByLeadId(long leadId)
         {
-            var result = new DataWrapper <List<AccountDto>>();
+            var result = new DataWrapper<List<AccountDto>>();
             try
-            {               
-                    result.Data = _connection.Query<AccountDto>(
-                    StoredProcedures.AccountGetByLeadId,
-                    new { leadId },
-                    commandType: CommandType.StoredProcedure).ToList();
+            {
+                result.Data = _connection.Query<AccountDto>(
+                StoredProcedures.AccountGetByLeadId,
+                new { leadId },
+                commandType: CommandType.StoredProcedure).ToList();
                 result.IsOk = true;
             }
             catch (Exception e)
@@ -52,8 +61,9 @@ namespace CRM.Data
                 result.ExceptionMessage = e.Message;
             }
             return result;
+
         }
-                                            
+
         public DataWrapper<LeadDto> AddOrUpdateLead(LeadDto leadDto)
         {
             var leadDictionary = new Dictionary<long, LeadDto>();
@@ -101,17 +111,27 @@ namespace CRM.Data
             return result;
         }
 
-        public DataWrapper<AccountWithLeadDto> AddOrUpdateAccount(AccountDto accountDto)
+        public DataWrapper<AccountDto> AddOrUpdateAccount(AccountDto accountDto)
         {
-            var result = new DataWrapper<AccountWithLeadDto>();
+            var result = new DataWrapper<AccountDto>();
             try
             {
-                result.Data = _connection.Query<AccountWithLeadDto>(StoredProcedures.AccountAddOrUpdate,  new 
-                       { 
-                           accountDto.Id, 
-                           accountDto.LeadId, 
-                           accountDto.CurrencyId 
-                       }, commandType: CommandType.StoredProcedure).FirstOrDefault();           
+                result.Data = _connection.Query<AccountDto, LeadDto, CityDto, AccountDto>(
+                    StoredProcedures.AccountAddOrUpdate,
+                    (account, lead, city) =>
+                    {
+                        AccountDto accoutEntry;
+                        accoutEntry = account;
+                        accoutEntry.Lead = lead;
+                        accoutEntry.Lead.City = city;
+                        return accoutEntry;
+                    },
+                    new
+                    {
+                        accountDto.Id,
+                        accountDto.LeadId,
+                        accountDto.CurrencyId
+                    }, splitOn: "Id", commandType: CommandType.StoredProcedure).FirstOrDefault();
                 result.IsOk = true;
             }
             catch (Exception e)
