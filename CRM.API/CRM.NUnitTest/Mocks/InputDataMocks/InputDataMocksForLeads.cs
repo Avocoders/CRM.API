@@ -228,7 +228,7 @@ namespace CRM.NUnitTest
                 6 => new EmailInputModel()
                 {
                     LeadId = 6,
-                    Email = "voron5@gmail.com"
+                    Email = "alenanuratova@gmail.com"
                 },
                 7 => new EmailInputModel()
                 {

@@ -1,4 +1,5 @@
 ﻿using CRM.API.Models.Output;
+using CRM.Data.DTO;
 using System.Collections.Generic;
 
 namespace CRM.NUnitTest
@@ -10,13 +11,17 @@ namespace CRM.NUnitTest
             return leadId switch
             {
                 1 => new LeadOutputModel()
-                {
+                {                    
                     Id = 1,
                     FirstName = "Alena",
                     LastName = "Nuratova",
+                    Patronymic = "Nikolaevna",
                     Login = "AlenaNurashka7639",
                     Phone = "+79261111111",
+                    Email = "alenanuratova@gmail.com",
+                    Role = "Client",
                     City = "Moscow",
+                    Address = "Kaliningradskaya, 25, 5",
                     BirthDate = "01.01.1970",
                     Accounts = new List<AccountOutputModel>()
                     {
@@ -37,9 +42,13 @@ namespace CRM.NUnitTest
                     Id = 2,
                     FirstName = "Pavel",
                     LastName = "Muratov",
+                    Patronymic = "Nikolaevich",
                     Login = "PashkaNurashka7639",
                     Phone = "+79322222222",
+                    Email = "pashkamuratov@gmail.com",
+                    Role = "Client",
                     City = "Moscow",
+                    Address = "Kaliningradskaya, 25, 10",
                     BirthDate = "01.08.1995",
                     Accounts = new List<AccountOutputModel>()
                     {
@@ -57,9 +66,13 @@ namespace CRM.NUnitTest
                     Id = 3,
                     FirstName = "Elena",
                     LastName = "Galich",
+                    Patronymic = "Ivanovna",
                     Login = "Elenaera1978",
                     Phone = "+79263333333",
+                    Email = "elenagalich@gmail.com",
+                    Role = "Client",
                     City = "Saratov",
+                    Address = "Stroitelei, 13, 78",
                     BirthDate = "11.04.1980",
                     Accounts = new List<AccountOutputModel>()
                     {
@@ -77,9 +90,13 @@ namespace CRM.NUnitTest
                     Id = 4,
                     FirstName = "Ivan",
                     LastName = "Piratov",
+                    Patronymic = "Nikolaevich",
                     Login = "IvashkaNurashkaaaaa7639",
                     Phone = "+79324444444",
+                    Email = "pirat@gmail.com",
+                    Role = "Client",
                     City = "Minsk",
+                    Address = "Kaliningradskaya, 25, 10",
                     BirthDate = "01.12.1997",
                     Accounts = new List<AccountOutputModel>()
                     {
@@ -94,9 +111,13 @@ namespace CRM.NUnitTest
                     Id = 5,
                     FirstName = "Sergei",
                     LastName = "Piratov",
+                    Patronymic = "Nikolaevich",
                     Login = "IvashkaNurashka7639",
                     Phone = "+79265555555",
+                    Email = "piratov@gmail.com",
+                    Role = "Client",
                     City = "Minsk",
+                    Address = "Kaliningradskaya, 25, 10",
                     BirthDate = "01.12.1997",
                     Accounts = new List<AccountOutputModel>()
                     {
@@ -111,9 +132,13 @@ namespace CRM.NUnitTest
                     Id = 6,
                     FirstName = "Daria",
                     LastName = "Piratova",
+                    Patronymic = "Ivanovna",
                     Login = "Piratova1980",
                     Phone = "+79267777777",
+                    Email = "piratovadaria@gmail.com",
+                    Role = "Client",
                     City = "Minsk",
+                    Address = "Kaliningradskaya, 25, 10",
                     BirthDate = "01.12.1997",
                     Accounts = new List<AccountOutputModel>()
                     {
@@ -134,32 +159,46 @@ namespace CRM.NUnitTest
                     Id = 11,
                     FirstName = "Daria",
                     LastName = "Piratova",
+                    Patronymic = "Ivannova",
                     Login = "dashunya7363",                   
                     Phone = "+79314647493",
+                    Email = "annayazikova2456388@gmail.com",
+                    Role = "Client",
                     City = "Saratov",                  
                     Address = "Malaya Konyushennaya Ulitsa229",
-                    BirthDate = "16.05.1991"
+                    BirthDate = "16.05.1991",
+                    IsDeleted = false
                                        
                 },
                 12 => new LeadOutputModel()
                 {
                     Id = 12,
                     FirstName = "Milena",
-                    LastName = "Murashova",                    
+                    LastName = "Murashova",
+                    Patronymic = "Nikolaevna",
                     Login = "AnnaMurashka7639",                    
-                    Phone = "+79762457628",                    
-                    City = "Minsk",                    
-                    BirthDate = "17.03.1990"
+                    Phone = "+79762457628",
+                    Email = "annamurashova@gmail.com",
+                    Role = "Client",
+                    City = "Minsk",
+                    Address = "Kaliningradskaya, 35, 15",
+                    BirthDate = "17.03.1990",
+                    IsDeleted = false
                 },
                 13 => new LeadOutputModel()
                 {
                     Id = 13,
                     FirstName = "Zena",
-                    LastName = "Koroleva",                    
+                    LastName = "Koroleva",
+                    Patronymic = "Nikolaevna",
                     Login = "Zena7639",                   
-                    Phone = "+79762457633",                   
-                    City = "Minsk",                   
-                    BirthDate = "17.03.1998"
+                    Phone = "+79762457633",
+                    Email = "zena7639@gmail.com",
+                    Role = "Client",
+                    City = "Minsk",
+                    Address = "Kaliningradskaya, 35, 15",
+                    BirthDate = "17.03.1998",
+                    IsDeleted = false
                 },
                 14 => "Enter the name",                
                 15 => "Password have to be between 8 and 20 characters long and contain lowercase, uppercase and number, possible characters: @#$%^&+=*.-_",               
@@ -178,10 +217,15 @@ namespace CRM.NUnitTest
                         {
                         Id = 1,
                         FirstName = "Alena",
-                        LastName = "Nuratova",                        
+                        LastName = "Nuratova",
+                        Patronymic = "Nikolaevna",
                         Login = "AlenaNurashka7639",
-                        Phone = "+79261111111",                        
-                        BirthDate = "01.01.1970",                        
+                        Phone = "+79261111111",
+                        Email = "alenanuratova@gmail.com",
+                        Role = "Client",
+                        City = "Moscow",
+                        Address = "Kaliningradskaya, 25, 5",
+                        BirthDate = "01.01.1970",
                         Accounts = new List<AccountOutputModel>()
                         {
                             new AccountOutputModel()
@@ -215,10 +259,15 @@ namespace CRM.NUnitTest
                         {
                             Id = 4,
                             FirstName = "Ivan",
-                            LastName = "Piratov",                            
+                            LastName = "Piratov",
+                            Patronymic = "Nikolaevich",
                             Login = "IvashkaNurashkaaaaa7639",
-                            Phone = "+79324444444",                            
-                            BirthDate = "01.12.1997",                            
+                            Phone = "+79324444444",
+                            Email = "pirat@gmail.com",
+                            Role = "Client",
+                            City = "Minsk",
+                            Address = "Kaliningradskaya, 25, 10",
+                            BirthDate = "01.12.1997",
                             Accounts = new List<AccountOutputModel>()
                             {
                                 new AccountOutputModel()
@@ -238,9 +287,14 @@ namespace CRM.NUnitTest
                          {
                                 Id = 7,
                                 FirstName = "Vladimir",
-                                LastName = "Galich",                                
+                                LastName = "Galich",    
+                                Patronymic = "Ivanovich",
                                 Login = "GalichVladimir1965",
-                                Phone = "+79268888888",                                
+                                Phone = "+79268888888",   
+                                Email = "galivova@gmail.com",
+                                Role = "Client",
+                                City = "Saratov",
+                                Address = "Stroitelei, 13, 78",
                                 BirthDate = "11.04.1965",                                
                                 Accounts = new List<AccountOutputModel>()
                                 {
@@ -265,9 +319,14 @@ namespace CRM.NUnitTest
                          {
                             Id = 8,
                             FirstName = "Oksana",
-                            LastName = "Galich",                            
+                            LastName = "Galich",  
+                            Patronymic = "Dmitrievna",
                             Login = "GalichOksana1965",
-                            Phone = "+79269999999",                            
+                            Phone = "+79269999999",  
+                            Email = "galichvova@gmail.com",
+                            Role = "Client",
+                            City = "Saratov",
+                            Address = "Stroitelei, 13, 78",
                             BirthDate = "11.04.1965",                           
                             Accounts = new List<AccountOutputModel>()
                             {
@@ -288,10 +347,15 @@ namespace CRM.NUnitTest
                          {
                             Id = 1,
                             FirstName = "Alena",
-                            LastName = "Nuratova",                            
+                            LastName = "Nuratova",
+                            Patronymic = "Nikolaevna",
                             Login = "AlenaNurashka7639",
-                            Phone = "+79261111111",                            
-                            BirthDate = "01.01.1970",                           
+                            Phone = "+79261111111",
+                            Email = "alenanuratova@gmail.com",
+                            Role = "Client",
+                            City = "Moscow",
+                            Address = "Kaliningradskaya, 25, 5",
+                            BirthDate = "01.01.1970",
                             Accounts = new List<AccountOutputModel>()
                             {
                                         new AccountOutputModel()
@@ -322,9 +386,14 @@ namespace CRM.NUnitTest
                          {
                                 Id = 9,
                                 FirstName = "Vlada",
-                                LastName = "Gala",                                
+                                LastName = "Gala",       
+                                Patronymic = "Ivanovna",
                                 Login = "GalaVlada1969",
-                                Phone = "+79268888887",                                
+                                Phone = "+79268888887",     
+                                Email = "gala@gmail.com",
+                                Role = "Client",
+                                City = "Saratov",
+                                Address = "Stroitelei, 13, 9",
                                 BirthDate = "11.04.1969",                               
                                 Accounts = new List<AccountOutputModel>()
                                 {
@@ -352,10 +421,15 @@ namespace CRM.NUnitTest
                         {
                             Id = 2,
                             FirstName = "Pavel",
-                            LastName = "Muratov",                        
+                            LastName = "Muratov",
+                            Patronymic = "Nikolaevich",
                             Login = "PashkaNurashka7639",
-                            Phone = "+79322222222",                        
-                            BirthDate = "01.08.1995",                        
+                            Phone = "+79322222222",
+                            Email = "pashkamuratov@gmail.com",
+                            Role = "Client",
+                            City = "Moscow",
+                            Address = "Kaliningradskaya, 25, 10",
+                            BirthDate = "01.08.1995",
                             Accounts = new List<AccountOutputModel>()
                             {                            
                                 new AccountOutputModel()
@@ -375,10 +449,15 @@ namespace CRM.NUnitTest
                          {
                             Id = 1,
                             FirstName = "Alena",
-                            LastName = "Nuratova",                            
+                            LastName = "Nuratova",
+                            Patronymic = "Nikolaevna",
                             Login = "AlenaNurashka7639",
-                            Phone = "+79261111111",                           
-                            BirthDate = "01.01.1970",                            
+                            Phone = "+79261111111",
+                            Email = "alenanuratova@gmail.com",
+                            Role = "Client",
+                            City = "Moscow",
+                            Address = "Kaliningradskaya, 25, 5",
+                            BirthDate = "01.01.1970",
                             Accounts = new List<AccountOutputModel>()
                             {
                                         new AccountOutputModel()
@@ -393,21 +472,19 @@ namespace CRM.NUnitTest
                          },
                          new LeadOutputModel()
                          {
-                            Id = 4,
+                            Id = 5,
                             FirstName = "Sergei",
-                            LastName = "Piratov",                            
+                            LastName = "Piratov",
+                            Patronymic = "Nikolaevich",
                             Login = "IvashkaNurashka7639",
-                            Phone = "+79265555555",                           
-                            BirthDate = "01.12.1997",                            
+                            Phone = "+79265555555",
+                            Email = "piratov@gmail.com",
+                            Role = "Client",
+                            City = "Minsk",
+                            Address = "Kaliningradskaya, 25, 10",
+                            BirthDate = "01.12.1997",
                             Accounts = new List<AccountOutputModel>()
-                            {
-                                new AccountOutputModel()
-                                {
-                                    Id = 9,
-                                    IsDeleted = false,
-                                    CurrencyCode = "JPY",
-                                    CurrencyName = "Yen"
-                                },
+                            {                                
                                 new AccountOutputModel()
                                 {
                                     Id = 20,
@@ -422,10 +499,15 @@ namespace CRM.NUnitTest
                          {
                                 Id = 7,
                                 FirstName = "Vladimir",
-                                LastName = "Galich",                                
+                                LastName = "Galich",
+                                Patronymic = "Ivanovich",
                                 Login = "GalichVladimir1965",
-                                Phone = "+79268888888",                                
-                                BirthDate = "11.04.1965",                                
+                                Phone = "+79268888888",
+                                Email = "galivova@gmail.com",
+                                Role = "Client",
+                                City = "Saratov",
+                                Address = "Stroitelei, 13, 78",
+                                BirthDate = "11.04.1965",
                                 Accounts = new List<AccountOutputModel>()
                                 {                                    
                                     new AccountOutputModel()
@@ -442,10 +524,15 @@ namespace CRM.NUnitTest
                          {
                                 Id = 9,
                                 FirstName = "Vlada",
-                                LastName = "Gala",                               
+                                LastName = "Gala",
+                                Patronymic = "Ivanovna",
                                 Login = "GalaVlada1969",
-                                Phone = "+79268888887",                                
-                                BirthDate = "11.04.1969",                                
+                                Phone = "+79268888887",
+                                Email = "gala@gmail.com",
+                                Role = "Client",
+                                City = "Saratov",
+                                Address = "Stroitelei, 13, 9",
+                                BirthDate = "11.04.1969",
                                 Accounts = new List<AccountOutputModel>()
                                 {
                                     new AccountOutputModel()
@@ -467,9 +554,9 @@ namespace CRM.NUnitTest
         {
             return num switch
             {
-                2 => "voron2@gmail.com",
-                3 => "voron3@gmail.com",
-                5 => "voron5@gmail.com",
+                2 => "E-mail was updated",
+                3 => "E-mail was updated",
+                5 => "E-mail was updated",
                 6 => "User with this email already exists",
                 7 => "Enter the email",
                 8 => "The Email is incorrect",                
