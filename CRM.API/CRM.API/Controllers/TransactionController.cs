@@ -22,11 +22,11 @@ namespace CRM.API.Controllers
         private readonly ILeadRepository _repo;
         private readonly ILogger _logger;
       
-        public TransactionController(ILeadRepository repo, IOptions<UrlOptions> options, ILogger logger)
+        public TransactionController(ILeadRepository repo, IOptions<UrlOptions> options)
         {                        
             _repo = repo;            
             _restClient = new RestClient(options.Value.TransactionStoreAPIUrl);
-            _logger = logger;
+           // _logger = logger;
         }
 
         /// <summary>
@@ -48,7 +48,6 @@ namespace CRM.API.Controllers
             //string code = Convert.ToString((CurrenciesCode)transactionModel.CurrencyId.Value);
             //_logger.LogInformation($"Create new TransferTransaction from Account {transactionModel.AccountId} to Account {transactionModel.AccountIdReceiver}: " +
             //                       $"{transactionModel.Amount} {code}");
-            restRequest.OnBeforeDeserialization = r => { r.ContentType = "application/json"; };
             var result = _restClient.Execute<List<long>>(restRequest);
             return MakeResponse<List<long>>(result);
 
@@ -72,7 +71,6 @@ namespace CRM.API.Controllers
              //string code = Convert.ToString((CurrenciesCode)transactionModel.CurrencyId.Value);
             //_logger.LogInformation($"Create new WithdrawTransaction for Account {transactionModel.AccountId}: " +
             //                       $"{transactionModel.Amount} {code}");
-            restRequest.OnBeforeDeserialization = r => { r.ContentType = "application/json"; };
             var result = _restClient.Execute<long>(restRequest);
             return MakeResponse<long>(result);
         }
@@ -113,7 +111,8 @@ namespace CRM.API.Controllers
             if (dataWrapper.Data == 0) return BadRequest("The account is not found or was deleted");
             var restRequest = new RestRequest($"transaction/by-account-id/{accountId}", Method.GET, DataFormat.Json);
             var result = _restClient.Execute<List<TransactionOutputModel>>(restRequest);
-            return MakeResponse<List<TransactionOutputModel>>(result);        }
+            return MakeResponse<List<TransactionOutputModel>>(result);        
+        }
 
         /// <summary>
         /// refers to TransactionStore to get transaction by Id
