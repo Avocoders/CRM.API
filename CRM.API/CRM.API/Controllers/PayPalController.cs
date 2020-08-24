@@ -51,14 +51,25 @@ namespace CRM.API.Controllers
         public async Task<ActionResult<string>> CreatePayPalPayment([FromBody] PaypalInputModel paypalInputModel)
         {
             var tmp = GetPayPalToken().Value;
-            _payPalClient = new RestClient(_options);
+            //_payPalClient = new RestClient(_options);
             _payPalClient.AddDefaultHeader("Authorization", $"Bearer {tmp}");
             var restRequest = new RestRequest(_paymentUrl, Method.POST, DataFormat.Json);
             //restRequest.AddHeader("Authorization", "Bearer " + tmp.Value);
             restRequest.AddJsonBody(paypalInputModel);
             var tmp2 = _payPalClient.Execute<string>(restRequest).Data;
-            return Ok();           
+            return tmp2;           
         }
 
+        [HttpPost(_paymentUrl + "/{paymentId}/execute")]
+        public async Task<ActionResult<string>> ExecutePayPalPayment (string paymentId, [FromBody] ExecuteInputModel model)
+        {
+            var tmp = GetPayPalToken().Value;
+            //_payPalClient = new RestClient(_options);
+            _payPalClient.AddDefaultHeader("Authorization", $"Bearer {tmp}");
+            var restRequest = new RestRequest($"{_paymentUrl}/{paymentId}/execute", Method.POST, DataFormat.Json);
+            restRequest.AddJsonBody(new { payer_id  = model.payerId });
+            var tmp2 = _payPalClient.Execute<string>(restRequest).Data;
+            return tmp2; //после проверки дописываем отправку в транзакшн стор, если не вернет успех, то рефанд делаем
+        }
     }
 }
