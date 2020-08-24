@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using CRM.Core;
 using CRM.Data;
 using CRM.API.Models.Input;
+using RestSharp.Authenticators;
 
 namespace CRM.API.Controllers
 {
@@ -26,25 +27,17 @@ namespace CRM.API.Controllers
             _restClient = new RestClient(options.Value.PayPalUrl);
             _logger = logger;
         }
-        //[HttpPost("token")]
 
-        //public async Task<ActionResult<string>> CreatePayPalPayment([FromBody] TokenInputModel tokenInputModel)
-        //{
-        //}
+        [HttpPost("token")]
 
-        //internal string GenerateServerBasedAccessToken()
-        //{
-        //    var result = _http.GeneralRequest($"{BaseOauthToken}?client_id={Settings.ClientId}&client_secret={Settings.Secret}&grant_type=client_credentials", "POST", null, ApiVersion.Helix, Settings.ClientId, null);
-        //    if (result.Key == 200)
-        //    {
-        //        var user = JsonConvert.DeserializeObject<dynamic>(result.Value);
-        //        var offset = (int)user.expires_in;
-        //        return (string)user.access_token;
-        //    }
-        //    return null;
-        //}
+        public async Task<ActionResult<string>> GetPayPalToken()
+        {
+            _restClient.Authenticator = new HttpBasicAuthenticator(userName, password);
+            var restRequest = new RestRequest(_createToken, Method.POST, DataFormat.Json);
 
+        }
 
+     
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost(_paymentUrl)]
