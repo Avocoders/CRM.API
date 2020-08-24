@@ -6,6 +6,6 @@ namespace CRM.Core
     {
         public string CrmAPIUrl { get; set; }
         public string TransactionStoreAPIUrl { get; set; }
-        public Uri PayPalUrl { get; set; }
+        public string PayPalUrl { get; set; }
     }
 }

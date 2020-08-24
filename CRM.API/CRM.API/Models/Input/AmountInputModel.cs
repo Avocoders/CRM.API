@@ -7,7 +7,7 @@ namespace TransactionStore.API.Models.Input
 {
     public class AmountInputModel
     {
-         public string Total { get; set; }
-         public string Currency { get; set; }
+         public string total { get; set; }
+         public string currency { get; set; }
     }
 }

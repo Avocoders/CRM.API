@@ -8,12 +8,12 @@ namespace CRM.API.Models.Input
 {
     public class PaypalInputModel
     {              
-            public string Intent { get; set; }
-            public PayerInputModel Payer { get; set; }
+            public string intent { get; set; }
+            public PayerInputModel payer { get; set; }
            
-            public List<TransactionsInputModel> Transactions { get; set; }
+            public List<TransactionsInputModel> transactions { get; set; }
             
-            public Redirect_Urls Redirect_Url { get; set; }
+            public Redirect_Urls redirect_urls { get; set; }
         // id Lead, id account ,
         
      }
