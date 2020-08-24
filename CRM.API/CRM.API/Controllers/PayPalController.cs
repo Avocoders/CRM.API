@@ -18,6 +18,7 @@ namespace CRM.API.Controllers
         private readonly ILeadRepository _repo;
         private readonly ILogger _logger;
         private const string _paymentUrl = "payments/payment";
+        private const string _createToken = "api.sandbox.paypal.com/v1/oauth2/token";
 
         public PayPalController(ILeadRepository repo, IOptions<UrlOptions> options, ILogger logger)
         {
@@ -25,7 +26,25 @@ namespace CRM.API.Controllers
             _restClient = new RestClient(options.Value.PayPalUrl);
             _logger = logger;
         }
-       
+        //[HttpPost("token")]
+
+        //public async Task<ActionResult<string>> CreatePayPalPayment([FromBody] TokenInputModel tokenInputModel)
+        //{
+        //}
+
+        //internal string GenerateServerBasedAccessToken()
+        //{
+        //    var result = _http.GeneralRequest($"{BaseOauthToken}?client_id={Settings.ClientId}&client_secret={Settings.Secret}&grant_type=client_credentials", "POST", null, ApiVersion.Helix, Settings.ClientId, null);
+        //    if (result.Key == 200)
+        //    {
+        //        var user = JsonConvert.DeserializeObject<dynamic>(result.Value);
+        //        var offset = (int)user.expires_in;
+        //        return (string)user.access_token;
+        //    }
+        //    return null;
+        //}
+
+
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost(_paymentUrl)]
