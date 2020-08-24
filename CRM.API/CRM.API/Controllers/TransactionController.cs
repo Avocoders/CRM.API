@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 using CRM.Core;
 using System;
 using Microsoft.Extensions.Logging;
+using CRM.API.Validators;
 
 namespace CRM.API.Controllers
 {
@@ -38,10 +39,8 @@ namespace CRM.API.Controllers
         [HttpPost("transfer")]
         public async Task<ActionResult<List<long>>> CreateTransferTransaction([FromBody] TransferInputModel transactionModel)
         {
-            if (_repo.GetAccountById(transactionModel.AccountId).Data is null) return BadRequest("The account is not found");//
-            if (_repo.GetAccountById(transactionModel.AccountIdReceiver).Data is null) return BadRequest("The account of receiver is not found");//
-            if (transactionModel.Amount <= 0) return BadRequest("The amount is missing"); //validatetransactionmodel
-
+            var validateInputModel = new ValidatorOfTransactionModel();
+            validateInputModel.ValidateTransferInputModel(transactionModel);
             transactionModel.CurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountId).Data;
             transactionModel.ReceiverCurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountIdReceiver).Data;            
             var restRequest = new RestRequest("transaction/transfer", Method.POST, DataFormat.Json);
@@ -63,8 +62,8 @@ namespace CRM.API.Controllers
         [HttpPost("withdraw")]
         public async Task<ActionResult<long>> CreateWithdrawTransaction([FromBody] TransactionInputModel transactionModel)
         {
-            if (_repo.GetAccountById(transactionModel.AccountId).Data is null) return BadRequest("The account is not found");//validate
-            if (transactionModel.Amount <= 0) return BadRequest("The amount is missing");//validate
+            var validateInputModel = new ValidatorOfTransactionModel();
+            validateInputModel.ValidateTransactionInputModel(transactionModel);
             transactionModel.CurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountId).Data;            
             var restRequest = new RestRequest("transaction/withdraw", Method.POST, DataFormat.Json);
             restRequest.AddJsonBody(transactionModel);
@@ -85,8 +84,8 @@ namespace CRM.API.Controllers
         [HttpPost("deposit")]
         public async Task<ActionResult<long>> CreateDepositTransaction([FromBody] TransactionInputModel transactionModel)
         {
-            if (_repo.GetAccountById(transactionModel.AccountId).Data is null) return BadRequest("The account is not found");
-            if (transactionModel.Amount <= 0) return BadRequest("The amount is missing");
+            var validateInputModel = new ValidatorOfTransactionModel();
+            validateInputModel.ValidateTransactionInputModel(transactionModel);
             transactionModel.CurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountId).Data;            
             var restRequest = new RestRequest("transaction/deposit", Method.POST, DataFormat.Json);
             restRequest.AddJsonBody(transactionModel);

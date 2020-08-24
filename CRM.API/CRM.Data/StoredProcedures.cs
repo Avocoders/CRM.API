@@ -19,5 +19,6 @@ namespace CRM.Data
         public const string LeadUpdateEmail = "Lead_UpdateEmail";
         public const string LeadSearch = "Lead_Search";
         public const string GetCurrencyByAccountId = "GetCurrencyByAccountId";
+        public const string AccountFindById = "Account_FindById";
     }
 }

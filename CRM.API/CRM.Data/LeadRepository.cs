@@ -310,5 +310,20 @@ namespace CRM.Data
             _connection.Execute("UpdatePassword", new { passwordDto.Id, passwordDto.Password },
                     commandType: CommandType.StoredProcedure);
         }
+
+        public DataWrapper<int> AccountFindById(long accountId)
+        {
+            var result = new DataWrapper<int>();
+            try
+            {
+                result.Data = _connection.Query<int>(StoredProcedures.AccountFindById, new {accountId}, commandType: CommandType.StoredProcedure).FirstOrDefault();
+                result.IsOk = true;
+            }
+            catch (Exception e)
+            {
+                result.ExceptionMessage = e.Message;
+            }
+            return result;
+        }
     }
 }
