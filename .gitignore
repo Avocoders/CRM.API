@@ -352,3 +352,5 @@ MigrationBackup/
 CRM.API/.idea/
 
 CRM.API/CRM.API/Logger/logger.txt
+
+CRM.API/CRM.API/logger.txt
