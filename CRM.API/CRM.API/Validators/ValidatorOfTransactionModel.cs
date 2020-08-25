@@ -12,7 +12,7 @@ namespace CRM.API.Validators
         private readonly ILeadRepository _repo;
         public ValidatorOfTransactionModel()
         {
-           
+
         }
        
         public string ValidateTransferInputModel(TransferInputModel transactionModel)

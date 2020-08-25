@@ -20,7 +20,7 @@ namespace CRM.API.Controllers
     {        
         private readonly RestClient _restClient;
         private readonly ILeadRepository _repo;
-        private readonly ILogger _logger;
+      //  private readonly ILogger _logger;
       
         public TransactionController(ILeadRepository repo, IOptions<UrlOptions> options)
         {                        
@@ -40,7 +40,7 @@ namespace CRM.API.Controllers
         public async Task<ActionResult<List<long>>> CreateTransferTransaction([FromBody] TransferInputModel transactionModel)
         {
             //var validateInputModel = new ValidatorOfTransactionModel();
-            //validateInputModel.ValidateTransferInputModel(transactionModel);
+            //validateInputModel.ValidateTransferInputModel(transactionModel);// если не пустая, то бэд реквест
             transactionModel.CurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountId).Data;
             transactionModel.ReceiverCurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountIdReceiver).Data;
             var restRequest = new RestRequest("transaction/transfer", Method.POST, DataFormat.Json);
@@ -86,15 +86,20 @@ namespace CRM.API.Controllers
         public async Task<ActionResult<long>> CreateDepositTransaction([FromBody] TransactionInputModel transactionModel)
         {
             //var validateInputModel = new ValidatorOfTransactionModel();
-            //validateInputModel.ValidateTransactionInputModel(transactionModel);
-            transactionModel.CurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountId).Data;            
-            var restRequest = new RestRequest("transaction/deposit", Method.POST, DataFormat.Json);
-            restRequest.AddJsonBody(transactionModel);
-            //string code = Convert.ToString((CurrenciesCode)transactionModel.CurrencyId.Value);
-            //_logger.LogInformation($"Create new DepositTransaction for Account {transactionModel.AccountId}: " +
-            //                       $"{transactionModel.Amount} {code}");
-            var result = _restClient.Execute<long>(restRequest);
-            return MakeResponse<long>(result);
+            //var validateResult = validateInputModel.ValidateTransactionInputModel(transactionModel);
+            //if (validateResult is null)
+            //{
+                transactionModel.CurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountId).Data;
+                var restRequest = new RestRequest("transaction/deposit", Method.POST, DataFormat.Json);
+                restRequest.AddJsonBody(transactionModel);
+                //string code = Convert.ToString((CurrenciesCode)transactionModel.CurrencyId.Value);
+                //_logger.LogInformation($"Create new DepositTransaction for Account {transactionModel.AccountId}: " +
+                //                       $"{transactionModel.Amount} {code}");
+                var result = _restClient.Execute<long>(restRequest);
+                return MakeResponse<long>(result);
+            //}
+            //return BadRequest(validateResult);
+
         }
 
         /// <summary>
