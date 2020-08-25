@@ -102,81 +102,34 @@ Hosting environment: Testing
 Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
 Application started. Press Ctrl+C to shut down.
 Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
+Content root path: D:\учеба\TransactionSystems\crm-api\CRM.API\CRM.API
 Application started. Press Ctrl+C to shut down.
 Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
-Connection ID "18086456113720459522", Request ID "80000103-0002-fb00-b63f-84710c7967bb": An unhandled exception was thrown by the application.
-Connection ID "18086456113720459522", Request ID "80000104-0002-fb00-b63f-84710c7967bb": An unhandled exception was thrown by the application.
-Connection ID "18086456113720459522", Request ID "80000105-0002-fb00-b63f-84710c7967bb": An unhandled exception was thrown by the application.
-Connection ID "18086456113720459522", Request ID "80000106-0002-fb00-b63f-84710c7967bb": An unhandled exception was thrown by the application.
-Connection ID "18086456113720459522", Request ID "80000107-0002-fb00-b63f-84710c7967bb": An unhandled exception was thrown by the application.
+Content root path: D:\учеба\TransactionSystems\crm-api\CRM.API\CRM.API
 Application started. Press Ctrl+C to shut down.
 Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
+Content root path: D:\учеба\TransactionSystems\crm-api\CRM.API\CRM.API
 Application started. Press Ctrl+C to shut down.
 Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
+Content root path: D:\учеба\TransactionSystems\crm-api\CRM.API\CRM.API
 Application started. Press Ctrl+C to shut down.
 Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
+Content root path: D:\учеба\TransactionSystems\crm-api\CRM.API\CRM.API
 Application started. Press Ctrl+C to shut down.
 Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
+Content root path: D:\учеба\TransactionSystems\crm-api\CRM.API\CRM.API
 Application started. Press Ctrl+C to shut down.
 Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
+Content root path: D:\учеба\TransactionSystems\crm-api\CRM.API\CRM.API
 Application started. Press Ctrl+C to shut down.
 Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
+Content root path: D:\учеба\TransactionSystems\crm-api\CRM.API\CRM.API
 Application started. Press Ctrl+C to shut down.
 Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
+Content root path: D:\учеба\TransactionSystems\crm-api\CRM.API\CRM.API
 Application started. Press Ctrl+C to shut down.
 Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
+Content root path: D:\учеба\TransactionSystems\crm-api\CRM.API\CRM.API
 Application started. Press Ctrl+C to shut down.
 Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
+Content root path: D:\учеба\TransactionSystems\crm-api\CRM.API\CRM.API
