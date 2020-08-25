@@ -222,3 +222,64 @@ Connection ID "18086456105130524680", Request ID "80000009-0000-fb00-b63f-84710c
 Application started. Press Ctrl+C to shut down.
 Hosting environment: Testing
 Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Testing
+Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
+Connection ID "18302628895834243076", Request ID "80000005-0002-fe00-b63f-84710c7967bb": An unhandled exception was thrown by the application.
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Testing
+Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Testing
+Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
+Connection ID "18374686511347007499", Request ID "8000000c-0007-ff00-b63f-84710c7967bb": An unhandled exception was thrown by the application.
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Testing
+Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
+Connection ID "18302628895834243082", Request ID "8000000b-0002-fe00-b63f-84710c7967bb": An unhandled exception was thrown by the application.
+Connection ID "18302628895834243082", Request ID "8000000c-0002-fe00-b63f-84710c7967bb": An unhandled exception was thrown by the application.
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Testing
+Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
+Connection ID "18374686485577203738", Request ID "8000001b-0001-ff00-b63f-84710c7967bb": An unhandled exception was thrown by the application.
+Connection ID "18374686485577203738", Request ID "8000001c-0001-ff00-b63f-84710c7967bb": An unhandled exception was thrown by the application.
+Connection ID "18374686485577203738", Request ID "8000001d-0001-ff00-b63f-84710c7967bb": An unhandled exception was thrown by the application.
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Testing
+Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Testing
+Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Testing
+Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Testing
+Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Testing
+Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Testing
+Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Testing
+Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Testing
+Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Testing
+Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Testing
+Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Testing
+Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Testing
+Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Testing
+Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
