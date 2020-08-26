@@ -102,184 +102,34 @@ Hosting environment: Testing
 Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
 Application started. Press Ctrl+C to shut down.
 Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
+Content root path: D:\учеба\TransactionSystems\crm-api\CRM.API\CRM.API
 Application started. Press Ctrl+C to shut down.
 Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
-Connection ID "18086456113720459522", Request ID "80000103-0002-fb00-b63f-84710c7967bb": An unhandled exception was thrown by the application.
-Connection ID "18086456113720459522", Request ID "80000104-0002-fb00-b63f-84710c7967bb": An unhandled exception was thrown by the application.
-Connection ID "18086456113720459522", Request ID "80000105-0002-fb00-b63f-84710c7967bb": An unhandled exception was thrown by the application.
-Connection ID "18086456113720459522", Request ID "80000106-0002-fb00-b63f-84710c7967bb": An unhandled exception was thrown by the application.
-Connection ID "18086456113720459522", Request ID "80000107-0002-fb00-b63f-84710c7967bb": An unhandled exception was thrown by the application.
+Content root path: D:\учеба\TransactionSystems\crm-api\CRM.API\CRM.API
 Application started. Press Ctrl+C to shut down.
 Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
+Content root path: D:\учеба\TransactionSystems\crm-api\CRM.API\CRM.API
 Application started. Press Ctrl+C to shut down.
 Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
+Content root path: D:\учеба\TransactionSystems\crm-api\CRM.API\CRM.API
 Application started. Press Ctrl+C to shut down.
 Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
+Content root path: D:\учеба\TransactionSystems\crm-api\CRM.API\CRM.API
 Application started. Press Ctrl+C to shut down.
 Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
+Content root path: D:\учеба\TransactionSystems\crm-api\CRM.API\CRM.API
 Application started. Press Ctrl+C to shut down.
 Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
+Content root path: D:\учеба\TransactionSystems\crm-api\CRM.API\CRM.API
 Application started. Press Ctrl+C to shut down.
 Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
+Content root path: D:\учеба\TransactionSystems\crm-api\CRM.API\CRM.API
 Application started. Press Ctrl+C to shut down.
 Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
+Content root path: D:\учеба\TransactionSystems\crm-api\CRM.API\CRM.API
 Application started. Press Ctrl+C to shut down.
 Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
+Content root path: D:\учеба\TransactionSystems\crm-api\CRM.API\CRM.API
 Application started. Press Ctrl+C to shut down.
 Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: D:\C# проекты\Банковские транзакции\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
-Connection ID "18374686507052040193", Request ID "80000002-0006-ff00-b63f-84710c7967bb": An unhandled exception was thrown by the application.
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
-Connection ID "18374686489872171012", Request ID "80000005-0002-ff00-b63f-84710c7967bb": An unhandled exception was thrown by the application.
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
-Connection ID "18086456105130524673", Request ID "80000002-0000-fb00-b63f-84710c7967bb": An unhandled exception was thrown by the application.
-Connection ID "18086456105130524673", Request ID "80000003-0000-fb00-b63f-84710c7967bb": An unhandled exception was thrown by the application.
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
-Connection ID "18374686489872171015", Request ID "80000008-0002-ff00-b63f-84710c7967bb": An unhandled exception was thrown by the application.
-Connection ID "18374686489872171015", Request ID "80000009-0002-ff00-b63f-84710c7967bb": An unhandled exception was thrown by the application.
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
-Connection ID "18374686494167138305", Request ID "80000002-0003-ff00-b63f-84710c7967bb": An unhandled exception was thrown by the application.
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
-Connection ID "18374686498462105609", Request ID "8000000a-0004-ff00-b63f-84710c7967bb": An unhandled exception was thrown by the application.
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
-Connection ID "18086456105130524680", Request ID "80000009-0000-fb00-b63f-84710c7967bb": An unhandled exception was thrown by the application.
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
-Connection ID "18302628895834243076", Request ID "80000005-0002-fe00-b63f-84710c7967bb": An unhandled exception was thrown by the application.
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
-Connection ID "18374686511347007499", Request ID "8000000c-0007-ff00-b63f-84710c7967bb": An unhandled exception was thrown by the application.
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
-Connection ID "18302628895834243082", Request ID "8000000b-0002-fe00-b63f-84710c7967bb": An unhandled exception was thrown by the application.
-Connection ID "18302628895834243082", Request ID "8000000c-0002-fe00-b63f-84710c7967bb": An unhandled exception was thrown by the application.
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
-Connection ID "18374686485577203738", Request ID "8000001b-0001-ff00-b63f-84710c7967bb": An unhandled exception was thrown by the application.
-Connection ID "18374686485577203738", Request ID "8000001c-0001-ff00-b63f-84710c7967bb": An unhandled exception was thrown by the application.
-Connection ID "18374686485577203738", Request ID "8000001d-0001-ff00-b63f-84710c7967bb": An unhandled exception was thrown by the application.
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
-Application started. Press Ctrl+C to shut down.
-Hosting environment: Testing
-Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
+Content root path: D:\учеба\TransactionSystems\crm-api\CRM.API\CRM.API
