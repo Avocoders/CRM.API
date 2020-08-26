@@ -296,28 +296,28 @@ namespace CRM.NUnitTest
         }
 
 
-        //[TestCase(11)]
-        //[TestCase(12)]
-        //[TestCase(13)]
-        //[TestCase(14)]
-        //[TestCase(15)]
-        //[TestCase(20)]
-        //public async Task RemoveLeadByIdTest(int num)
-        //{
-        //    var response = await _client.DeleteAsync($"{_crmUrl}{EndpointUrl.leadUrl}{num}");
-        //    var actual = await response.Content.ReadAsStringAsync();
-        //    int[] failedResults = new int[] { 14, 15, 20 };
-        //    if (failedResults.Contains(num))
-        //    {
-        //        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
-        //        Assert.AreEqual("Lead was not found", actual);                
-        //    }
-        //    else
-        //    {
-        //        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-        //        Assert.AreEqual("Successfully deleted", actual);
-        //    }
-        //}
+        [TestCase(11)]
+        [TestCase(12)]
+        [TestCase(13)]
+        [TestCase(14)]
+        [TestCase(15)]
+        [TestCase(20)]
+        public async Task RemoveLeadByIdTest(int num)
+        {
+            var response = await _client.DeleteAsync($"{_crmUrl}{EndpointUrl.leadUrl}{num}");
+            var actual = await response.Content.ReadAsStringAsync();
+            int[] failedResults = new int[] { 14, 15, 20 };
+            if (failedResults.Contains(num))
+            {
+                Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
+                Assert.AreEqual("Lead was not found", actual);
+            }
+            else
+            {
+                Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+                Assert.AreEqual("Successfully deleted", actual);
+            }
+        }
 
 
         [TestCase(7)]
@@ -357,7 +357,7 @@ namespace CRM.NUnitTest
         [OneTimeTearDown]
         public void Teardown()
         {
-            //_connection.Execute(Queries.clearTestBase);
+            _connection.Execute(Queries.clearTestBase);
             _server.Dispose();
             _client.Dispose();
         }

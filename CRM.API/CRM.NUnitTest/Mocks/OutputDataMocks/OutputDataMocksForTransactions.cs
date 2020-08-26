@@ -143,20 +143,26 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
                                 AccountId = 1,
                                 Type = "Deposit",
                                 Amount = 800000,
+                                Timestamp = DateTime.Now.ToString("dd:MMMM:yyyy"),
+                                AccountIdReceiver = null,
                             },
                             new TransactionOutputModel()
                             {
-                                Id = 4,
+                                Id = 5,
                                 AccountId = 1,
                                 Type = "Transfer",
-                                Amount = -500000
+                                Amount = -500000,
+                                Timestamp = DateTime.Now.ToString("dd:MMMM:yyyy"),
+                                AccountIdReceiver = 6,
                             },
                             new TransactionOutputModel()
                             {
-                                Id = 6,
+                                Id = 7,
                                 AccountId = 1,
                                 Type = "Transfer",
-                                Amount = -300000
+                                Amount = -300000,
+                                Timestamp = DateTime.Now.ToString("dd:MMMM:yyyy"),
+                                AccountIdReceiver = 4,
                             }
                         };
                     }
@@ -169,14 +175,18 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
                                 Id = 2,
                                 AccountId = 2,
                                 Type = "Deposit",
-                                Amount = 5000
+                                Amount = 5000,
+                                Timestamp = DateTime.Now.ToString("dd:MMMM:yyyy"),
+                                AccountIdReceiver = null,
                             },
                             new TransactionOutputModel()
                             {
-                                Id = 10,
+                                Id = 13,
                                 AccountId = 2,
                                 Type = "Withdraw",
-                                Amount = -1000
+                                Amount = -1000,
+                                Timestamp = DateTime.Now.ToString("dd:MMMM:yyyy"),
+                                AccountIdReceiver = null,
                             }
                         };
                     }
@@ -189,20 +199,29 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
                                 Id = 3,
                                 AccountId = 3,
                                 Type = "Deposit",
-                                Amount = 325000
+                                Amount = 325000,
+                                Timestamp = DateTime.Now.ToString("dd:MMMM:yyyy"),
+                                AccountIdReceiver = null,
                             },
                             new TransactionOutputModel()
                             {
-                                Id = 11,
+                                Id = 14,
                                 AccountId = 3,
                                 Type = "Withdraw",
-                                Amount = -500
+                                Amount = -500,
+                                Timestamp = DateTime.Now.ToString("dd:MMMM:yyyy"),
+                                AccountIdReceiver = null,
+                            },
+                             new TransactionOutputModel()
+                            {
+                                Id = 11,
+                                AccountId = 3,
+                                Type = "Transfer",
+                                Amount = -1000,
+                                Timestamp = DateTime.Now.ToString("dd:MMMM:yyyy"),
+                                AccountIdReceiver = -1,
                             }
                         };
-                    }
-                case 0:
-                    {
-                        return "Account was not found";
                     }
                 case 6:
                     {
@@ -210,10 +229,12 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
                         {
                             new TransactionOutputModel()
                             {
-                                Id = 4,
+                                Id = 5,
                                 AccountId = 1,
                                 Type = "Transfer",
-                                Amount = -500000
+                                Amount = -500000,
+                                Timestamp = DateTime.Now.ToString("dd:MMMM:yyyy"),
+                                AccountIdReceiver = 6,
                             }
                         };
                     }
@@ -223,24 +244,30 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
                         {
                             new TransactionOutputModel()
                             {
-                                Id = 12,
+                                Id = 15,
                                 AccountId = 4,
                                 Type = "Withdraw",
                                 Amount = -2,
+                                Timestamp = DateTime.Now.ToString("dd:MMMM:yyyy"),
+                                AccountIdReceiver = null,
                             },
                             new TransactionOutputModel()
                             {
-                                Id = 6,
+                                Id = 7,
                                 AccountId = 1,
                                 Type = "Transfer",
                                 Amount = -300000,
+                                Timestamp = DateTime.Now.ToString("dd:MMMM:yyyy"),
+                                AccountIdReceiver = 4,
                             },
                             new TransactionOutputModel()
                             {
-                                Id = 8,
+                                Id = 9,
                                 AccountId = 4,
                                 Type = "Transfer",
                                 Amount = -500,
+                                Timestamp = DateTime.Now.ToString("dd:MMMM:yyyy"),
+                                AccountIdReceiver = 5,
                             }
                         };
                     }
