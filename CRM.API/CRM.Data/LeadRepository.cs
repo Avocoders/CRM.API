@@ -257,11 +257,12 @@ namespace CRM.Data
         {
             var leadDictionary = new Dictionary<long, LeadDto>();
             var results = new DataWrapper<List<LeadDto>>();
+            LeadDto leadEntry = new LeadDto();
             try
             {
                 results.Data = _connection.Query<LeadDto, RoleDto, CityDto, AccountDto, LeadDto>(
                     StoredProcedures.LeadSearch,
-                    (lead, role, city, account) =>
+                   (lead, role, city, account) =>
                     {
                         LeadDto leadEntry;
                         if (!leadDictionary.TryGetValue(lead.Id.Value, out leadEntry))
@@ -279,6 +280,7 @@ namespace CRM.Data
                     searchParameters, splitOn: "Id",
                     commandType: CommandType.StoredProcedure).ToList();
                 results.IsOk = true;
+                results.Data = new List<LeadDto> (leadDictionary.Values);
             }
             catch (Exception e)
             {
