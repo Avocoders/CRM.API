@@ -14,6 +14,8 @@ using TransactionStore.API.Models.Input;
 using DocumentFormat.OpenXml.Spreadsheet;
 using System;
 using System.Globalization;
+using CRM.API.Models.Output;
+using System.Diagnostics;
 
 namespace CRM.API.Controllers
 {
@@ -21,7 +23,8 @@ namespace CRM.API.Controllers
     [Route("[Controller]")]
     public class PayPalController : TransactionController
     {
-        private RestClient _payPalClient;       
+        private RestClient _payPalClient;
+        private string paymentId;
         //private readonly ILogger _logger;
         private const string _paymentUrl = "payments/payment";
         private const string _createToken = "oauth2/token";
@@ -55,8 +58,18 @@ namespace CRM.API.Controllers
             _payPalClient.AddDefaultHeader("Authorization", $"Bearer {tmp}");
             var restRequest = new RestRequest(_paymentUrl, Method.POST, DataFormat.Json);            
             restRequest.AddJsonBody(paypalInputModel);
-            var tmp2 = _payPalClient.Execute<string>(restRequest).Data;
-            return tmp2;           
+            var tmp2 = _payPalClient.Execute<PayPalOutputModel>(restRequest).Data;
+            try
+            {
+                Response.Redirect(tmp2.links[1].href);
+            }
+            catch(Exception ex)
+            {
+                return ex.Message;
+            }
+            paymentId = tmp2.id;
+            //ExecutePayPalPayment(tmp2.id, )
+            return "-1";
         }
 
         [HttpPost(_paymentUrl + "/{paymentId}/execute/{accountId}")]
@@ -64,16 +77,13 @@ namespace CRM.API.Controllers
         {
             var tmp = GetPayPalToken().Value;            
             _payPalClient.AddDefaultHeader("Authorization", $"Bearer {tmp}");
-            var restRequest = new RestRequest($"{_paymentUrl}/{paymentId}/execute", Method.POST, DataFormat.Json);
+            var restRequest = new RestRequest($"{_paymentUrl}/{paymentId}/execute/{accountId}", Method.POST, DataFormat.Json);
             restRequest.AddJsonBody(new { payer_id  = model.payerId });
             var tmp2 = _payPalClient.Execute<PaypalInputModel>(restRequest);          
             if((int)tmp2.StatusCode == 200)
             {
                 var tmp4 = (tmp2.Data.transactions[0].amount.total);
-                var tmp3 = Decimal.Parse(tmp4,
-                  NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture);
-
-                //Convert.ToDouble(tmp4);
+                var tmp3 = Decimal.Parse(tmp4, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture);
                 TransactionInputModel transactionModel = new TransactionInputModel();
                 transactionModel.AccountId = accountId;
                 transactionModel.Amount = tmp3;
