@@ -1,4 +1,5 @@
 ﻿using CRM.API.Models.Output;
+using System;
 using System.Collections.Generic;
 
 namespace CRM.NUnitTest.Mocks.OutputModelMocks
@@ -22,9 +23,9 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
         {
             return num switch
             {
-                1 => new List<int>() { 4, 5 },
-                2 => new List<int>() { 6, 7 },
-                3 => new List<int>() { 8, 9 },
+                1 => new List<int>() { 5, 6 },
+                2 => new List<int>() { 7, 8 },
+                3 => new List<int>() { 9, 10 },
                 4 => "The account of receiver is not found",
                 5 => "The amount is missing",
                 6 => "",               
@@ -36,9 +37,9 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
         {
             return num switch
             {
-                1 => 10,
-                2 => 11,
-                3 => 12,
+                1 => 13,
+                2 => 14,
+                3 => 15,
                 4 => "The amount is missing",
                 5 => "0",         
                 6 => "The account is not found",
@@ -52,9 +53,9 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
             {
                 1 => 0.0000M,
                 2 => 4000.0000M,
-                3 => 324500.0000M,
-                4 => 3616.4123M,
-                5 => 422.2117M,
+                3 => 323500.0000M,
+                4 => 3598.0436M,
+                5 => 422.495M,
                 256 => 0,  
                 _ => -1,
             };
@@ -62,40 +63,70 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
 
         public dynamic GetTransactionMockById(int num) 
         {
-            return num switch
+            switch (num) 
             {
-                1 => new TransactionOutputModel()
-                {
-                    Id = 1,
-                    AccountId = 1,
-                    Type = "Deposit",
-                    Amount = 800000,
-                },
-                2 => new TransactionOutputModel()
-                {
-                    Id = 2,
-                    AccountId = 2,
-                    Type = "Deposit",
-                    Amount = 5000,
-                },
-                4 => new TransactionOutputModel()
-                {
-                    Id = 4,
-                    AccountId = 1,
-                    Type = "Transfer",
-                    Amount = -500000,
-                },
-                8 => new TransactionOutputModel()
-                {
-                    Id = 8,
-                    AccountId = 4,
-                    Type = "Transfer",
-                    Amount = -500.0000M
-                },
-                13 => new TransactionOutputModel(),
-                0 => "Transactions were not found",
-                _ => -1,
+                case 1: 
+                    {
+                        return new List<TransactionOutputModel>()
+                        {
+                            new TransactionOutputModel()
+                            {
+                                Id = 1,
+                                AccountId = 1,
+                                Type = "Deposit",
+                                Amount = 800000,
+                                Timestamp = DateTime.Now.ToString("dd:MMMM:yyyy"),
+                                AccountIdReceiver =null,
+                            }
+                        };
+                    }
+                case 2:
+                    {
+                        return new List<TransactionOutputModel>()
+                        {
+                            new TransactionOutputModel()
+                            {
+                                Id = 2,
+                                AccountId = 2,
+                                Type = "Deposit",
+                                Amount = 5000,
+                                Timestamp = DateTime.Now.ToString("dd:MMMM:yyyy"),
+                                AccountIdReceiver = null,
+                            }
+                        };
+                    }
+                case 5:
+                    {
+                        return new List<TransactionOutputModel>()
+                        {
+                            new TransactionOutputModel()
+                            {
+                                Id = 5,
+                                AccountId = 1,
+                                Type = "Transfer",
+                                Amount = -500000.0000M,
+                                Timestamp = DateTime.Now.ToString("dd:MMMM:yyyy"),
+                                AccountIdReceiver = 6,
+                            }
+                        };
+                    }
+                case 8:
+                    {
+                        return new List<TransactionOutputModel>()
+                        {
+                            new TransactionOutputModel()
+                            {
+                                Id = 7,
+                                AccountId = 1,
+                                Type = "Transfer",
+                                Amount = -300000.0000M,
+                                Timestamp = DateTime.Now.ToString("dd:MMMM:yyyy"),
+                                AccountIdReceiver = 4,
+                            }
+                        };
+                    }                            
             };
+            return new List<TransactionOutputModel>();
         }
 
         public dynamic GetTransactionsMockByAccountId(int num)  

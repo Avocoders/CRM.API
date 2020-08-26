@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using CRM.API.Controllers;
+using CRM.API.Validators;
 using CRM.Core;
 using CRM.Data;
 
@@ -10,11 +11,12 @@ namespace CRM.API.Configuration
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<LeadRepository>().As<ILeadRepository>();
+            builder.RegisterType<LeadSearchParameters>().SingleInstance();
             builder.RegisterType<DatabaseOptions>().As<IDatabaseOptions>();
             builder.RegisterType<UrlOptions>().As<IUrlOptions>();
             builder.RegisterType<Validator>().SingleInstance();
             builder.RegisterType<ResponseWrapper>().SingleInstance();
-            builder.RegisterType<Validator>().SingleInstance();
+            builder.RegisterType<ValidatorOfTransactionModel>().SingleInstance();
         }
     }
 }

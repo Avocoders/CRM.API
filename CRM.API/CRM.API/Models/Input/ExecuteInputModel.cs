@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TransactionStore.API.Models.Input;
 
 namespace CRM.API.Models.Input
 {
-    public class TransactionsInputModel
+    public class ExecuteInputModel
     {
-        public AmountInputModel amount { get; set; }
-   
+        public string payerId { get; set; }
     }
 }

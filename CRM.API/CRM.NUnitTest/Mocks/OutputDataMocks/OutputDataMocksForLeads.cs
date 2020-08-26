@@ -244,11 +244,18 @@ namespace CRM.NUnitTest
                             },
                             new AccountOutputModel()
                             {
-                                Id = 1,
+                                Id = 3,
                                 IsDeleted = false,
                                 CurrencyCode = "USD",
                                 CurrencyName = "USDollar"
-                            }
+                            },
+                            new AccountOutputModel()
+                             {
+                                 Id = 21,
+                                 IsDeleted = false,
+                                 CurrencyCode = "EUR",
+                                 CurrencyName = "Euro"
+                             },
                         },
                         IsDeleted = false
                         }
@@ -300,14 +307,14 @@ namespace CRM.NUnitTest
                                 {
                                     new AccountOutputModel()
                                     {
-                                        Id = 13,
+                                        Id = 6,
                                         IsDeleted = false,
                                         CurrencyCode = "EUR",
                                         CurrencyName = "Euro"
                                     },
                                     new AccountOutputModel()
                                     {
-                                        Id = 14,
+                                        Id = 1,
                                         IsDeleted = false,
                                         CurrencyCode = "RUB",
                                         CurrencyName = "RussianRubble"

@@ -7,6 +7,6 @@ namespace TransactionStore.API.Models.Input
 {
     public class PayerInputModel
     {
-        public string Payment_method { get; set; }
+        public string payment_method { get; set; }
     }
 }

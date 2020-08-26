@@ -128,6 +128,7 @@ namespace CRM.API
                 logger.LogInformation($"Processing request {context.Request.Path}");
                 await context.Response.WriteAsync("Message"); // Some message
             });
+
         }
 
         public void ConfigureContainer(ContainerBuilder builder)

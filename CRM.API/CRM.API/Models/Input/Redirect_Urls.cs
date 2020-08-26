@@ -7,7 +7,7 @@ namespace TransactionStore.API.Models.Input
 {
     public class Redirect_Urls
     {
-        public string Return_url { get; set; } = "https://sandbox.paypal.com";
-        public string Cancel_url { get; set; } = "https://sandbox.paypal.com";
+        public string return_url { get; set; } = "https://sandbox.paypal.com";
+        public string cancel_url { get; set; } = "https://sandbox.paypal.com";
     }
 }
