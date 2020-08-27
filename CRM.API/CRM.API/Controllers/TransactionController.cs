@@ -12,6 +12,8 @@ using System;
 using Google.Authenticator;
 using CRM.API.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.JsonPatch.Operations;
+using CRM.Data.DTO;
 
 namespace CRM.API.Controllers
 {
@@ -21,18 +23,21 @@ namespace CRM.API.Controllers
     {        
         private readonly RestClient _restClient;
         private readonly ILeadRepository _repo;
+        private readonly IOperationRepository _operation;
+
         // private readonly ILogger _logger;
         private readonly GoogleAuthentication _authentication;
         private readonly IMapper _mapper;
 
 
-        public TransactionController(ILeadRepository repo, IOptions<UrlOptions> options, IMapper mapper)
+        public TransactionController(ILeadRepository repo, IOperationRepository operation, IOptions<UrlOptions> options, IMapper mapper)
         {                        
             _repo = repo;            
             _restClient = new RestClient(options.Value.TransactionStoreAPIUrl);
             // _logger = logger;
             _authentication = new GoogleAuthentication();
             _mapper = mapper;
+            _operation = operation;
         }        
 
         /// <summary>
@@ -74,11 +79,13 @@ namespace CRM.API.Controllers
             if (transactionModel.Amount <= 0) return BadRequest("The amount is missing");
             //var validateInputModel = new ValidatorOfTransactionModel();
             //validateInputModel.ValidateTransactionInputModel(transactionModel);
-            transactionModel.CurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountId).Data;
-            var model = _mapper.Map<AuthModel>(transactionModel);
-            _authentication.GenerateTwoFactorAuthentication(); 
-            model.AuthenticationManualCode = _authentication.AuthenticationManualCode;
-            return model;
+            transactionModel.CurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountId).Data;                     
+            _authentication.GenerateTwoFactorAuthentication();
+            var model = _mapper.Map<OperationDto>(transactionModel);
+            AuthModel auth = new AuthModel();
+            auth.Id = _operation.AddOperation(_mapper.Map<OperationDto>(transactionModel)).Data;
+            auth.AuthenticationManualCode = _authentication.AuthenticationManualCode;
+            return auth;
         }
 
         /// <summary>

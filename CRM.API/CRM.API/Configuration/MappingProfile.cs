@@ -59,7 +59,9 @@ namespace CRM.API.Configuration
                  .ForMember(dest => dest.CurrencyCode, o => o.MapFrom(src => Enum.GetName(typeof(CurrenciesCode), src.CurrencyId)))
                  .ForMember(dest => dest.CurrencyName, o => o.MapFrom(src => Enum.GetName(typeof(CurrenciesName), src.CurrencyId)));
 
-            CreateMap<TransactionInputModel, AuthModel>();
+            CreateMap<TransactionInputModel, OperationDto>();
+
+
             CreateMap<AuthModel, TransactionInputModel>();
         }
     }

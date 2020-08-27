@@ -9,11 +9,11 @@ using System.Linq;
 
 namespace CRM.Data
 {
-    public class OperatinRepository
+    public class OperationRepository : IOperationRepository
     {
         private readonly IDbConnection _connection;
 
-        public OperatinRepository(IOptions<DatabaseOptions> options)
+        public OperationRepository(IOptions<DatabaseOptions> options)
         {
             _connection = new SqlConnection(options.Value.DBConnectionString);
         }
@@ -23,7 +23,10 @@ namespace CRM.Data
             var result = new DataWrapper<long>();
             try
             {
-                result.Data = _connection.Query<long>(StoredProcedures.AddOperation, operation, commandType: CommandType.StoredProcedure).FirstOrDefault();
+                result.Data = _connection.Query<long>(StoredProcedures.AddOperation,
+                new {operation.AccountId,
+                    operation.Amount},
+                commandType: CommandType.StoredProcedure).FirstOrDefault();
                 result.IsOk = true;
             }
             catch (Exception e)
@@ -38,7 +41,7 @@ namespace CRM.Data
             var result = new DataWrapper<OperationDto>();
             try
             {
-                result.Data = _connection.Query<OperationDto>(StoredProcedures.GetOperationById,  new { Id }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+                result.Data = _connection.Query<OperationDto>(StoredProcedures.GetOperationById, new { Id }, commandType: CommandType.StoredProcedure).FirstOrDefault();
                 result.IsOk = true;
             }
             catch (Exception e)
@@ -50,7 +53,7 @@ namespace CRM.Data
 
         public void CompletedOperation(long id)
         {
-            _connection.Execute(StoredProcedures.CompletedOperation, new { id }, commandType: CommandType.StoredProcedure);           
+            _connection.Execute(StoredProcedures.CompletedOperation, new { id }, commandType: CommandType.StoredProcedure);
         }
     }
 }
