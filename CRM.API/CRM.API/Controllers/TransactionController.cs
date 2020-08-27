@@ -9,6 +9,7 @@ using RestSharp;
 using Microsoft.Extensions.Options;
 using CRM.Core;
 using System;
+using Google.Authenticator;
 using CRM.API.Models;
 using AutoMapper;
 using CRM.Data.DTO;
@@ -95,23 +96,21 @@ namespace CRM.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost("withdraw")]
-        public  async Task<ActionResult<long>> CreateWithdrawTransaction2(string pin)
+        public ActionResult<long> CreateWithdrawTransaction2([FromBody]string pin)
         {            
             if(_authentication.ValidateTwoFactorPIN(pin) == true)
             {
-                var transactionModel = _mapper.Map<TransactionInputModel>(_operation.GetOperationById(operationId));
+                var transactionModel = _mapper.Map<TransactionInputModel>(_operation.GetOperationById(operationId).Data);
                 transactionModel.CurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountId).Data;
                 var restRequest = new RestRequest("transaction/withdraw", Method.POST, DataFormat.Json);             
                 restRequest.AddJsonBody(transactionModel);
-                //string code = Convert.ToString((CurrenciesCode)transactionModel.CurrencyId.Value);
-                //_logger.LogInformation($"Create new WithdrawTransaction for Account {transactionModel.AccountId}: " +
-                //                       $"{transactionModel.Amount} {code}");
                 var result = _restClient.Execute<long>(restRequest);
 
                 return MakeResponse(result);
             }
             return BadRequest("((((");
         }
+      
 
         /// <summary>
         /// refers to TransactionStore to create a deposit transaction

@@ -62,7 +62,10 @@ namespace CRM.API.Configuration
             CreateMap<TransactionInputModel, OperationDto>();
 
 
-            CreateMap<OperationDto, TransactionInputModel>();
+            CreateMap<OperationDto, TransactionInputModel>()
+                 .ForPath(dest => dest.AccountId, o => o.MapFrom(src => src.AccountId))
+                 .ForPath(dest => dest.Amount, o => o.MapFrom(src => src.Amount));
+                 
         }
     }
 }
