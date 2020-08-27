@@ -108,11 +108,18 @@
             <param name="transactionModel"></param>
             <returns></returns>
         </member>
-        <member name="M:CRM.API.Controllers.TransactionController.CreateWithdrawTransaction(TransactionStore.API.Models.Input.TransactionInputModel)">
+        <member name="M:CRM.API.Controllers.TransactionController.CreateWithdrawTransaction1(TransactionStore.API.Models.Input.TransactionInputModel)">
             <summary>
-            refers to TransactionStore to create a withdraw transaction
+            
             </summary>
             <param name="transactionModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CRM.API.Controllers.TransactionController.CreateWithdrawTransaction2(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="authModel"></param>
             <returns></returns>
         </member>
         <member name="M:CRM.API.Controllers.TransactionController.CreateDepositTransaction(TransactionStore.API.Models.Input.TransactionInputModel)">

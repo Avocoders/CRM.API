@@ -20,5 +20,8 @@ namespace CRM.Data
         public const string LeadSearch = "Lead_Search";
         public const string GetCurrencyByAccountId = "GetCurrencyByAccountId";
         public const string AccountFindById = "Account_FindById";
+        public const string AddOperation = "Operation_Add";
+        public const string CompletedOperation = "Operation_Update";
+        public const string GetOperationById = "Operation_Get";
     }
 }

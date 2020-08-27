@@ -11,6 +11,7 @@ namespace CRM.API.Configuration
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<LeadRepository>().As<ILeadRepository>();
+            builder.RegisterType< OperationRepository> ().As<IOperationRepository>();
             builder.RegisterType<LeadSearchParameters>().SingleInstance();
             builder.RegisterType<DatabaseOptions>().As<IDatabaseOptions>();
             builder.RegisterType<UrlOptions>().As<IUrlOptions>();

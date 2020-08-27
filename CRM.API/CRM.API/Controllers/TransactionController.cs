@@ -9,8 +9,10 @@ using RestSharp;
 using Microsoft.Extensions.Options;
 using CRM.Core;
 using System;
-using Microsoft.Extensions.Logging;
-using CRM.API.Validators;
+using Google.Authenticator;
+using CRM.API.Models;
+using AutoMapper;
+using CRM.Data.DTO;
 
 namespace CRM.API.Controllers
 {
@@ -20,14 +22,23 @@ namespace CRM.API.Controllers
     {        
         private readonly RestClient _restClient;
         private readonly ILeadRepository _repo;
-       // private readonly ILogger _logger;
-      
-        public TransactionController(ILeadRepository repo, IOptions<UrlOptions> options)
+        private readonly IOperationRepository _operation;
+        private static long operationId; 
+
+        // private readonly ILogger _logger;
+        private readonly GoogleAuthentication _authentication;
+        private readonly IMapper _mapper;
+
+
+        public TransactionController(ILeadRepository repo, IOperationRepository operation, IOptions<UrlOptions> options, IMapper mapper)
         {                        
             _repo = repo;            
             _restClient = new RestClient(options.Value.TransactionStoreAPIUrl);
-           // _logger = logger;
-        }
+            // _logger = logger;
+            _authentication = new GoogleAuthentication();
+            _mapper = mapper;
+            _operation = operation;
+        }        
 
         /// <summary>
         /// refers to TransactionStore to create a transfer transaction
@@ -55,28 +66,51 @@ namespace CRM.API.Controllers
         }
 
         /// <summary>
-        /// refers to TransactionStore to create a withdraw transaction
+        /// 
         /// </summary>
         /// <param name="transactionModel"></param>
         /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]      
-        [HttpPost("withdraw")]
-        public async Task<ActionResult<long>> CreateWithdrawTransaction([FromBody] TransactionInputModel transactionModel)
+        [HttpPost("withdraw/authentication")]
+        public async Task<ActionResult<AuthModel>> CreateWithdrawTransaction1([FromBody] TransactionInputModel transactionModel)
         {
             if (_repo.GetAccountById(transactionModel.AccountId).Data is null) return BadRequest("The account is not found");
             if (transactionModel.Amount <= 0) return BadRequest("The amount is missing");
             //var validateInputModel = new ValidatorOfTransactionModel();
-            //validateInputModel.ValidateTransactionInputModel(transactionModel);
-            transactionModel.CurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountId).Data;            
-            var restRequest = new RestRequest("transaction/withdraw", Method.POST, DataFormat.Json);
-            restRequest.AddJsonBody(transactionModel);
-             //string code = Convert.ToString((CurrenciesCode)transactionModel.CurrencyId.Value);
-            //_logger.LogInformation($"Create new WithdrawTransaction for Account {transactionModel.AccountId}: " +
-            //                       $"{transactionModel.Amount} {code}");
-            var result = _restClient.Execute<long>(restRequest);
-            return MakeResponse(result);
+            //validateInputModel.ValidateTransactionInputModel(transactionModel);                         
+            _authentication.GenerateTwoFactorAuthentication();
+            var model = _mapper.Map<OperationDto>(transactionModel);
+            AuthModel auth = new AuthModel();
+            operationId= _operation.AddOperation(_mapper.Map<OperationDto>(transactionModel)).Data;
+            auth.Id = operationId;
+            auth.AuthenticationManualCode = _authentication.AuthenticationManualCode;
+            return auth;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="authModel"></param>
+        /// <returns></returns>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpPost("withdraw")]
+        public ActionResult<long> CreateWithdrawTransaction2([FromBody]string pin)
+        {            
+            if(_authentication.ValidateTwoFactorPIN(pin) == true)
+            {
+                var transactionModel = _mapper.Map<TransactionInputModel>(_operation.GetOperationById(operationId).Data);
+                transactionModel.CurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountId).Data;
+                var restRequest = new RestRequest("transaction/withdraw", Method.POST, DataFormat.Json);             
+                restRequest.AddJsonBody(transactionModel);
+                var result = _restClient.Execute<long>(restRequest);
+
+                return MakeResponse(result);
+            }
+            return BadRequest("((((");
+        }
+      
 
         /// <summary>
         /// refers to TransactionStore to create a deposit transaction
