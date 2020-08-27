@@ -13,6 +13,8 @@ using Google.Authenticator;
 using CRM.API.Models;
 using AutoMapper;
 using CRM.Data.DTO;
+using CRM.API.Validators;
+using Microsoft.Extensions.Logging;
 
 namespace CRM.API.Controllers
 {
@@ -25,12 +27,12 @@ namespace CRM.API.Controllers
         private readonly IOperationRepository _operation;
         private static long operationId; 
 
-        // private readonly ILogger _logger;
+      //   private readonly ILogger _logger;
         private readonly GoogleAuthentication _authentication;
         private readonly IMapper _mapper;
 
 
-        public TransactionController(ILeadRepository repo, IOperationRepository operation, IOptions<UrlOptions> options, IMapper mapper)
+        public TransactionController(ILeadRepository repo, IOperationRepository operation, IOptions<UrlOptions> options, IMapper mapper /*ILogger logger*/)
         {                        
             _repo = repo;            
             _restClient = new RestClient(options.Value.TransactionStoreAPIUrl);
@@ -191,10 +193,10 @@ namespace CRM.API.Controllers
             {
                 return Problem(result.ErrorException.InnerException?.Message ?? result.ErrorException.Message, statusCode: 503); 
             }
-            //if ((int)result.StatusCode == 418)// придумать код согласовано с TS
-            //{
-            //    return Problem("Not enough money on the account", statusCode: 520);
-            //}
+            if ((int)result.StatusCode == 418)
+            {
+                return Problem("Not enough money on the account", statusCode: 520);
+            }
             return Ok(result.Data);
         }
     }

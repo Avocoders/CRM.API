@@ -32,7 +32,7 @@ namespace CRM.API.Controllers
         private const string userName = "AUQVTtwW6FAGCRUZNVcFU9BffNtzw-ukYIQmW1pk-uODKcB_Y3Ei6NfE25lC8VPwqjFcCMS3pokeQCy_";
         private const string password = "EEGtuAyQIHSYEgmV9VfA7I_7XqaKrY566l1NIJytW8z19Vbp-LiLxxYwNlrpF7Ga-4sLCY7BbX5T9Du1";
 
-        public PayPalController(ILeadRepository repo, IOperationRepository operation, IOptions<UrlOptions> options, IMapper mapper /*, ILogger logger*//*, string _paymentId*/) : base(repo, operation, options, mapper)
+        public PayPalController(ILeadRepository repo, IOperationRepository operation, IOptions<UrlOptions> options, IMapper mapper /*, ILogger logger*/) : base(repo, operation, options, mapper /*, logger*/)
         {
             _payPalClient = new RestClient(options.Value.PayPalUrl);
             //paymentId = _paymentId;
