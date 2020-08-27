@@ -9,8 +9,7 @@ using RestSharp;
 using Microsoft.Extensions.Options;
 using CRM.Core;
 using System;
-using Microsoft.Extensions.Logging;
-using CRM.API.Validators;
+using Google.Authenticator;
 
 namespace CRM.API.Controllers
 {
@@ -27,7 +26,7 @@ namespace CRM.API.Controllers
             _repo = repo;            
             _restClient = new RestClient(options.Value.TransactionStoreAPIUrl);
            // _logger = logger;
-        }
+        }        
 
         /// <summary>
         /// refers to TransactionStore to create a transfer transaction
@@ -61,21 +60,40 @@ namespace CRM.API.Controllers
         /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]      
-        [HttpPost("withdraw")]
-        public async Task<ActionResult<long>> CreateWithdrawTransaction([FromBody] TransactionInputModel transactionModel)
+        [HttpPost("withdraw/authentic")]
+        public string CreateWithdrawTransaction1(/*[FromBody] TransactionInputModel transactionModel*/)
         {
-            if (_repo.GetAccountById(transactionModel.AccountId).Data is null) return BadRequest("The account is not found");
-            if (transactionModel.Amount <= 0) return BadRequest("The amount is missing");
+            //if (_repo.GetAccountById(transactionModel.AccountId).Data is null) return BadRequest("The account is not found");
+            //if (transactionModel.Amount <= 0) return BadRequest("The amount is missing");
             //var validateInputModel = new ValidatorOfTransactionModel();
             //validateInputModel.ValidateTransactionInputModel(transactionModel);
-            transactionModel.CurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountId).Data;            
-            var restRequest = new RestRequest("transaction/withdraw", Method.POST, DataFormat.Json);
-            restRequest.AddJsonBody(transactionModel);
-             //string code = Convert.ToString((CurrenciesCode)transactionModel.CurrencyId.Value);
-            //_logger.LogInformation($"Create new WithdrawTransaction for Account {transactionModel.AccountId}: " +
-            //                       $"{transactionModel.Amount} {code}");
-            var result = _restClient.Execute<long>(restRequest);
-            return MakeResponse(result);
+            //transactionModel.CurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountId).Data;
+            AuthenticationGoogle g = new AuthenticationGoogle();            
+            g.GenerateTwoFactorAuthentication();
+            var result = g.AuthenticationManualCode;
+            return result;
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpPost("withdraw")]
+        public bool /*async Task<ActionResult<long>>*/ CreateWithdrawTransaction2([FromBody]string pin)
+        {
+            AuthenticationGoogle g = new AuthenticationGoogle();
+            var result = g.ValidateTwoFactorPIN(pin);
+            return result;
+            //if (_repo.GetAccountById(transactionModel.AccountId).Data is null) return BadRequest("The account is not found");
+            //if (transactionModel.Amount <= 0) return BadRequest("The amount is missing");
+            ////var validateInputModel = new ValidatorOfTransactionModel();
+            ////validateInputModel.ValidateTransactionInputModel(transactionModel);
+            //transactionModel.CurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountId).Data;
+            //var restRequest = new RestRequest("transaction/withdraw", Method.POST, DataFormat.Json);
+            //restRequest.AddJsonBody(transactionModel);
+            ////string code = Convert.ToString((CurrenciesCode)transactionModel.CurrencyId.Value);
+            ////_logger.LogInformation($"Create new WithdrawTransaction for Account {transactionModel.AccountId}: " +
+            ////                       $"{transactionModel.Amount} {code}");
+            //var result = _restClient.Execute<long>(restRequest);
+            //return MakeResponse(result);
         }
 
         /// <summary>
