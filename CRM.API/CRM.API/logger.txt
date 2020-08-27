@@ -335,3 +335,36 @@ Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
 Application started. Press Ctrl+C to shut down.
 Hosting environment: Testing
 Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Testing
+Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Testing
+Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Testing
+Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Testing
+Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Testing
+Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Testing
+Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Testing
+Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Testing
+Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
+Connection ID "18374686485577204026", Request ID "8000013b-0001-ff00-b63f-84710c7967bb": An unhandled exception was thrown by the application.
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Testing
+Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
+Connection ID "18374686507052040657", Request ID "800001d2-0006-ff00-b63f-84710c7967bb": An unhandled exception was thrown by the application.
+Application started. Press Ctrl+C to shut down.
+Hosting environment: Testing
+Content root path: C:\Users\Home\source\repos\crm-api\crm-api\CRM.API\CRM.API
+Connection ID "18158513699168452932", Request ID "80000145-0000-fc00-b63f-84710c7967bb": An unhandled exception was thrown by the application.

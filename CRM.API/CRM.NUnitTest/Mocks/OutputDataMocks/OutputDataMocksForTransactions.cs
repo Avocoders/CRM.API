@@ -23,12 +23,12 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
         {
             return num switch
             {
-                1 => new List<int>() { 5, 6 },
-                2 => new List<int>() { 7, 8 },
-                3 => new List<int>() { 9, 10 },
+                1 => new List<int>() { 4, 5 },
+                2 => new List<int>() { 6, 7 },
+                3 => new List<int>() { 8, 9 },
                 4 => "The account of receiver is not found",
                 5 => "The amount is missing",
-                6 => "",               
+                6 => 520,               
                 _ => new List<int>(),
             };
         }                                              
@@ -52,9 +52,9 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
             return num switch
             {
                 1 => 0.0000M,
-                2 => 4000.0000M,
-                3 => 323500.0000M,
-                4 => 3598.0436M,
+                2 => 5000.0000M,
+                3 => 325000.0000M,
+                4 => 3600.0436m,
                 5 => 422.495M,
                 256 => 0,  
                 _ => -1,
@@ -101,7 +101,7 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
                         {
                             new TransactionOutputModel()
                             {
-                                Id = 5,
+                                Id = 4,
                                 AccountId = 1,
                                 Type = "Transfer",
                                 Amount = -500000.0000M,
@@ -116,12 +116,12 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
                         {
                             new TransactionOutputModel()
                             {
-                                Id = 7,
-                                AccountId = 1,
+                                Id = 8,
+                                AccountId = 4,
                                 Type = "Transfer",
-                                Amount = -300000.0000M,
+                                Amount = -500,
                                 Timestamp = DateTime.Now.ToString("dd:MMMM:yyyy"),
-                                AccountIdReceiver = 4,
+                                AccountIdReceiver = 5,
                             }
                         };
                     }                            
@@ -148,7 +148,7 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
                             },
                             new TransactionOutputModel()
                             {
-                                Id = 5,
+                                Id = 4,
                                 AccountId = 1,
                                 Type = "Transfer",
                                 Amount = -500000,
@@ -157,7 +157,7 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
                             },
                             new TransactionOutputModel()
                             {
-                                Id = 7,
+                                Id = 6,
                                 AccountId = 1,
                                 Type = "Transfer",
                                 Amount = -300000,
@@ -179,15 +179,7 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
                                 Timestamp = DateTime.Now.ToString("dd:MMMM:yyyy"),
                                 AccountIdReceiver = null,
                             },
-                            new TransactionOutputModel()
-                            {
-                                Id = 13,
-                                AccountId = 2,
-                                Type = "Withdraw",
-                                Amount = -1000,
-                                Timestamp = DateTime.Now.ToString("dd:MMMM:yyyy"),
-                                AccountIdReceiver = null,
-                            }
+                           
                         };
                     }
                 case 3:
@@ -203,24 +195,7 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
                                 Timestamp = DateTime.Now.ToString("dd:MMMM:yyyy"),
                                 AccountIdReceiver = null,
                             },
-                            new TransactionOutputModel()
-                            {
-                                Id = 14,
-                                AccountId = 3,
-                                Type = "Withdraw",
-                                Amount = -500,
-                                Timestamp = DateTime.Now.ToString("dd:MMMM:yyyy"),
-                                AccountIdReceiver = null,
-                            },
-                             new TransactionOutputModel()
-                            {
-                                Id = 11,
-                                AccountId = 3,
-                                Type = "Transfer",
-                                Amount = -1000,
-                                Timestamp = DateTime.Now.ToString("dd:MMMM:yyyy"),
-                                AccountIdReceiver = -1,
-                            }
+                         
                         };
                     }
                 case 6:
@@ -229,7 +204,7 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
                         {
                             new TransactionOutputModel()
                             {
-                                Id = 5,
+                                Id = 4,
                                 AccountId = 1,
                                 Type = "Transfer",
                                 Amount = -500000,
@@ -242,18 +217,10 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
                     {
                         return new List<TransactionOutputModel>()
                         {
+                           
                             new TransactionOutputModel()
                             {
-                                Id = 15,
-                                AccountId = 4,
-                                Type = "Withdraw",
-                                Amount = -2,
-                                Timestamp = DateTime.Now.ToString("dd:MMMM:yyyy"),
-                                AccountIdReceiver = null,
-                            },
-                            new TransactionOutputModel()
-                            {
-                                Id = 7,
+                                Id = 6,
                                 AccountId = 1,
                                 Type = "Transfer",
                                 Amount = -300000,
@@ -262,7 +229,7 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
                             },
                             new TransactionOutputModel()
                             {
-                                Id = 9,
+                                Id = 8,
                                 AccountId = 4,
                                 Type = "Transfer",
                                 Amount = -500,

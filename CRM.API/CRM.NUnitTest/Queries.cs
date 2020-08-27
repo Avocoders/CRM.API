@@ -3,7 +3,9 @@
 	public static class Queries
 	{
 		public const string fillTestBase =
-			 @"Insert Into Lead
+			 @"truncate table [dbo].Account 
+				truncate table [dbo].Lead
+				Insert Into Lead
 					   (FirstName,
 						LastName,
 						Patronymic,
