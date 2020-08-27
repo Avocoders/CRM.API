@@ -10,6 +10,8 @@ using Microsoft.Extensions.Options;
 using CRM.Core;
 using System;
 using Google.Authenticator;
+using CRM.API.Models;
+using AutoMapper;
 
 namespace CRM.API.Controllers
 {
@@ -19,13 +21,18 @@ namespace CRM.API.Controllers
     {        
         private readonly RestClient _restClient;
         private readonly ILeadRepository _repo;
-       // private readonly ILogger _logger;
-      
-        public TransactionController(ILeadRepository repo, IOptions<UrlOptions> options)
+        // private readonly ILogger _logger;
+        private readonly GoogleAuthentication _authentication;
+        private readonly IMapper _mapper;
+
+
+        public TransactionController(ILeadRepository repo, IOptions<UrlOptions> options, IMapper mapper)
         {                        
             _repo = repo;            
             _restClient = new RestClient(options.Value.TransactionStoreAPIUrl);
-           // _logger = logger;
+            // _logger = logger;
+            _authentication = new GoogleAuthentication();
+            _mapper = mapper;
         }        
 
         /// <summary>
@@ -54,46 +61,47 @@ namespace CRM.API.Controllers
         }
 
         /// <summary>
-        /// refers to TransactionStore to create a withdraw transaction
+        /// 
         /// </summary>
         /// <param name="transactionModel"></param>
         /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]      
-        [HttpPost("withdraw/authentic")]
-        public string CreateWithdrawTransaction1(/*[FromBody] TransactionInputModel transactionModel*/)
+        [HttpPost("withdraw/authentication")]
+        public async Task<ActionResult<AuthModel>> CreateWithdrawTransaction1([FromBody] TransactionInputModel transactionModel)
         {
-            //if (_repo.GetAccountById(transactionModel.AccountId).Data is null) return BadRequest("The account is not found");
-            //if (transactionModel.Amount <= 0) return BadRequest("The amount is missing");
+            if (_repo.GetAccountById(transactionModel.AccountId).Data is null) return BadRequest("The account is not found");
+            if (transactionModel.Amount <= 0) return BadRequest("The amount is missing");
             //var validateInputModel = new ValidatorOfTransactionModel();
             //validateInputModel.ValidateTransactionInputModel(transactionModel);
-            //transactionModel.CurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountId).Data;
-            AuthenticationGoogle g = new AuthenticationGoogle();            
-            g.GenerateTwoFactorAuthentication();
-            var result = g.AuthenticationManualCode;
-            return result;
+            transactionModel.CurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountId).Data;
+            var model = _mapper.Map<AuthModel>(transactionModel);
+            _authentication.GenerateTwoFactorAuthentication(); 
+            model.AuthenticationManualCode = _authentication.AuthenticationManualCode;
+            return model;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="authModel"></param>
+        /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost("withdraw")]
-        public bool /*async Task<ActionResult<long>>*/ CreateWithdrawTransaction2([FromBody]string pin)
-        {
-            AuthenticationGoogle g = new AuthenticationGoogle();
-            var result = g.ValidateTwoFactorPIN(pin);
-            return result;
-            //if (_repo.GetAccountById(transactionModel.AccountId).Data is null) return BadRequest("The account is not found");
-            //if (transactionModel.Amount <= 0) return BadRequest("The amount is missing");
-            ////var validateInputModel = new ValidatorOfTransactionModel();
-            ////validateInputModel.ValidateTransactionInputModel(transactionModel);
-            //transactionModel.CurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountId).Data;
-            //var restRequest = new RestRequest("transaction/withdraw", Method.POST, DataFormat.Json);
-            //restRequest.AddJsonBody(transactionModel);
-            ////string code = Convert.ToString((CurrenciesCode)transactionModel.CurrencyId.Value);
-            ////_logger.LogInformation($"Create new WithdrawTransaction for Account {transactionModel.AccountId}: " +
-            ////                       $"{transactionModel.Amount} {code}");
-            //var result = _restClient.Execute<long>(restRequest);
-            //return MakeResponse(result);
+        public  async Task<ActionResult<long>> CreateWithdrawTransaction2([FromBody]AuthModel authModel)
+        {            
+            if(_authentication.ValidateTwoFactorPIN(authModel.AuthenticationManualCode) == true)
+            {
+                var restRequest = new RestRequest("transaction/withdraw", Method.POST, DataFormat.Json);             
+                restRequest.AddJsonBody(_mapper.Map<TransactionInputModel>(authModel));
+                //string code = Convert.ToString((CurrenciesCode)transactionModel.CurrencyId.Value);
+                //_logger.LogInformation($"Create new WithdrawTransaction for Account {transactionModel.AccountId}: " +
+                //                       $"{transactionModel.Amount} {code}");
+                var result = _restClient.Execute<long>(restRequest);
+                return MakeResponse(result);
+            }
+            return BadRequest("((((");
         }
 
         /// <summary>

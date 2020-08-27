@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CRM.API.Models;
 using CRM.API.Models.Input;
 using CRM.API.Models.Output;
 using CRM.Core;
@@ -6,6 +7,7 @@ using CRM.Data;
 using CRM.Data.DTO;
 using System;
 using System.Globalization;
+using TransactionStore.API.Models.Input;
 
 namespace CRM.API.Configuration
 {
@@ -56,6 +58,9 @@ namespace CRM.API.Configuration
                  .ForPath(dest => dest.City, o => o.MapFrom(src => src.Lead.City.Name))
                  .ForMember(dest => dest.CurrencyCode, o => o.MapFrom(src => Enum.GetName(typeof(CurrenciesCode), src.CurrencyId)))
                  .ForMember(dest => dest.CurrencyName, o => o.MapFrom(src => Enum.GetName(typeof(CurrenciesName), src.CurrencyId)));
+
+            CreateMap<TransactionInputModel, AuthModel>();
+            CreateMap<AuthModel, TransactionInputModel>();
         }
     }
 }
