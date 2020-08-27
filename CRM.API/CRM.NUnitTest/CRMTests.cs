@@ -357,7 +357,7 @@ namespace CRM.NUnitTest
         [OneTimeTearDown]
         public void Teardown()
         {
-            _connection.Execute(Queries.clearTestBase);
+            //_connection.Execute(Queries.clearTestBase);
             _server.Dispose();
             _client.Dispose();
         }
