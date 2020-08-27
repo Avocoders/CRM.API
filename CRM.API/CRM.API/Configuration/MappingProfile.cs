@@ -62,7 +62,7 @@ namespace CRM.API.Configuration
             CreateMap<TransactionInputModel, OperationDto>();
 
 
-            CreateMap<AuthModel, TransactionInputModel>();
+            CreateMap<OperationDto, TransactionInputModel>();
         }
     }
 }
