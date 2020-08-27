@@ -50,7 +50,7 @@ namespace CRM.API.Controllers
             //_logger.LogInformation($"Create new TransferTransaction from Account {transactionModel.AccountId} to Account {transactionModel.AccountIdReceiver}: " +
             //                       $"{transactionModel.Amount} {code}");
             var result = _restClient.Execute<List<long>>(restRequest);
-            return MakeResponse<List<long>>(result);
+            return MakeResponse(result);
 
         }
 
@@ -75,7 +75,7 @@ namespace CRM.API.Controllers
             //_logger.LogInformation($"Create new WithdrawTransaction for Account {transactionModel.AccountId}: " +
             //                       $"{transactionModel.Amount} {code}");
             var result = _restClient.Execute<long>(restRequest);
-            return MakeResponse<long>(result);
+            return MakeResponse(result);
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace CRM.API.Controllers
                 //_logger.LogInformation($"Create new DepositTransaction for Account {transactionModel.AccountId}: " +
                 //                       $"{transactionModel.Amount} {code}");
                 var result = _restClient.Execute<long>(restRequest);
-                return MakeResponse<long>(result);
+                return MakeResponse(result);
          
 
         }
@@ -116,7 +116,7 @@ namespace CRM.API.Controllers
              if (dataWrapper.Data == 0) return BadRequest("The account is not found or was deleted");  
             var restRequest = new RestRequest($"transaction/by-account-id/{accountId}", Method.GET, DataFormat.Json);
             var result = _restClient.Execute<List<TransactionOutputModel>>(restRequest);
-            return MakeResponse<List<TransactionOutputModel>>(result);        
+            return MakeResponse(result);        
         }
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace CRM.API.Controllers
         {                   
             var restRequest = new RestRequest($"transaction/{id}", Method.GET, DataFormat.Json);
             var result = _restClient.Execute<List<TransactionOutputModel>>(restRequest);
-            return MakeResponse<List<TransactionOutputModel>>(result);
+            return MakeResponse(result);
         }
 
         /// <summary>
@@ -148,7 +148,7 @@ namespace CRM.API.Controllers
             if (dataWrapper.Data == 0) return BadRequest("The account is not found or was deleted");
             var restRequest = new RestRequest($"transaction/{accountId}/balance", Method.GET, DataFormat.Json);
             var result = _restClient.Execute<decimal>(restRequest);
-            return  MakeResponse<decimal>(result);
+            return  MakeResponse(result);
         }
         
         private ActionResult<T> MakeResponse<T>(IRestResponse<T> result)
