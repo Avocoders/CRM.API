@@ -1,30 +1,25 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using TransactionStore.API.Models.Input;
+using CRM.API.Models.Output;
 using Microsoft.AspNetCore.Http;
 using RestSharp;
 using Microsoft.Extensions.Options;
-using System.Threading.Tasks;
 using CRM.Core;
-using CRM.Data;
-using CRM.API.Models.Input;
-using RestSharp.Authenticators;
 using CRM.API.Models;
-using Newtonsoft.Json;
-using TransactionStore.API.Models.Input;
-using DocumentFormat.OpenXml.Spreadsheet;
+using CRM.API.Models.Input;
 using System;
 using System.Globalization;
-using CRM.API.Models.Output;
-using System.Diagnostics;
-using AutoMapper;
+using RestSharp.Authenticators;
 
 namespace CRM.API.Controllers
 {
     [ApiController]
     [Route("[Controller]")]
-    public class PayPalController : TransactionController
+    public class PayPalController: Controller
     {
         private RestClient _payPalClient;
+        private TransactionController _transaction;
 
         //private readonly ILogger _logger;
         private const string _paymentUrl = "payments/payment";
@@ -32,9 +27,10 @@ namespace CRM.API.Controllers
         private const string userName = "AUQVTtwW6FAGCRUZNVcFU9BffNtzw-ukYIQmW1pk-uODKcB_Y3Ei6NfE25lC8VPwqjFcCMS3pokeQCy_";
         private const string password = "EEGtuAyQIHSYEgmV9VfA7I_7XqaKrY566l1NIJytW8z19Vbp-LiLxxYwNlrpF7Ga-4sLCY7BbX5T9Du1";
 
-        public PayPalController(ILeadRepository repo, IOperationRepository operation, IOptions<UrlOptions> options, IMapper mapper /*, ILogger logger*/) : base(repo, operation, options, mapper /*, logger*/)
+        public PayPalController(IOptions<UrlOptions> options, TransactionController transaction /*, ILogger logger*/)
         {
             _payPalClient = new RestClient(options.Value.PayPalUrl);
+            _transaction = transaction;
             //paymentId = _paymentId;
             /*_logger = logger;*/
         }
@@ -67,14 +63,14 @@ namespace CRM.API.Controllers
             catch (Exception ex)
             {
                 return ex.Message;
-            }           
+            }
             Payment.paymentId = tmp2.id;
 
             return "-1";
         }
 
         [HttpPost(_paymentUrl + "/execute/{accountId}")]
-        public async Task<ActionResult> ExecutePayPalPayment( [FromBody] ExecuteInputModel model, long accountId)
+        public async Task<ActionResult> ExecutePayPalPayment([FromBody] ExecuteInputModel model, long accountId)
         {
 
             var tmp = GetPayPalToken().Value;
@@ -84,15 +80,28 @@ namespace CRM.API.Controllers
             var tmp2 = _payPalClient.Execute<PaypalInputModel>(restRequest);
             if ((int)tmp2.StatusCode == 200)
             {
-                var tmp4 = (tmp2.Data.transactions[0].amount.total);
-                var tmp3 = Decimal.Parse(tmp4, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture);
+                //var tmp4 = (tmp2.Data.transactions[0].amount.total);
+                var tmp3 = Decimal.Parse(tmp2.Data.transactions[0].amount.total, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture);
                 TransactionInputModel transactionModel = new TransactionInputModel();
                 transactionModel.AccountId = accountId;
                 transactionModel.Amount = tmp3;
-                var result = await CreateDepositTransaction(transactionModel);
-                return Ok("Вы - умница)))");
+                var result = await _transaction.CreateDepositTransaction(transactionModel);
+                return Ok(result);
             }
             return BadRequest("418.все печально(((");
+        }
+
+        private ActionResult<T> MakeResponse<T>(IRestResponse<T> result)
+        {
+            if (result.StatusCode == 0)
+            {
+                return Problem(result.ErrorException.InnerException?.Message ?? result.ErrorException.Message, statusCode: 503);
+            }
+            if ((int)result.StatusCode == 418)
+            {
+                return Problem("Not enough money on the account", statusCode: 520);
+            }
+            return Ok(result.Data);
         }
     }
     public static class Payment

@@ -8,15 +8,11 @@ using Microsoft.AspNetCore.Http;
 using RestSharp;
 using Microsoft.Extensions.Options;
 using CRM.Core;
-using System;
-using Google.Authenticator;
 using CRM.API.Models;
 using AutoMapper;
 using CRM.Data.DTO;
-using CRM.API.Validators;
-using Microsoft.Extensions.Logging;
 using CRM.API.Models.Input;
-using ADO.Net.Client.Core;
+
 
 namespace CRM.API.Controllers
 {
@@ -27,7 +23,6 @@ namespace CRM.API.Controllers
         private readonly RestClient _restClient;
         private readonly ILeadRepository _repo;
         private readonly IOperationRepository _operation;
-        private static long operationId; 
 
       //   private readonly ILogger _logger;
         private readonly GoogleAuthentication _authentication;
@@ -86,8 +81,7 @@ namespace CRM.API.Controllers
             _authentication.GenerateTwoFactorAuthentication();
             var model = _mapper.Map<OperationDto>(transactionModel);
             AuthOutputModel auth = new AuthOutputModel();
-            operationId= _operation.AddOperation(_mapper.Map<OperationDto>(transactionModel)).Data;
-            auth.Id = operationId;
+            auth.Id = _operation.AddOperation(_mapper.Map<OperationDto>(transactionModel)).Data;
             auth.AuthenticationManualCode = _authentication.AuthenticationManualCode;
             return auth;
         }
