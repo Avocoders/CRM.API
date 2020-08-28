@@ -89,7 +89,7 @@ namespace CRM.API.Controllers
                 TransactionInputModel transactionModel = new TransactionInputModel();
                 transactionModel.AccountId = accountId;
                 transactionModel.Amount = tmp3;
-                var result = CreateDepositTransaction(transactionModel).Result;
+                var result = await CreateDepositTransaction(transactionModel);
                 return Ok("Вы - умница)))");
             }
             return BadRequest("418.все печально(((");

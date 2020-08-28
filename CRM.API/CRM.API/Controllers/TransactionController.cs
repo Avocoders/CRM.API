@@ -15,6 +15,8 @@ using AutoMapper;
 using CRM.Data.DTO;
 using CRM.API.Validators;
 using Microsoft.Extensions.Logging;
+using CRM.API.Models.Input;
+using ADO.Net.Client.Core;
 
 namespace CRM.API.Controllers
 {
@@ -75,7 +77,7 @@ namespace CRM.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]      
         [HttpPost("withdraw/authentication")]
-        public async Task<ActionResult<AuthModel>> CreateWithdrawTransaction1([FromBody] TransactionInputModel transactionModel)
+        public async Task<ActionResult<AuthOutputModel>> CreateWithdrawTransaction1([FromBody] TransactionInputModel transactionModel)
         {
             if (_repo.GetAccountById(transactionModel.AccountId).Data is null) return BadRequest("The account is not found");
             if (transactionModel.Amount <= 0) return BadRequest("The amount is missing");
@@ -83,7 +85,7 @@ namespace CRM.API.Controllers
             //validateInputModel.ValidateTransactionInputModel(transactionModel);                         
             _authentication.GenerateTwoFactorAuthentication();
             var model = _mapper.Map<OperationDto>(transactionModel);
-            AuthModel auth = new AuthModel();
+            AuthOutputModel auth = new AuthOutputModel();
             operationId= _operation.AddOperation(_mapper.Map<OperationDto>(transactionModel)).Data;
             auth.Id = operationId;
             auth.AuthenticationManualCode = _authentication.AuthenticationManualCode;
@@ -98,19 +100,26 @@ namespace CRM.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost("withdraw")]
-        public ActionResult<long> CreateWithdrawTransaction2([FromBody]string pin)
-        {            
-            if(_authentication.ValidateTwoFactorPIN(pin) == true)
+        public ActionResult<long> CreateWithdrawTransaction2([FromBody] AuthInputModel authInput )
+        {
+            if (authInput.Id==null) BadRequest("Enter operation ID");
+            if (authInput.Pin.Length != 6) BadRequest("PIN not entered or incorrect number of characters entered");
+            if (_authentication.ValidateTwoFactorPIN(authInput.Pin) == true)
             {
-                var transactionModel = _mapper.Map<TransactionInputModel>(_operation.GetOperationById(operationId).Data);
-                transactionModel.CurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountId).Data;
-                var restRequest = new RestRequest("transaction/withdraw", Method.POST, DataFormat.Json);             
-                restRequest.AddJsonBody(transactionModel);
-                var result = _restClient.Execute<long>(restRequest);
-
-                return MakeResponse(result);
+                var operationModel = _operation.GetOperationById(authInput.Id).Data;
+                if (operationModel.IsCompleted == false) 
+                {
+                    _operation.CompletedOperation(authInput.Id);
+                    var transactionModel = _mapper.Map<TransactionInputModel>(operationModel);
+                    transactionModel.CurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountId).Data;
+                    var restRequest = new RestRequest("transaction/withdraw", Method.POST, DataFormat.Json);
+                    restRequest.AddJsonBody(transactionModel);
+                    var result = _restClient.Execute<long>(restRequest);
+                    return MakeResponse(result);
+                }
+                return Ok("The operation was performed");
             }
-            return BadRequest("((((");
+            return BadRequest("Incorrect PIN entered");
         }
       
 
