@@ -13,6 +13,7 @@ using System.Globalization;
 using RestSharp.Authenticators;
 using PayPal.Api;
 using PayPal;
+using APIContext = PayPal.Api.APIContext;
 
 namespace CRM.API.Controllers
 {
@@ -72,7 +73,7 @@ namespace CRM.API.Controllers
         }
 
         [HttpPost(_paymentUrl + "/execute/{accountId}")]
-        public async Task<ActionResult> ExecutePayPalPayment([FromBody] ExecuteInputModel model, long accountId)
+        public async Task<ActionResult<string>> ExecutePayPalPayment([FromBody] ExecuteInputModel model, long accountId)
         {
 
             var tmp = GetPayPalToken().Value;
@@ -91,14 +92,23 @@ namespace CRM.API.Controllers
                 if (result.Value!=0) return Ok(result);
                 else 
                 {
-
-                    var refundRequest = new RestRequest($"payments/refun/{Payment.paymentId}", Method.GET, DataFormat.Json);
+                    Amount refundAmount = new Amount();
+                    refundAmount.total = "5";
+                    refundAmount.currency = "RUB";
+                    Refund refund = new Refund();
+                    refund.amount = refundAmount;
+                    var apiContext = new APIContext(tmp);
+                    string saleId = Payment.paymentId;
+                    Refund refundforreal = Sale.Refund(apiContext, saleId, refund);
+                    return refundforreal.id;
+                    //var refundRequest = new RestRequest($"payments/refun/{Payment.paymentId}", Method.GET, DataFormat.Json);
                     //restRequest.AddJsonBody(new { payer_id = model.payerId });
-                    var tmp4 = _payPalClient.Execute<PaypalInputModel>(refundRequest);                   
+                    //var tmp4 = _payPalClient.Execute<PaypalInputModel>(refundRequest);                   
                 }
             }
             return BadRequest("418.все печально(((");
         }
+                
 
         private ActionResult<T> MakeResponse<T>(IRestResponse<T> result)
         {
