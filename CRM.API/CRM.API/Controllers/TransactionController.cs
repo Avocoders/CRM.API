@@ -27,16 +27,14 @@ namespace CRM.API.Controllers
         private readonly IOperationRepository _operation;
         private static long operationId; 
 
-      //   private readonly ILogger _logger;
         private readonly GoogleAuthentication _authentication;
         private readonly IMapper _mapper;
 
 
-        public TransactionController(ILeadRepository repo, IOperationRepository operation, IOptions<UrlOptions> options, IMapper mapper /*ILogger logger*/)
+        public TransactionController(ILeadRepository repo, IOperationRepository operation, IOptions<UrlOptions> options, IMapper mapper)
         {                        
             _repo = repo;            
             _restClient = new RestClient(options.Value.TransactionStoreAPIUrl);
-            // _logger = logger;
             _authentication = new GoogleAuthentication();
             _mapper = mapper;
             _operation = operation;

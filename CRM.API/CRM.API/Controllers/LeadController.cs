@@ -21,7 +21,6 @@ namespace CRM.API.Controllers
     [Route("[controller]")]
     public class LeadController : Controller
     {
-        private readonly ILogger _logger;
         private readonly IMapper _mapper;
         private readonly ILeadRepository _repo;
         private readonly ResponseWrapper _wrapper;
@@ -29,13 +28,11 @@ namespace CRM.API.Controllers
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="logger"></param>
         /// <param name="repo"></param>
         /// <param name="mapper"></param>
-        /// <param name="validator"></param>
-        public LeadController(ILogger<LeadController> logger, ILeadRepository repo, IMapper mapper, ResponseWrapper wrapper)
+        /// <param name="wrapper"></param>
+        public LeadController(ILeadRepository repo, IMapper mapper, ResponseWrapper wrapper)
         {
-            _logger = logger;
             _mapper = mapper;
             _repo = repo;
             _wrapper = wrapper;
@@ -69,7 +66,7 @@ namespace CRM.API.Controllers
             {
                 leadModel.Password = new PasswordEncryptor().EncryptPassword(leadModel.Password);  //возможно не в контроллере должна быть, в автомап !!!
                 DataWrapper<LeadDto> newDataWrapper = _repo.AddOrUpdateLead(_mapper.Map<LeadDto>(leadModel));
-                _logger.LogInformation($"Create new lead with Id: {newDataWrapper.Data.Id}");
+                //_logger.Info($"Create new lead with Id: {newDataWrapper.Data.Id}");
                 return MakeResponse(newDataWrapper, _mapper.Map<LeadOutputModel>);
             }
             else
@@ -91,7 +88,7 @@ namespace CRM.API.Controllers
             {
                 leadModel.Password = new PasswordEncryptor().EncryptPassword(leadModel.Password); // нельзя поменять пароль в обычном update, сделать отдельно !!!
                 DataWrapper<LeadDto> newDataWrapper = _repo.AddOrUpdateLead(_mapper.Map<LeadDto>(leadModel));
-                _logger.LogInformation($"Update lead info with Id: {newDataWrapper.Data.Id}");
+                //_logger.Info($"Update lead info with Id: {newDataWrapper.Data.Id}");
                 return MakeResponse(newDataWrapper, _mapper.Map<LeadOutputModel>);
             }
             else
@@ -111,7 +108,7 @@ namespace CRM.API.Controllers
             DataWrapper<LeadDto> dataWrapper = _repo.GetById(leadId);
             if (dataWrapper.Data == null) return BadRequest("Lead was not found");
             _repo.Delete(leadId);
-            _logger.LogInformation($"Delete lead with Id: {dataWrapper.Data.Id}");
+            //_logger.Info($"Delete lead with Id: {dataWrapper.Data.Id}");
             return Ok("Successfully deleted");
         }
 
@@ -130,7 +127,7 @@ namespace CRM.API.Controllers
             {
                 passwordModel.Password = new PasswordEncryptor().EncryptPassword(passwordModel.Password);
                 _repo.UpdatePassword(_mapper.Map<PasswordDto>(passwordModel));
-                _logger.LogInformation($"Update password for lead with Id: {passwordModel.Id}");
+                //_logger.Info($"Update password for lead with Id: {passwordModel.Id}");
                 return Ok("Successfully updated");
             }
             else
@@ -151,7 +148,7 @@ namespace CRM.API.Controllers
             if (string.IsNullOrWhiteSpace(message))
             {
                 _repo.UpdateEmailByLeadId(_mapper.Map<EmailDto>(emailModel));
-                _logger.LogInformation($"Update e-mail for lead with Id: {emailModel.LeadId} - {emailModel.Email} ");
+                //_logger.Info($"Update e-mail for lead with Id: {emailModel.LeadId} - {emailModel.Email} ");
                 return Ok("E-mail was updated");
             }
             else
@@ -209,7 +206,7 @@ namespace CRM.API.Controllers
         {
             if (account.CurrencyId == null) return BadRequest("Choose currency");
             DataWrapper<AccountDto> dataWrapper = _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));
-            _logger.LogInformation($"Create new account with Id: {dataWrapper.Data.Id}");
+            //_logger.Info($"Create new account with Id: {dataWrapper.Data.Id}");
             return MakeResponse(dataWrapper, _mapper.Map<AccountWithLeadOutputModel>);
         }
         /// <summary>
@@ -222,7 +219,7 @@ namespace CRM.API.Controllers
         public ActionResult<AccountWithLeadOutputModel> UpdateAccount(AccountInputModel account)
         {
             DataWrapper<AccountDto> dataWrapper = _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));
-            _logger.LogInformation($"Update account with Id: {dataWrapper.Data.Id}");
+            //_logger.Info($"Update account with Id: {dataWrapper.Data.Id}");
             return MakeResponse(dataWrapper, _mapper.Map<AccountWithLeadOutputModel>);
         }
 
