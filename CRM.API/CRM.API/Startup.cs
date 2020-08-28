@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using CRM.API.Logger;
+using CRM.API.Controllers;
 
 namespace CRM.API
 {

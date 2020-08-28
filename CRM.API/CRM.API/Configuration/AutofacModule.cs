@@ -18,6 +18,8 @@ namespace CRM.API.Configuration
             builder.RegisterType<Validator>().SingleInstance();
             builder.RegisterType<ResponseWrapper>().SingleInstance();
             builder.RegisterType<ValidatorOfTransactionModel>().SingleInstance();
+            builder.RegisterType<TransactionController>().SingleInstance();
+
         }
     }
 }

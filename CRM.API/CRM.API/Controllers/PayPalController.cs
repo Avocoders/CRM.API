@@ -11,6 +11,8 @@ using CRM.API.Models.Input;
 using System;
 using System.Globalization;
 using RestSharp.Authenticators;
+using PayPal.Api;
+using PayPal;
 
 namespace CRM.API.Controllers
 {
@@ -19,7 +21,7 @@ namespace CRM.API.Controllers
     public class PayPalController: Controller
     {
         private RestClient _payPalClient;
-        private TransactionController _transaction;
+        private readonly TransactionController _transaction;
 
         //private readonly ILogger _logger;
         private const string _paymentUrl = "payments/payment";
@@ -27,7 +29,7 @@ namespace CRM.API.Controllers
         private const string userName = "AUQVTtwW6FAGCRUZNVcFU9BffNtzw-ukYIQmW1pk-uODKcB_Y3Ei6NfE25lC8VPwqjFcCMS3pokeQCy_";
         private const string password = "EEGtuAyQIHSYEgmV9VfA7I_7XqaKrY566l1NIJytW8z19Vbp-LiLxxYwNlrpF7Ga-4sLCY7BbX5T9Du1";
 
-        public PayPalController(IOptions<UrlOptions> options, TransactionController transaction /*, ILogger logger*/)
+        public PayPalController(IOptions<UrlOptions> options, TransactionController transaction  /*, ILogger logger*/)
         {
             _payPalClient = new RestClient(options.Value.PayPalUrl);
             _transaction = transaction;
@@ -86,7 +88,14 @@ namespace CRM.API.Controllers
                 transactionModel.AccountId = accountId;
                 transactionModel.Amount = tmp3;
                 var result = await _transaction.CreateDepositTransaction(transactionModel);
-                return Ok(result);
+                if (result.Value!=0) return Ok(result);
+                else 
+                {
+
+                    var refundRequest = new RestRequest($"payments/refun/{Payment.paymentId}", Method.GET, DataFormat.Json);
+                    //restRequest.AddJsonBody(new { payer_id = model.payerId });
+                    var tmp4 = _payPalClient.Execute<PaypalInputModel>(refundRequest);                   
+                }
             }
             return BadRequest("418.все печально(((");
         }

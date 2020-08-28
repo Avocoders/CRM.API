@@ -37,7 +37,11 @@ namespace CRM.API.Controllers
             _authentication = new GoogleAuthentication();
             _mapper = mapper;
             _operation = operation;
-        }        
+        }
+
+        public TransactionController()
+        {
+        }
 
         /// <summary>
         /// refers to TransactionStore to create a transfer transaction
@@ -96,7 +100,6 @@ namespace CRM.API.Controllers
         [HttpPost("withdraw")]
         public ActionResult<long> CreateWithdrawTransaction2([FromBody] AuthInputModel authInput )
         {
-            if (authInput.Id==null) BadRequest("Enter operation ID");
             if (authInput.Pin.Length != 6) BadRequest("PIN not entered or incorrect number of characters entered");
             if (_authentication.ValidateTwoFactorPIN(authInput.Pin) == true)
             {
@@ -192,14 +195,14 @@ namespace CRM.API.Controllers
         
         private ActionResult<T> MakeResponse<T>(IRestResponse<T> result)
         {           
-            if (result.StatusCode == 0)
-            {
-                return Problem(result.ErrorException.InnerException?.Message ?? result.ErrorException.Message, statusCode: 503); 
-            }
-            if ((int)result.StatusCode == 418)
-            {
-                return Problem("Not enough money on the account", statusCode: 520);
-            }
+            //if (result.StatusCode == 0)
+            //{
+            //    return Problem(result.ErrorException.InnerException?.Message ?? result.ErrorException.Message, statusCode: 503); 
+            //}
+            //if ((int)result.StatusCode == 418)
+            //{
+            //    return Problem("Not enough money on the account", statusCode: 520);
+            //}
             return Ok(result.Data);
         }
     }
