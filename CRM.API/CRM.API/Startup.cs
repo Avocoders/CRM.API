@@ -13,8 +13,6 @@ using CRM.Core;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
 using System.IO;
-//using CRM.API.Logger;
-using CRM.API.Controllers;
 
 namespace CRM.API
 {
@@ -120,16 +118,6 @@ namespace CRM.API
             {
                 endpoints.MapControllers();
             });
-
-            //loggerFactory.AddFile(Path.Combine(Directory.GetCurrentDirectory(), "./logger.txt"));
-            //var logger = loggerFactory.CreateLogger("FileLogger");
-
-            //app.Run(async (context) =>
-            //{
-            //    logger.LogInformation($"Processing request {context.Request.Path}");
-            //    await context.Response.WriteAsync("Message"); // Some message
-            //});
-
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
