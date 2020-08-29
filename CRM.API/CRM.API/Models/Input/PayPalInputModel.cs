@@ -1,21 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using TransactionStore.API.Models.Input;
+﻿using System.Collections.Generic;
 
 namespace CRM.API.Models.Input
 {
     public class PaypalInputModel
     {              
             public string intent { get; set; }
-            public PayerInputModel payer { get; set; }
-           
-            public List<TransactionsInputModel> transactions { get; set; }
-            
-            public Redirect_Urls redirect_urls { get; set; }
-        // id Lead, id account ,
-        
-     }
+            public Payer payer { get; set; }           
+            public List<Transactions> transactions { get; set; }            
+            public RedirectUrls redirect_urls { get; set; }       
+    }
 
+    public class Payer
+    {
+        public string payment_method { get; set; }
+    }
+
+    public class Transactions
+    {
+        public Amount amount { get; set; }
+    }
+
+    public class Amount
+    {
+        public string total { get; set; }
+        public string currency { get; set; }
+    }
+
+    public class RedirectUrls
+    {
+        public string return_url { get; set; } = "https://sandbox.paypal.com";
+        public string cancel_url { get; set; } = "https://sandbox.paypal.com";
+    }
 }

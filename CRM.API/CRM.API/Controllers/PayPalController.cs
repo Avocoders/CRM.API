@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using TransactionStore.API.Models.Input;
 using CRM.API.Models.Output;
 using Microsoft.AspNetCore.Http;
 using RestSharp;
@@ -9,11 +8,11 @@ using CRM.Core;
 using CRM.API.Models;
 using CRM.API.Models.Input;
 using System;
-using System.Globalization;
 using RestSharp.Authenticators;
 using PayPal.Api;
-using PayPal;
 using APIContext = PayPal.Api.APIContext;
+using System.Globalization;
+using TransactionStore.API.Models.Input;
 
 namespace CRM.API.Controllers
 {
@@ -22,115 +21,97 @@ namespace CRM.API.Controllers
     public class PayPalController: Controller
     {
         private RestClient _payPalClient;
-        private readonly TransactionController _transaction;
-
-        //private readonly ILogger _logger;
+        private readonly TransactionController _transaction;      
         private const string _paymentUrl = "payments/payment";
         private const string _createToken = "oauth2/token";
         private const string userName = "AUQVTtwW6FAGCRUZNVcFU9BffNtzw-ukYIQmW1pk-uODKcB_Y3Ei6NfE25lC8VPwqjFcCMS3pokeQCy_";
         private const string password = "EEGtuAyQIHSYEgmV9VfA7I_7XqaKrY566l1NIJytW8z19Vbp-LiLxxYwNlrpF7Ga-4sLCY7BbX5T9Du1";
 
-        public PayPalController(IOptions<UrlOptions> options, TransactionController transaction  /*, ILogger logger*/)
+        public PayPalController(IOptions<UrlOptions> options, TransactionController transaction)
         {
             _payPalClient = new RestClient(options.Value.PayPalUrl);
-            _transaction = transaction;
-            //paymentId = _paymentId;
-            /*_logger = logger;*/
+            _transaction = transaction;         
+        }
+
+        public static class Payment  //надо убрать статичный класс
+        {
+            public static string paymentId;
         }
 
         [HttpPost("token")]
-
         public ActionResult<string> GetPayPalToken()
         {
             _payPalClient.Authenticator = new HttpBasicAuthenticator(userName, password);
             var restRequest = new RestRequest($"{_createToken}?grant_type=client_credentials", Method.POST, DataFormat.Json);
-            var tmp = _payPalClient.Execute<Token>(restRequest).Data;
-            return tmp.Access_Token;
+            var token = _payPalClient.Execute<Token>(restRequest).Data;
+            return token.Access_Token;
         }
-
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost(_paymentUrl)]
-        public async Task<ActionResult<string>> CreatePayPalPayment([FromBody] PaypalInputModel paypalInputModel)
+        public async Task<ActionResult<string>> CreatePayPalPayment([FromBody] PaypalInputModel payPalInputModel)
         {
-            var tmp = GetPayPalToken().Value;
-            _payPalClient.AddDefaultHeader("Authorization", $"Bearer {tmp}");
+            var token = GetPayPalToken().Value;
+            _payPalClient.AddDefaultHeader("Authorization", $"Bearer {token}");
             var restRequest = new RestRequest(_paymentUrl, Method.POST, DataFormat.Json);
-            restRequest.AddJsonBody(paypalInputModel);
-            var tmp2 = _payPalClient.Execute<PayPalOutputModel>(restRequest).Data;
+            restRequest.AddJsonBody(payPalInputModel);
+            var payPalOutputModel = _payPalClient.Execute<PayPalOutputModel>(restRequest).Data;
             try
             {
-                Response.Redirect(tmp2.links[1].href);
+                Response.Redirect(payPalOutputModel.links[1].href);
             }
             catch (Exception ex)
             {
-                return ex.Message;
+                return BadRequest(ex.Message);
             }
-            Payment.paymentId = tmp2.id;
-
-            return "-1";
+            Payment.paymentId = payPalOutputModel.id;
+            return Ok("Confirm your payment now");
         }
 
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpPost(_paymentUrl + "/execute/{accountId}")]
-        public async Task<ActionResult<string>> ExecutePayPalPayment([FromBody] ExecuteInputModel model, long accountId)
+        public async Task<ActionResult<string>> ExecutePayPalPayment([FromBody] ExecuteInputModel executeInputModel, long accountId)
         {
+            var token = GetPayPalToken().Value;
+            _payPalClient.AddDefaultHeader("Authorization", $"Bearer {token}");
+            var restRequest = new RestRequest($"{_paymentUrl}/{Payment.paymentId}/execute/", Method.POST, DataFormat.Json);            
+            restRequest.AddJsonBody(new { payer_id = executeInputModel.payerId });
+            var executeOutputModel = _payPalClient.Execute<ExecuteOutputModel>(restRequest);
+            if ((int) executeOutputModel.StatusCode == 200)
+            {                
+                var totalAmount = Decimal.Parse(executeOutputModel.Data.transactions[0].amount.total, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture);
+                TransactionInputModel transactionModel = new TransactionInputModel();
+                transactionModel.AccountId = accountId;
+                transactionModel.Amount = totalAmount;
+                var result = await _transaction.CreateDepositTransaction(transactionModel);
+                if (result.Value != 0) return Ok(result);
+                else
+                {
+                    //RefundRequest refund = new RefundRequest();   либо вот это для рефанда???
+                    //var apiContext = new APIContext(token);
+                    //string saleId = executeOutputModel.Data.transactions[0].related_resources[0].sale.id;
+                    //Refund refundforreal = Sale.Refund(apiContext, saleId, refund);
 
-            var tmp = GetPayPalToken().Value;
-            _payPalClient.AddDefaultHeader("Authorization", $"Bearer {tmp}");
-            var restRequest = new RestRequest($"{_paymentUrl}/{Payment.paymentId}/execute/", Method.POST, DataFormat.Json);
-            
-            restRequest.AddJsonBody(new { payer_id = model.payerId });
-            var tmp2 = _payPalClient.Execute<Paypal>(restRequest);
-            var refund = new RestRequest($"payments/sale/{tmp2.Data.transactions[0].related_resources[0].sale.id}/refund", Method.POST, DataFormat.Json);
-            var tmp9 = _payPalClient.Execute<Paypal>(refund);
-
-            //var tmp8 = _payPalClient.Execute<PaypalInputModel>(rest);
-            //if ((int)tmp2.StatusCode == 200)
-            //{
-            //    //var tmp4 = (tmp2.Data.transactions[0].amount.total);
-            //    //var tmp3 = Decimal.Parse(tmp2.Data.transactions[0].amount.total, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture);
-            //    TransactionInputModel transactionModel = new TransactionInputModel();
-            //    transactionModel.AccountId = accountId;
-            //    //transactionModel.Amount = tmp3;
-            //    var result = await _transaction.CreateDepositTransaction(transactionModel);
-            //    if (result.Value!=0) return Ok(result);
-            //    else 
-            //    {
-            //        Amount refundAmount = new Amount();
-            //        refundAmount.total = "5";
-            //        refundAmount.currency = "RUB";
-            //        Refund refund = new Refund();
-            //        refund.amount = refundAmount;
-            //        var apiContext = new APIContext(tmp);
-            //        string saleId = Payment.paymentId;
-            //        return null;
-            //        //Refund refundforreal = Sale.Refund(apiContext, saleId, refund);
-            //        //return refundforreal.id;
-            //        //var refundRequest = new RestRequest($"payments/refun/{Payment.paymentId}", Method.GET, DataFormat.Json);
-            //        //restRequest.AddJsonBody(new { payer_id = model.payerId });
-            //        //var tmp4 = _payPalClient.Execute<PaypalInputModel>(refundRequest);                   
-            //    }
-            //}
+                    var refund = new RestRequest($"payments/sale/{executeOutputModel.Data.transactions[0].related_resources[0].sale.id}/refund", Method.POST, DataFormat.Json);
+                    var refundId = _payPalClient.Execute<RefundOutputModel>(refund).Data.id;
+                    return BadRequest($"Payment was refund, refundId: {refundId}");
+                }
+            }
             return BadRequest("418.все печально(((");
-        }
-                
+        }                
 
-        private ActionResult<T> MakeResponse<T>(IRestResponse<T> result)
-        {
-            if (result.StatusCode == 0)
-            {
-                return Problem(result.ErrorException.InnerException?.Message ?? result.ErrorException.Message, statusCode: 503);
-            }
-            if ((int)result.StatusCode == 418)
-            {
-                return Problem("Not enough money on the account", statusCode: 520);
-            }
-            return Ok(result.Data);
-        }
-    }
-    public static class Payment
-    {
-        public static string paymentId;
-    }
+        //private ActionResult<T> MakeResponse<T>(IRestResponse<T> result)  пока не нужен
+        //{
+        //    if (result.StatusCode == 0)
+        //    {
+        //        return Problem(result.ErrorException.InnerException?.Message ?? result.ErrorException.Message, statusCode: 503);
+        //    }
+        //    if ((int)result.StatusCode == 418)
+        //    {
+        //        return Problem("Not enough money on the account", statusCode: 520);
+        //    }
+        //    return Ok(result.Data);
+        //}
+    }    
 }

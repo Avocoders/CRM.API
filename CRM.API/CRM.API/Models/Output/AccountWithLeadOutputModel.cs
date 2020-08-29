@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace CRM.API.Models.Output
+﻿namespace CRM.API.Models.Output
 {
     public class AccountWithLeadOutputModel
     {
@@ -20,7 +15,6 @@ namespace CRM.API.Models.Output
         public string CurrencyCode { get; set; }
         public string CurrencyName { get; set; }
         public bool IsDeleted { get; set; }
-
 
         public override bool Equals(object obj)
         {
@@ -47,7 +41,5 @@ namespace CRM.API.Models.Output
         {
             return base.GetHashCode();
         }
-
     }
-
 }

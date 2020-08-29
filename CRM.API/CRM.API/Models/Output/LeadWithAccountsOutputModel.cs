@@ -1,5 +1,4 @@
-﻿using CRM.Data.DTO;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace CRM.API.Models.Output
 {
