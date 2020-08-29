@@ -9,6 +9,7 @@ namespace CRM.API.Models.Input
     public class TransactionsInputModel
     {
         public AmountInputModel amount { get; set; }
-   
+        //public List<RelatedResources> related_resources { get; set; }
+
     }
 }

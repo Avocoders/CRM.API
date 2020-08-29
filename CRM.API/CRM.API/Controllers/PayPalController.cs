@@ -79,33 +79,39 @@ namespace CRM.API.Controllers
             var tmp = GetPayPalToken().Value;
             _payPalClient.AddDefaultHeader("Authorization", $"Bearer {tmp}");
             var restRequest = new RestRequest($"{_paymentUrl}/{Payment.paymentId}/execute/", Method.POST, DataFormat.Json);
+            
             restRequest.AddJsonBody(new { payer_id = model.payerId });
-            var tmp2 = _payPalClient.Execute<PaypalInputModel>(restRequest);
-            if ((int)tmp2.StatusCode == 200)
-            {
-                //var tmp4 = (tmp2.Data.transactions[0].amount.total);
-                var tmp3 = Decimal.Parse(tmp2.Data.transactions[0].amount.total, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture);
-                TransactionInputModel transactionModel = new TransactionInputModel();
-                transactionModel.AccountId = accountId;
-                transactionModel.Amount = tmp3;
-                var result = await _transaction.CreateDepositTransaction(transactionModel);
-                if (result.Value!=0) return Ok(result);
-                else 
-                {
-                    Amount refundAmount = new Amount();
-                    refundAmount.total = "5";
-                    refundAmount.currency = "RUB";
-                    Refund refund = new Refund();
-                    refund.amount = refundAmount;
-                    var apiContext = new APIContext(tmp);
-                    string saleId = Payment.paymentId;
-                    Refund refundforreal = Sale.Refund(apiContext, saleId, refund);
-                    return refundforreal.id;
-                    //var refundRequest = new RestRequest($"payments/refun/{Payment.paymentId}", Method.GET, DataFormat.Json);
-                    //restRequest.AddJsonBody(new { payer_id = model.payerId });
-                    //var tmp4 = _payPalClient.Execute<PaypalInputModel>(refundRequest);                   
-                }
-            }
+            var tmp2 = _payPalClient.Execute<Paypal>(restRequest);
+            var refund = new RestRequest($"payments/sale/{tmp2.Data.transactions[0].related_resources[0].sale.id}/refund", Method.POST, DataFormat.Json);
+            var tmp9 = _payPalClient.Execute<Paypal>(refund);
+
+            //var tmp8 = _payPalClient.Execute<PaypalInputModel>(rest);
+            //if ((int)tmp2.StatusCode == 200)
+            //{
+            //    //var tmp4 = (tmp2.Data.transactions[0].amount.total);
+            //    //var tmp3 = Decimal.Parse(tmp2.Data.transactions[0].amount.total, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture);
+            //    TransactionInputModel transactionModel = new TransactionInputModel();
+            //    transactionModel.AccountId = accountId;
+            //    //transactionModel.Amount = tmp3;
+            //    var result = await _transaction.CreateDepositTransaction(transactionModel);
+            //    if (result.Value!=0) return Ok(result);
+            //    else 
+            //    {
+            //        Amount refundAmount = new Amount();
+            //        refundAmount.total = "5";
+            //        refundAmount.currency = "RUB";
+            //        Refund refund = new Refund();
+            //        refund.amount = refundAmount;
+            //        var apiContext = new APIContext(tmp);
+            //        string saleId = Payment.paymentId;
+            //        return null;
+            //        //Refund refundforreal = Sale.Refund(apiContext, saleId, refund);
+            //        //return refundforreal.id;
+            //        //var refundRequest = new RestRequest($"payments/refun/{Payment.paymentId}", Method.GET, DataFormat.Json);
+            //        //restRequest.AddJsonBody(new { payer_id = model.payerId });
+            //        //var tmp4 = _payPalClient.Execute<PaypalInputModel>(refundRequest);                   
+            //    }
+            //}
             return BadRequest("418.все печально(((");
         }
                 
