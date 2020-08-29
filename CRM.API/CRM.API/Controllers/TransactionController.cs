@@ -8,13 +8,11 @@ using Microsoft.AspNetCore.Http;
 using RestSharp;
 using Microsoft.Extensions.Options;
 using CRM.Core;
-using System;
-using Google.Authenticator;
 using CRM.API.Models;
 using AutoMapper;
 using CRM.Data.DTO;
-using CRM.API.Validators;
-using Microsoft.Extensions.Logging;
+using CRM.API.Models.Input;
+
 
 namespace CRM.API.Controllers
 {
@@ -25,7 +23,6 @@ namespace CRM.API.Controllers
         private readonly RestClient _restClient;
         private readonly ILeadRepository _repo;
         private readonly IOperationRepository _operation;
-        private static long operationId; 
 
       //   private readonly ILogger _logger;
         private readonly GoogleAuthentication _authentication;
@@ -40,7 +37,11 @@ namespace CRM.API.Controllers
             _authentication = new GoogleAuthentication();
             _mapper = mapper;
             _operation = operation;
-        }        
+        }
+
+        public TransactionController()
+        {
+        }
 
         /// <summary>
         /// refers to TransactionStore to create a transfer transaction
@@ -75,7 +76,7 @@ namespace CRM.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]      
         [HttpPost("withdraw/authentication")]
-        public async Task<ActionResult<AuthModel>> CreateWithdrawTransaction1([FromBody] TransactionInputModel transactionModel)
+        public async Task<ActionResult<AuthOutputModel>> CreateWithdrawTransaction1([FromBody] TransactionInputModel transactionModel)
         {
             if (_repo.GetAccountById(transactionModel.AccountId).Data is null) return BadRequest("The account is not found");
             if (transactionModel.Amount <= 0) return BadRequest("The amount is missing");
@@ -83,9 +84,8 @@ namespace CRM.API.Controllers
             //validateInputModel.ValidateTransactionInputModel(transactionModel);                         
             _authentication.GenerateTwoFactorAuthentication();
             var model = _mapper.Map<OperationDto>(transactionModel);
-            AuthModel auth = new AuthModel();
-            operationId= _operation.AddOperation(_mapper.Map<OperationDto>(transactionModel)).Data;
-            auth.Id = operationId;
+            AuthOutputModel auth = new AuthOutputModel();
+            auth.Id = _operation.AddOperation(_mapper.Map<OperationDto>(transactionModel)).Data;
             auth.AuthenticationManualCode = _authentication.AuthenticationManualCode;
             return auth;
         }
@@ -98,19 +98,25 @@ namespace CRM.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost("withdraw")]
-        public ActionResult<long> CreateWithdrawTransaction2([FromBody]string pin)
-        {            
-            if(_authentication.ValidateTwoFactorPIN(pin) == true)
+        public ActionResult<long> CreateWithdrawTransaction2([FromBody] AuthInputModel authInput )
+        {
+            if (authInput.Pin.Length != 6) BadRequest("PIN not entered or incorrect number of characters entered");
+            if (_authentication.ValidateTwoFactorPIN(authInput.Pin) == true)
             {
-                var transactionModel = _mapper.Map<TransactionInputModel>(_operation.GetOperationById(operationId).Data);
-                transactionModel.CurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountId).Data;
-                var restRequest = new RestRequest("transaction/withdraw", Method.POST, DataFormat.Json);             
-                restRequest.AddJsonBody(transactionModel);
-                var result = _restClient.Execute<long>(restRequest);
-
-                return MakeResponse(result);
+                var operationModel = _operation.GetOperationById(authInput.Id).Data;
+                if (operationModel.IsCompleted == false) 
+                {
+                    _operation.CompletedOperation(authInput.Id);
+                    var transactionModel = _mapper.Map<TransactionInputModel>(operationModel);
+                    transactionModel.CurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountId).Data;
+                    var restRequest = new RestRequest("transaction/withdraw", Method.POST, DataFormat.Json);
+                    restRequest.AddJsonBody(transactionModel);
+                    var result = _restClient.Execute<long>(restRequest);
+                    return MakeResponse(result);
+                }
+                return Ok("The operation was performed");
             }
-            return BadRequest("((((");
+            return BadRequest("Incorrect PIN entered");
         }
       
 
@@ -189,14 +195,14 @@ namespace CRM.API.Controllers
         
         private ActionResult<T> MakeResponse<T>(IRestResponse<T> result)
         {           
-            if (result.StatusCode == 0)
-            {
-                return Problem(result.ErrorException.InnerException?.Message ?? result.ErrorException.Message, statusCode: 503); 
-            }
-            if ((int)result.StatusCode == 418)
-            {
-                return Problem("Not enough money on the account", statusCode: 520);
-            }
+            //if (result.StatusCode == 0)
+            //{
+            //    return Problem(result.ErrorException.InnerException?.Message ?? result.ErrorException.Message, statusCode: 503); 
+            //}
+            //if ((int)result.StatusCode == 418)
+            //{
+            //    return Problem("Not enough money on the account", statusCode: 520);
+            //}
             return Ok(result.Data);
         }
     }

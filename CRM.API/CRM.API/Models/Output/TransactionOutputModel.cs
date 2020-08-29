@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace CRM.API.Models.Output
+﻿namespace CRM.API.Models.Output
 {
     public class TransactionOutputModel
     {

@@ -1,13 +1,13 @@
-﻿using Microsoft.Extensions.Logging;
+﻿//using Microsoft.Extensions.Logging;
 
-namespace CRM.API.Logger
-{
-    public static class FileLoggerExtensions
-    {
-        public static ILoggerFactory AddFile(this ILoggerFactory factory, string filePath)
-        {
-            factory.AddProvider(new FileLoggerProvider(filePath));
-            return factory;
-        }
-    }
-}
+//namespace CRM.API.Logger
+//{
+//    public static class FileLoggerExtensions
+//    {
+//        public static ILoggerFactory AddFile(this ILoggerFactory factory, string filePath)
+//        {
+//            factory.AddProvider(new FileLoggerProvider(filePath));
+//            return factory;
+//        }
+//    }
+//}

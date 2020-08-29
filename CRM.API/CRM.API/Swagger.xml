@@ -115,7 +115,7 @@
             <param name="transactionModel"></param>
             <returns></returns>
         </member>
-        <member name="M:CRM.API.Controllers.TransactionController.CreateWithdrawTransaction2(System.String)">
+        <member name="M:CRM.API.Controllers.TransactionController.CreateWithdrawTransaction2(CRM.API.Models.Input.AuthInputModel)">
             <summary>
             
             </summary>
