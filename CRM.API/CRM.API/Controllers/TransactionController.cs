@@ -45,19 +45,20 @@ namespace CRM.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost("transfer")]
-        public async Task<ActionResult<List<long>>> CreateTransferTransaction([FromBody] TransferInputModel transactionModel)
+        public async ValueTask<ActionResult<List<long>>> CreateTransferTransaction([FromBody] TransferInputModel transactionModel)
         {
-            if (_repo.GetAccountById(transactionModel.AccountId).Data is null) return BadRequest("The account is not found");
-            if (_repo.GetAccountById(transactionModel.AccountIdReceiver).Data is null) return BadRequest("The account of receiver is not found");
+            var checkingAccountId = await _repo.GetAccountById(transactionModel.AccountId);
+            if  (checkingAccountId.Data is null) return BadRequest("The account is not found");
+            var checkingAccountIdReceiver = await _repo.GetAccountById(transactionModel.AccountIdReceiver);
+            if (checkingAccountIdReceiver.Data is null) return BadRequest("The account of receiver is not found");
             if (transactionModel.Amount <= 0) return BadRequest("The amount is missing");
-            transactionModel.CurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountId).Data;
-            transactionModel.ReceiverCurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountIdReceiver).Data;
+            var currencyId = await _repo.GetCurrencyByAccountId(transactionModel.AccountId);
+            transactionModel.CurrencyId =  currencyId.Data;
+            var receiver = await _repo.GetCurrencyByAccountId(transactionModel.AccountIdReceiver);
+            transactionModel.ReceiverCurrencyId = receiver.Data;
             var restRequest = new RestRequest("transaction/transfer", Method.POST, DataFormat.Json);
             restRequest.AddJsonBody(transactionModel);
-            //string code = Convert.ToString((CurrenciesCode)transactionModel.CurrencyId.Value);
-            //_logger.LogInformation($"Create new TransferTransaction from Account {transactionModel.AccountId} to Account {transactionModel.AccountIdReceiver}: " +
-            //                       $"{transactionModel.Amount} {code}");
-            var result = _restClient.Execute<List<long>>(restRequest);
+            var result = await _restClient.ExecuteAsync<List<long>>(restRequest);
             return MakeResponse(result);
 
         }
@@ -70,16 +71,16 @@ namespace CRM.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]      
         [HttpPost("withdraw/authentication")]
-        public async Task<ActionResult<AuthOutputModel>> CreateWithdrawTransaction1([FromBody] TransactionInputModel transactionModel)
+        public async ValueTask<ActionResult<AuthOutputModel>> CreateWithdrawTransaction1([FromBody] TransactionInputModel transactionModel)
         {
-            if (_repo.GetAccountById(transactionModel.AccountId).Data is null) return BadRequest("The account is not found");
-            if (transactionModel.Amount <= 0) return BadRequest("The amount is missing");
-            //var validateInputModel = new ValidatorOfTransactionModel();
-            //validateInputModel.ValidateTransactionInputModel(transactionModel);                         
+            var checkingAccountId = await _repo.GetAccountById(transactionModel.AccountId);
+            if (checkingAccountId.Data is null) return BadRequest("The account is not found");
+            if (transactionModel.Amount <= 0) return BadRequest("The amount is missing");                    
             _authentication.GenerateTwoFactorAuthentication();
             var model = _mapper.Map<OperationDto>(transactionModel);
             AuthOutputModel auth = new AuthOutputModel();
-            auth.Id = _operation.AddOperation(_mapper.Map<OperationDto>(transactionModel)).Data;
+            var tmp = await _operation.AddOperation(_mapper.Map<OperationDto>(transactionModel));
+            auth.Id = tmp.Data;
             auth.AuthenticationManualCode = _authentication.AuthenticationManualCode;
             return auth;
         }
@@ -92,20 +93,22 @@ namespace CRM.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost("withdraw")]
-        public ActionResult<long> CreateWithdrawTransaction2([FromBody] AuthInputModel authInput )
+        public async ValueTask<ActionResult<long>> CreateWithdrawTransaction2([FromBody] AuthInputModel authInput )
         {
             if (authInput.Pin.Length != 6) BadRequest("PIN not entered or incorrect number of characters entered");
             if (_authentication.ValidateTwoFactorPIN(authInput.Pin) == true)
             {
-                var operationModel = _operation.GetOperationById(authInput.Id).Data;
+                var tmp = await _operation.GetOperationById(authInput.Id);
+                var operationModel = tmp.Data;
                 if (operationModel.IsCompleted == false) 
                 {
                     _operation.CompletedOperation(authInput.Id);
                     var transactionModel = _mapper.Map<TransactionInputModel>(operationModel);
-                    transactionModel.CurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountId).Data;
+                    var currencyId = await _repo.GetCurrencyByAccountId(transactionModel.AccountId);
+                    transactionModel.CurrencyId = currencyId.Data;
                     var restRequest = new RestRequest("transaction/withdraw", Method.POST, DataFormat.Json);
                     restRequest.AddJsonBody(transactionModel);
-                    var result = _restClient.Execute<long>(restRequest);
+                    var result = await _restClient.ExecuteAsync<long>(restRequest);
                     return MakeResponse(result);
                 }
                 return Ok("The operation was performed");
@@ -122,17 +125,16 @@ namespace CRM.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost("deposit")]
-        public async Task<ActionResult<long>> CreateDepositTransaction([FromBody] TransactionInputModel transactionModel)
+        public async ValueTask<ActionResult<long>> CreateDepositTransaction([FromBody] TransactionInputModel transactionModel)
         {
-                if (_repo.GetAccountById(transactionModel.AccountId).Data is null) return BadRequest("The account is not found");
-                if (transactionModel.Amount <= 0) return BadRequest("The amount is missing");
-                transactionModel.CurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountId).Data;
+            var checkingAccountId = await _repo.GetAccountById(transactionModel.AccountId);
+            if (checkingAccountId.Data is null) return BadRequest("The account is not found");
+            if (transactionModel.Amount <= 0) return BadRequest("The amount is missing");
+                var currencyId = await _repo.GetCurrencyByAccountId(transactionModel.AccountId);
+                transactionModel.CurrencyId = currencyId.Data;
                 var restRequest = new RestRequest("transaction/deposit", Method.POST, DataFormat.Json);
                 restRequest.AddJsonBody(transactionModel);
-                //string code = Convert.ToString((CurrenciesCode)transactionModel.CurrencyId.Value);
-                //_logger.LogInformation($"Create new DepositTransaction for Account {transactionModel.AccountId}: " +
-                //                       $"{transactionModel.Amount} {code}");
-                var result = _restClient.Execute<long>(restRequest);
+                var result = await _restClient.ExecuteAsync<long>(restRequest);
                 return MakeResponse(result);
          
 
@@ -146,13 +148,13 @@ namespace CRM.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("by-account-id/{accountId}")]
-        public async Task<ActionResult<List<TransactionOutputModel>>> GetTransactionsByAccountId(long accountId)
+        public async ValueTask<ActionResult<List<TransactionOutputModel>>> GetTransactionsByAccountId(long accountId)
         {
-             DataWrapper<int> dataWrapper = _repo.AccountFindById(accountId);
+             DataWrapper<int> dataWrapper = await _repo.AccountFindById(accountId);
              if (dataWrapper.Data == 0) return BadRequest("The account is not found or was deleted");  
-            var restRequest = new RestRequest($"transaction/by-account-id/{accountId}", Method.GET, DataFormat.Json);
-            var result = _restClient.Execute<List<TransactionOutputModel>>(restRequest);
-            return MakeResponse(result);        
+             var restRequest = new RestRequest($"transaction/by-account-id/{accountId}", Method.GET, DataFormat.Json);
+             var result = await _restClient.ExecuteAsync<List<TransactionOutputModel>>(restRequest);
+             return MakeResponse(result);        
         }
 
         /// <summary>
@@ -163,10 +165,10 @@ namespace CRM.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("{id}")]
-        public async Task<ActionResult<List<TransactionOutputModel>>> GetTransactionById(long id)
+        public async ValueTask<ActionResult<List<TransactionOutputModel>>> GetTransactionById(long id)
         {                   
             var restRequest = new RestRequest($"transaction/{id}", Method.GET, DataFormat.Json);
-            var result = _restClient.Execute<List<TransactionOutputModel>>(restRequest);
+            var result =await _restClient.ExecuteAsync<List<TransactionOutputModel>>(restRequest);
             return MakeResponse(result);
         }
 
@@ -178,25 +180,25 @@ namespace CRM.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("{accountId}/balance")]
-        public async Task<ActionResult<decimal>> GetBalanceByAccountIdInCurrency(long accountId)
+        public async ValueTask<ActionResult<decimal>> GetBalanceByAccountIdInCurrency(long accountId)
         {
-            DataWrapper<int> dataWrapper = _repo.AccountFindById(accountId);
+            DataWrapper<int> dataWrapper = await _repo.AccountFindById(accountId);
             if (dataWrapper.Data == 0) return BadRequest("The account is not found or was deleted");
             var restRequest = new RestRequest($"transaction/{accountId}/balance", Method.GET, DataFormat.Json);
-            var result = _restClient.Execute<decimal>(restRequest);
+            var result = await _restClient.ExecuteAsync<decimal>(restRequest);
             return  MakeResponse(result);
         }
         
         private ActionResult<T> MakeResponse<T>(IRestResponse<T> result)
-        {           
-            //if (result.StatusCode == 0)
-            //{
-            //    return Problem(result.ErrorException.InnerException?.Message ?? result.ErrorException.Message, statusCode: 503); 
-            //}
-            //if ((int)result.StatusCode == 418)
-            //{
-            //    return Problem("Not enough money on the account", statusCode: 520);
-            //}
+        {
+            if (result.StatusCode == 0)
+            {
+                return Problem(result.ErrorException.InnerException?.Message ?? result.ErrorException.Message, statusCode: 503);
+            }
+            if ((int)result.StatusCode == 418)
+            {
+                return Problem("Not enough money on the account", statusCode: 520);
+            }
             return Ok(result.Data);
         }
     }

@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 using AutoMapper;
 using NLog;
+using System.Threading.Tasks;
 
 namespace CRM.API.Controllers
 {
@@ -47,9 +48,9 @@ namespace CRM.API.Controllers
         //[Authorize()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet("{leadId}")]
-        public ActionResult<LeadOutputModel> GetLeadById(long leadId)
+        public async ValueTask<ActionResult<LeadOutputModel>> GetLeadById(long leadId)
         {
-            DataWrapper<LeadDto> dataWrapper = _repo.GetById(leadId);
+            DataWrapper<LeadDto> dataWrapper = await _repo.GetById(leadId);
             _logger.Info($"Get info about lead with Id: {leadId}");
             return MakeResponse(dataWrapper, _mapper.Map<LeadOutputModel>);
         }
@@ -62,13 +63,13 @@ namespace CRM.API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost]
-        public ActionResult<LeadOutputModel> CreateLead(LeadInputModel leadModel)
+        public async ValueTask <ActionResult<LeadOutputModel>> CreateLead(LeadInputModel leadModel)
         {
-            var message = _wrapper.CreateLeadRW(leadModel);
+            var message = await _wrapper.CreateLeadRW(leadModel);
             if (string.IsNullOrWhiteSpace(message))
             {
                 leadModel.Password = new PasswordEncryptor().EncryptPassword(leadModel.Password);  //возможно не в контроллере должна быть, в автомап !!!
-                DataWrapper<LeadDto> newDataWrapper = _repo.AddOrUpdateLead(_mapper.Map<LeadDto>(leadModel));
+                DataWrapper<LeadDto> newDataWrapper = await _repo.AddOrUpdateLead(_mapper.Map<LeadDto>(leadModel));
                 _logger.Info($"Create new lead with Id: {newDataWrapper.Data.Id}");
                 return MakeResponse(newDataWrapper, _mapper.Map<LeadOutputModel>);
             }
@@ -84,13 +85,13 @@ namespace CRM.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPut]
-        public ActionResult<LeadOutputModel> UpdateLead(LeadInputModel leadModel)
+        public async ValueTask<ActionResult<LeadOutputModel>> UpdateLead(LeadInputModel leadModel)
         {
-            var message = _wrapper.UpdateLeadRW(leadModel);
+            var message = await _wrapper.UpdateLeadRW(leadModel);
             if (string.IsNullOrWhiteSpace(message))
             {
-                leadModel.Password = new PasswordEncryptor().EncryptPassword(leadModel.Password); // нельзя поменять пароль в обычном update, сделать отдельно !!!
-                DataWrapper<LeadDto> newDataWrapper = _repo.AddOrUpdateLead(_mapper.Map<LeadDto>(leadModel));
+                leadModel.Password = new PasswordEncryptor().EncryptPassword(leadModel.Password);
+                DataWrapper<LeadDto> newDataWrapper = await _repo.AddOrUpdateLead(_mapper.Map<LeadDto>(leadModel));
                 _logger.Info($"Update lead info with Id: {newDataWrapper.Data.Id}");
                 return MakeResponse(newDataWrapper, _mapper.Map<LeadOutputModel>);
             }
@@ -106,9 +107,9 @@ namespace CRM.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpDelete("{leadId}")]
-        public ActionResult DeleteLeadById(long leadId)
+        public async ValueTask<ActionResult> DeleteLeadById(long leadId)
         {
-            DataWrapper<LeadDto> dataWrapper = _repo.GetById(leadId);
+            DataWrapper<LeadDto> dataWrapper = await _repo.GetById(leadId);
             if (dataWrapper.Data == null) return BadRequest("Lead was not found");
             _repo.Delete(leadId);
             _logger.Info($"Delete lead with Id: {dataWrapper.Data.Id}");
@@ -145,9 +146,9 @@ namespace CRM.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost("email")]
-        public ActionResult<string> UpdateEmailByLeadId(EmailInputModel emailModel)
+        public async ValueTask<ActionResult<string>> UpdateEmailByLeadId(EmailInputModel emailModel)
         {
-            var message = _wrapper.UpdateEmailRW(emailModel);
+            var message = await _wrapper.UpdateEmailRW(emailModel);
             if (string.IsNullOrWhiteSpace(message))
             {
                 _repo.UpdateEmailByLeadId(_mapper.Map<EmailDto>(emailModel));
@@ -166,9 +167,9 @@ namespace CRM.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost("search")]
-        public ActionResult<List<LeadOutputModel>> SearchLead(SearchParametersInputModel searchparameters)
+        public async ValueTask<ActionResult<List<LeadOutputModel>>> SearchLead(SearchParametersInputModel searchparameters)
         {
-            DataWrapper<List<LeadDto>> dataWrapper = _repo.SearchLeads(_mapper.Map<LeadSearchParameters>(searchparameters));
+            DataWrapper<List<LeadDto>> dataWrapper = await _repo.SearchLeads(_mapper.Map<LeadSearchParameters>(searchparameters));
             return MakeResponse(dataWrapper, _mapper.Map<List<LeadOutputModel>>);
         }
 
@@ -179,9 +180,9 @@ namespace CRM.API.Controllers
         //[Authorize()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet("account/{Id}")]
-        public ActionResult<AccountWithLeadOutputModel> GetAccountById(long id) // переделать в OutputModel с AccId, LeadId, CurrId, Balance 
+        public async ValueTask<ActionResult<AccountWithLeadOutputModel>> GetAccountById(long id) // переделать в OutputModel с AccId, LeadId, CurrId, Balance 
         {
-            DataWrapper<AccountDto> dataWrapper = _repo.GetAccountById(id);
+            DataWrapper<AccountDto> dataWrapper = await _repo.GetAccountById(id);
             return MakeResponse(dataWrapper, _mapper.Map<AccountWithLeadOutputModel>);
         }
         /// <summary>
@@ -192,9 +193,9 @@ namespace CRM.API.Controllers
         /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet("{leadId}/accounts")]
-        public ActionResult<List<AccountOutputModel>> GetAccountsByLeadId(long leadId)
+        public async ValueTask<ActionResult<List<AccountOutputModel>>> GetAccountsByLeadId(long leadId)
         {
-            DataWrapper<List<AccountDto>> dataWrapper = _repo.GetAccountsByLeadId(leadId);
+            DataWrapper<List<AccountDto>> dataWrapper = await _repo.GetAccountsByLeadId(leadId);
             return MakeResponse(dataWrapper, _mapper.Map<List<AccountOutputModel>>);
         }
         /// <summary>
@@ -205,10 +206,10 @@ namespace CRM.API.Controllers
         /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpPost("account")]
-        public ActionResult<AccountWithLeadOutputModel> CreateAccount(AccountInputModel account)
+        public async ValueTask<ActionResult<AccountWithLeadOutputModel>> CreateAccount(AccountInputModel account)
         {
             if (account.CurrencyId == null) return BadRequest("Choose currency");
-            DataWrapper<AccountDto> dataWrapper = _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));
+            DataWrapper<AccountDto> dataWrapper = await _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));
             _logger.Info($"Create new account with Id: {dataWrapper.Data.Id}");
             return MakeResponse(dataWrapper, _mapper.Map<AccountWithLeadOutputModel>);
         }
@@ -219,9 +220,9 @@ namespace CRM.API.Controllers
         /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpPut("account")]
-        public ActionResult<AccountWithLeadOutputModel> UpdateAccount(AccountInputModel account)
+        public async ValueTask<ActionResult<AccountWithLeadOutputModel>> UpdateAccount(AccountInputModel account)
         {
-            DataWrapper<AccountDto> dataWrapper = _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));
+            DataWrapper<AccountDto> dataWrapper = await _repo.AddOrUpdateAccount(_mapper.Map<AccountDto>(account));
             _logger.Info($"Update account with Id: {dataWrapper.Data.Id}");
             return MakeResponse(dataWrapper, _mapper.Map<AccountWithLeadOutputModel>);
         }

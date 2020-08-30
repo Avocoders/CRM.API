@@ -8,6 +8,7 @@ using CRM.API.Models.Input;
 using CRM.API.Sha256;
 using CRM.Data.DTO;
 using CRM.Data;
+using System.Threading.Tasks;
 
 namespace CRM.API.Controllers
 {
@@ -31,9 +32,9 @@ namespace CRM.API.Controllers
         /// <param name="auth"></param>
         /// <returns></returns>
         [HttpPost]
-        public IActionResult Authorization([FromBody] AuthorizeInputModel auth)
+        public async ValueTask<IActionResult> Authorization([FromBody] AuthorizeInputModel auth)
         {
-            ClaimsIdentity identity = GetIdentity(auth.Login, auth.Password);
+            ClaimsIdentity identity = await GetIdentity(auth.Login, auth.Password);
             if (identity != null)
             {
                 DateTime now = DateTime.UtcNow;
@@ -58,9 +59,9 @@ namespace CRM.API.Controllers
             }
         }
 
-        private ClaimsIdentity GetIdentity(string login, string password)
+        private async ValueTask<ClaimsIdentity> GetIdentity(string login, string password)
         {
-            DataWrapper<AuthorizationDto> authorizationDto = _repo.GetByLogin(login);
+            DataWrapper<AuthorizationDto> authorizationDto = await _repo.GetByLogin(login);
             PasswordEncryptor encryptor = new PasswordEncryptor();
 
             if (authorizationDto != null)

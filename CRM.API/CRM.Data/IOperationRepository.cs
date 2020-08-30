@@ -1,11 +1,12 @@
 ﻿using CRM.Data.DTO;
+using System.Threading.Tasks;
 
 namespace CRM.Data
 {
     public interface IOperationRepository
     {
-        DataWrapper<long> AddOperation(OperationDto operation);
-        void CompletedOperation(long id);
-        DataWrapper<OperationDto> GetOperationById(long Id);
+        ValueTask<DataWrapper<long>> AddOperation(OperationDto operation);
+        ValueTask CompletedOperation(long id);
+        ValueTask<DataWrapper<OperationDto>> GetOperationById(long Id);
     }
 }

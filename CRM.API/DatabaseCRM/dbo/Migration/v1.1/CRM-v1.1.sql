@@ -1,8 +1,8 @@
 ﻿DECLARE @currentDBVersion nvarchar(10);
 set @currentDBVersion = (select top(1) DbVersion from [dbo].[DbVersion] order by Created desc)
 
-IF @currentDBVersion <> '1.1'
-
+IF @currentDBVersion >= '1.1'
+set noexec on
 create table [dbo].[Currency] (
     Id   tinyint  unique      NOT NULL,
     [Name] nvarchar (30) NOT NULL,
@@ -367,3 +367,4 @@ go
 
 INSERT INTO dbo.[DbVersion] (Created, DbVersion) VALUES (SYSDATETIME(), '1.1')
 go
+set noexec off
