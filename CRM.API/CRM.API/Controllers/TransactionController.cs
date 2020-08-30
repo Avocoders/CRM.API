@@ -12,7 +12,8 @@ using CRM.API.Models;
 using AutoMapper;
 using CRM.Data.DTO;
 using CRM.API.Models.Input;
-
+using NLog;
+using System;
 
 namespace CRM.API.Controllers
 {
@@ -23,6 +24,7 @@ namespace CRM.API.Controllers
         private readonly RestClient _restClient;
         private readonly ILeadRepository _repo;
         private readonly IOperationRepository _operation;
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         private readonly GoogleAuthentication _authentication;
         private readonly IMapper _mapper;
@@ -59,6 +61,9 @@ namespace CRM.API.Controllers
             var restRequest = new RestRequest("transaction/transfer", Method.POST, DataFormat.Json);
             restRequest.AddJsonBody(transactionModel);
             var result = await _restClient.ExecuteAsync<List<long>>(restRequest);
+            string code = Convert.ToString((CurrenciesCode)transactionModel.CurrencyId.Value);
+            _logger.Info($"Create new TransferTransaction from Account {transactionModel.AccountId} to Account {transactionModel.AccountIdReceiver}: " +
+                                  $"{transactionModel.Amount} {code}");
             return MakeResponse(result);
 
         }
@@ -109,6 +114,9 @@ namespace CRM.API.Controllers
                     var restRequest = new RestRequest("transaction/withdraw", Method.POST, DataFormat.Json);
                     restRequest.AddJsonBody(transactionModel);
                     var result = await _restClient.ExecuteAsync<long>(restRequest);
+                    string code = Convert.ToString((CurrenciesCode)transactionModel.CurrencyId.Value);
+                    _logger.Info($"Create new WithdrawTransaction for Account [{transactionModel.AccountId}] " +
+                                  $"{transactionModel.Amount} {code}");
                     return MakeResponse(result);
                 }
                 return Ok("The operation was performed");
@@ -135,9 +143,10 @@ namespace CRM.API.Controllers
                 var restRequest = new RestRequest("transaction/deposit", Method.POST, DataFormat.Json);
                 restRequest.AddJsonBody(transactionModel);
                 var result = await _restClient.ExecuteAsync<long>(restRequest);
-                return MakeResponse(result);
-         
-
+                string code = Convert.ToString((CurrenciesCode)transactionModel.CurrencyId.Value);
+                _logger.Info($"Create new DepositTransaction for Account [{transactionModel.AccountId}] " +
+                          $"{transactionModel.Amount} {code}");
+            return MakeResponse(result);
         }
 
         /// <summary>
@@ -170,6 +179,20 @@ namespace CRM.API.Controllers
             var restRequest = new RestRequest($"transaction/{id}", Method.GET, DataFormat.Json);
             var result =await _restClient.ExecuteAsync<List<TransactionOutputModel>>(restRequest);
             return MakeResponse(result);
+        }
+
+        /// <summary>
+        /// delete all transaction
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpDelete]
+        public async ValueTask DeleteAllTransaction()
+        {
+            var restRequest = new RestRequest($"transaction/delete", Method.DELETE, DataFormat.Json);
+            await _restClient.ExecuteAsync(restRequest);
         }
 
         /// <summary>

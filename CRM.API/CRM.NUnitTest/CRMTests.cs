@@ -28,6 +28,7 @@ namespace CRM.NUnitTest
         private HttpClient _client;
         private IDbConnection _connection;
         private string _crmUrl;
+        private string _transactionStoreAPIUrl;
         private InputDataMocksForAccounts _inputDataForAccount;
         private InputDataMocksForLeads _inputDataForLead;
         private InputDataMocksForTransactions _inputDataForTransaction;
@@ -38,6 +39,7 @@ namespace CRM.NUnitTest
         [OneTimeSetUp]
         public void Setup()
         {
+            
             _webHostBuilder =
                   new WebHostBuilder()
                         .UseEnvironment("Testing")
@@ -49,6 +51,7 @@ namespace CRM.NUnitTest
             _client = _server.CreateClient();
             var urlOptions = lifetimeScope.Resolve<IOptions<UrlOptions>>();
             _crmUrl = urlOptions.Value.CrmAPIUrl;
+            _transactionStoreAPIUrl = urlOptions.Value.TransactionStoreAPIUrl;
             var databaseOptions = lifetimeScope.Resolve<IOptions<DatabaseOptions>>();
             _connection = new SqlConnection(databaseOptions.Value.DBConnectionString);
             _connection.Execute(Queries.fillTestBase);
@@ -57,7 +60,7 @@ namespace CRM.NUnitTest
             _inputDataForTransaction = new InputDataMocksForTransactions();
             _outputDataForAccount = new OutputDataMocksForAccounts();
             _outputDataForLead = new OutputDataMocksForLeads();
-            _outputDataForTransaction = new OutputDataMocksForTransactions();
+            _outputDataForTransaction = new OutputDataMocksForTransactions();   
         }
 
 
@@ -368,6 +371,7 @@ namespace CRM.NUnitTest
         [OneTimeTearDown]
         public void Teardown()
         {
+            _client.DeleteAsync($"{_transactionStoreAPIUrl}");
             //_connection.Execute(Queries.clearTestBase);
             _server.Dispose();
             _client.Dispose();
