@@ -3,6 +3,7 @@ using CRM.Data;
 using System.Text.RegularExpressions;
 using CRM.API.Encryptor;
 using TransactionStore.API.Models.Input;
+using System.Threading.Tasks;
 
 namespace CRM.API
 {
@@ -19,11 +20,11 @@ namespace CRM.API
             _repo = repo;
         }
 
-        public string ValidateLeadInputModel(LeadInputModel leadModel)
+        public async ValueTask<string> ValidateLeadInputModel(LeadInputModel leadModel)
         {
             if (leadModel.Id.HasValue)
             {
-                var leadId = _repo.GetById(leadModel.Id.Value);
+                var leadId = await _repo.GetById(leadModel.Id.Value);
                 if (leadId == null) return "Lead was not found";
             }
             if (string.IsNullOrWhiteSpace(leadModel.FirstName)) return ("Enter the name");
@@ -42,46 +43,46 @@ namespace CRM.API
             return "";
         }
 
-        public string ValidateLoginInfo(LeadInputModel leadModel)
+        public async ValueTask<string> ValidateLoginInfo(LeadInputModel leadModel)
         {
             DataWrapper<int> dataWrapper;
             if (string.IsNullOrWhiteSpace(leadModel.Login))
             {
-                leadModel.Login = CreateLogin();
+                leadModel.Login = await CreateLogin();
             }
             if (!string.IsNullOrWhiteSpace(leadModel.Login))
             {
-                dataWrapper = _repo.FindLeadByLogin(leadModel.Login);
+                dataWrapper = await _repo.FindLeadByLogin(leadModel.Login);
                 if (dataWrapper.Data != 0) return ("User with this login already exists");
                 if (!Regex.IsMatch(leadModel.Login, Validator.loginPattern)) return ("The Login is incorrect");
             }
             if (string.IsNullOrWhiteSpace(leadModel.Email)) return ("Enter the email");
             if (!string.IsNullOrWhiteSpace(leadModel.Email))
             {
-                dataWrapper = _repo.CheckEmail(leadModel.Email);
+                dataWrapper = await _repo.CheckEmail(leadModel.Email);
                 if (dataWrapper.Data != 0) return ("User with this email already exists");
                 if ((!Regex.IsMatch(leadModel.Email, Validator.emailPattern))) return ("The Email is incorrect");
             }
-            return "";
+            return  "";
         }
 
-        public string ValidateEmailInputModel(EmailInputModel emailModel)
+        public async ValueTask<string> ValidateEmailInputModel(EmailInputModel emailModel)
         {
             if ((!Regex.IsMatch(emailModel.Email, Validator.emailPattern))) return "The Email is incorrect";
             var leadId = _repo.GetById(emailModel.LeadId);
             if (leadId == null) return "Lead was not found";
-            DataWrapper<int> dataWrapper = _repo.CheckEmail(emailModel.Email);
+            DataWrapper<int> dataWrapper = await _repo.CheckEmail(emailModel.Email);
             if (dataWrapper.Data != 0) return "User with this email already exists";
             return "";
         }
 
-        private string CreateLogin()
+        private async ValueTask<string> CreateLogin()
         {
             DataWrapper<int> dataWrapper;
             while (true)
             {
                 var newLogin = new LoginEncryptor().EncryptorLogin();
-                dataWrapper = _repo.FindLeadByLogin(newLogin);
+                dataWrapper = await _repo.FindLeadByLogin(newLogin);
                 if (dataWrapper.Data == 0) return newLogin;
             }
         }

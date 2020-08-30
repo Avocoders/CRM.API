@@ -6,7 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;  
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CRM.Data
 {
@@ -19,23 +20,24 @@ namespace CRM.Data
             _connection = new SqlConnection(options.Value.DBConnectionString);
         }
 
-        public DataWrapper<AccountDto> GetAccountById(long Id)
+        public async ValueTask<DataWrapper<AccountDto>> GetAccountById(long Id)
         {
             var result = new DataWrapper<AccountDto>();
             try
             {
-                result.Data = _connection.Query<AccountDto, LeadDto, CityDto, AccountDto>(
-                    StoredProcedures.AccountGetById,
-                    (account, lead, city) =>
-                    {
-                        AccountDto accoutEntry;
-                        accoutEntry = account;
-                        accoutEntry.Lead = lead;
-                        accoutEntry.Lead.City = city;
-                        return accoutEntry;
-                    },
-                    new { Id }, splitOn: "Id",
-                    commandType: CommandType.StoredProcedure).FirstOrDefault();
+                var tmp = await _connection.QueryAsync<AccountDto, LeadDto, CityDto, AccountDto>(
+                      StoredProcedures.AccountGetById,
+                      (account, lead, city) =>
+                      {
+                          AccountDto accoutEntry;
+                          accoutEntry = account;
+                          accoutEntry.Lead = lead;
+                          accoutEntry.Lead.City = city;
+                          return accoutEntry;
+                      },
+                      new { Id }, splitOn: "Id",
+                      commandType: CommandType.StoredProcedure);
+                result.Data = tmp.FirstOrDefault();
                 result.IsOk = true;
             }
             catch (Exception e)
@@ -45,15 +47,16 @@ namespace CRM.Data
             return result;
         }
 
-        public DataWrapper<List<AccountDto>> GetAccountsByLeadId(long leadId)
+        public async ValueTask<DataWrapper<List<AccountDto>>> GetAccountsByLeadId(long leadId)
         {
             var result = new DataWrapper<List<AccountDto>>();
             try
             {
-                result.Data = _connection.Query<AccountDto>(
+                var tmp = await _connection.QueryAsync<AccountDto>(
                 StoredProcedures.AccountGetByLeadId,
                 new { leadId },
-                commandType: CommandType.StoredProcedure).ToList();
+                commandType: CommandType.StoredProcedure);
+                result.Data = tmp.ToList();
                 result.IsOk = true;
             }
             catch (Exception e)
@@ -64,13 +67,13 @@ namespace CRM.Data
 
         }
 
-        public DataWrapper<LeadDto> AddOrUpdateLead(LeadDto leadDto)
+        public async ValueTask<DataWrapper<LeadDto>> AddOrUpdateLead(LeadDto leadDto)
         {
             var leadDictionary = new Dictionary<long, LeadDto>();
             var result = new DataWrapper<LeadDto>();
             try
             {
-                result.Data = _connection.Query<LeadDto, RoleDto, CityDto, AccountDto, LeadDto>(
+                var tmp = await _connection.QueryAsync<LeadDto, RoleDto, CityDto, AccountDto, LeadDto>(
                     StoredProcedures.LeadAddOrUpdate,
                     (lead, role, city, account) =>
                     {
@@ -101,7 +104,8 @@ namespace CRM.Data
                         leadDto.Address,
                         leadDto.BirthDate
                     }, splitOn: "Id",
-                    commandType: CommandType.StoredProcedure).FirstOrDefault();
+                    commandType: CommandType.StoredProcedure);
+               result.Data = tmp.FirstOrDefault();
                 result.IsOk = true;
             }
             catch (Exception e)
@@ -111,12 +115,12 @@ namespace CRM.Data
             return result;
         }
 
-        public DataWrapper<AccountDto> AddOrUpdateAccount(AccountDto accountDto)
+        public async ValueTask<DataWrapper<AccountDto>> AddOrUpdateAccount(AccountDto accountDto)
         {
             var result = new DataWrapper<AccountDto>();
             try
             {
-                result.Data = _connection.Query<AccountDto, LeadDto, CityDto, AccountDto>(
+                var tmp = await _connection.QueryAsync<AccountDto, LeadDto, CityDto, AccountDto>(
                     StoredProcedures.AccountAddOrUpdate,
                     (account, lead, city) =>
                     {
@@ -131,7 +135,8 @@ namespace CRM.Data
                         accountDto.Id,
                         accountDto.LeadId,
                         accountDto.CurrencyId
-                    }, splitOn: "Id", commandType: CommandType.StoredProcedure).FirstOrDefault();
+                    }, splitOn: "Id", commandType: CommandType.StoredProcedure);
+                  result.Data = tmp.FirstOrDefault();
                 result.IsOk = true;
             }
             catch (Exception e)
@@ -141,18 +146,18 @@ namespace CRM.Data
             return result;
         }
 
-        public void Delete(long id)
+        public async ValueTask Delete(long id)
         {
-            _connection.Execute(StoredProcedures.LeadDelete, new { id }, commandType: CommandType.StoredProcedure);
+           var tmp = await _connection.ExecuteAsync(StoredProcedures.LeadDelete, new { id }, commandType: CommandType.StoredProcedure);
         }
 
-        public DataWrapper<LeadDto> GetById(long leadId)
+        public async ValueTask<DataWrapper<LeadDto>> GetById(long leadId)
         {
             var leadDictionary = new Dictionary<long, LeadDto>();
             var result = new DataWrapper<LeadDto>();
             try
             {
-                result.Data = _connection.Query<LeadDto, RoleDto, CityDto, AccountDto, LeadDto>(
+                var tmp = await _connection.QueryAsync<LeadDto, RoleDto, CityDto, AccountDto, LeadDto>(
                     StoredProcedures.LeadGetById,
                     (lead, role, city, account) =>
                     {
@@ -171,7 +176,8 @@ namespace CRM.Data
                     },
                     new { leadId },
                     splitOn: "Id",
-                    commandType: CommandType.StoredProcedure).FirstOrDefault();
+                    commandType: CommandType.StoredProcedure);
+               result.Data = tmp.FirstOrDefault();
                 result.IsOk = true;
             }
             catch (Exception e)
@@ -181,12 +187,12 @@ namespace CRM.Data
             return result;
         }
 
-        public DataWrapper<AuthorizationDto> GetByLogin(string login)
+        public async ValueTask<DataWrapper<AuthorizationDto>> GetByLogin(string login)
         {
             var result = new DataWrapper<AuthorizationDto>();
             try
             {
-                result.Data = _connection.Query<AuthorizationDto, RoleDto, AuthorizationDto>(
+                var tmp = await _connection.QueryAsync<AuthorizationDto, RoleDto, AuthorizationDto>(
                     StoredProcedures.LeadGetByLogin,
                     (lead, role) =>
                     {
@@ -198,7 +204,8 @@ namespace CRM.Data
                     },
                     new { login },
                     splitOn: "Id",
-                    commandType: CommandType.StoredProcedure).FirstOrDefault();
+                    commandType: CommandType.StoredProcedure);
+                result.Data = tmp.FirstOrDefault();
                 result.IsOk = true;
             }
             catch (Exception e)
@@ -208,12 +215,13 @@ namespace CRM.Data
             return result;
         }
        
-        public DataWrapper<int> FindLeadByLogin(string login)
+        public async ValueTask<DataWrapper<int>> FindLeadByLogin(string login)
         {
             var result = new DataWrapper<int>();
             try
             {
-                result.Data = _connection.Query<int>(StoredProcedures.LeadFindByLogin, new { login }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+                var tmp = await _connection.QueryAsync<int>(StoredProcedures.LeadFindByLogin, new { login }, commandType: CommandType.StoredProcedure);
+               result.Data = tmp.FirstOrDefault();
                 result.IsOk = true;
             }
             catch (Exception e)
@@ -223,12 +231,13 @@ namespace CRM.Data
             return result;
         }
 
-        public DataWrapper<int> CheckEmail(string email)
+        public async ValueTask<DataWrapper<int>> CheckEmail(string email)
         {
             var result = new DataWrapper<int>();
             try
             {
-                result.Data = _connection.Query<int>(StoredProcedures.LeadFindByEmail, new { email }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+                var tmp = await _connection.QueryAsync<int>(StoredProcedures.LeadFindByEmail, new { email }, commandType: CommandType.StoredProcedure);
+               result.Data = tmp.FirstOrDefault();
                 result.IsOk = true;
             }
             catch (Exception e)
@@ -238,12 +247,13 @@ namespace CRM.Data
             return result;
         }
 
-        public DataWrapper<string> UpdateEmailByLeadId(EmailDto emailDto)
+        public async ValueTask<DataWrapper<string>> UpdateEmailByLeadId(EmailDto emailDto)
         {
             var result = new DataWrapper<string>();
             try
             {
-                result.Data = _connection.Query<string>(StoredProcedures.LeadUpdateEmail, new { emailDto.LeadId, emailDto.Email }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+                var tmp = await _connection.QueryAsync<string>(StoredProcedures.LeadUpdateEmail, new { emailDto.LeadId, emailDto.Email }, commandType: CommandType.StoredProcedure);
+                result.Data = tmp.FirstOrDefault();
                 result.IsOk = true;
             }
             catch (Exception e)
@@ -253,32 +263,33 @@ namespace CRM.Data
             return result;
         }
 
-        public DataWrapper<List<LeadDto>> SearchLeads(LeadSearchParameters searchParameters)
+        public async ValueTask<DataWrapper<List<LeadDto>>> SearchLeads(LeadSearchParameters searchParameters)
         {
             var leadDictionary = new Dictionary<long, LeadDto>();
             var results = new DataWrapper<List<LeadDto>>();
             LeadDto leadEntry = new LeadDto();
             try
             {
-                results.Data = _connection.Query<LeadDto, RoleDto, CityDto, AccountDto, LeadDto>(
+                var tmp = await _connection.QueryAsync<LeadDto, RoleDto, CityDto, AccountDto, LeadDto>(
                     StoredProcedures.LeadSearch,
                    (lead, role, city, account) =>
-                    {
-                        LeadDto leadEntry;
-                        if (!leadDictionary.TryGetValue(lead.Id.Value, out leadEntry))
-                        {
-                            leadEntry = lead;
-                            leadEntry.Accounts = new List<AccountDto>();
-                            leadDictionary.Add(leadEntry.Id.Value, leadEntry);
-                            leadEntry.Role = role;
-                            leadEntry.City = city;
+                   {
+                       LeadDto leadEntry;
+                       if (!leadDictionary.TryGetValue(lead.Id.Value, out leadEntry))
+                       {
+                           leadEntry = lead;
+                           leadEntry.Accounts = new List<AccountDto>();
+                           leadDictionary.Add(leadEntry.Id.Value, leadEntry);
+                           leadEntry.Role = role;
+                           leadEntry.City = city;
 
-                        }
-                        leadEntry.Accounts.Add(account);
-                        return leadEntry;
-                    },
+                       }
+                       leadEntry.Accounts.Add(account);
+                       return leadEntry;
+                   },
                     searchParameters, splitOn: "Id",
-                    commandType: CommandType.StoredProcedure).ToList();
+                    commandType: CommandType.StoredProcedure);
+               results.Data = tmp.ToList();
                 results.IsOk = true;
                 results.Data = new List<LeadDto> (leadDictionary.Values);
             }
@@ -289,13 +300,14 @@ namespace CRM.Data
             return results;
         }
 
-        public DataWrapper<byte> GetCurrencyByAccountId(long accountId)
+        public async ValueTask<DataWrapper<byte>> GetCurrencyByAccountId(long accountId)
         {
             var result = new DataWrapper<byte>();
             try
             {
                 string sqlExpression = StoredProcedures.GetCurrencyByAccountId;
-                var currency = _connection.Query<byte>(sqlExpression, new { accountId }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+                var tmp = await _connection.QueryAsync<byte>(sqlExpression, new { accountId }, commandType: CommandType.StoredProcedure);
+                var currency = tmp.FirstOrDefault();
                 result.Data = currency;
                 result.IsOk = true;
             }
@@ -307,18 +319,18 @@ namespace CRM.Data
             return result;
         }
 
-        public void UpdatePassword(PasswordDto passwordDto)
+        public async ValueTask UpdatePassword(PasswordDto passwordDto)
         {
-            _connection.Execute("UpdatePassword", new { passwordDto.Id, passwordDto.Password },
-                    commandType: CommandType.StoredProcedure);
+           var tmp = await _connection.ExecuteAsync("UpdatePassword", new { passwordDto.Id, passwordDto.Password },commandType: CommandType.StoredProcedure);
         }
 
-        public DataWrapper<int> AccountFindById(long accountId)
+        public async ValueTask<DataWrapper<int>> AccountFindById(long accountId)
         {
             var result = new DataWrapper<int>();
             try
             {
-                result.Data = _connection.Query<int>(StoredProcedures.AccountFindById, new {accountId}, commandType: CommandType.StoredProcedure).FirstOrDefault();
+                var tmp = await _connection.QueryAsync<int>(StoredProcedures.AccountFindById, new { accountId }, commandType: CommandType.StoredProcedure);
+                result.Data = tmp.FirstOrDefault();
                 result.IsOk = true;
             }
             catch (Exception e)

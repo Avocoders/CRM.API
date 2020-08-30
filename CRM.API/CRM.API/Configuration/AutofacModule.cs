@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using CRM.API.Controllers;
-using CRM.API.Validators;
 using CRM.Core;
 using CRM.Data;
 
@@ -17,7 +16,6 @@ namespace CRM.API.Configuration
             builder.RegisterType<UrlOptions>().As<IUrlOptions>();
             builder.RegisterType<Validator>().SingleInstance();
             builder.RegisterType<ResponseWrapper>().SingleInstance();
-            builder.RegisterType<ValidatorOfTransactionModel>().SingleInstance();
             builder.RegisterType<TransactionController>().SingleInstance();
 
         }

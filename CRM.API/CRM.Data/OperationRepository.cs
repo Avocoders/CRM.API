@@ -6,6 +6,7 @@ using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace CRM.Data
 {
@@ -18,15 +19,19 @@ namespace CRM.Data
             _connection = new SqlConnection(options.Value.DBConnectionString);
         }
 
-        public DataWrapper<long> AddOperation(OperationDto operation)
+        public async ValueTask<DataWrapper<long>> AddOperation(OperationDto operation)
         {
             var result = new DataWrapper<long>();
             try
             {
-                result.Data = _connection.Query<long>(StoredProcedures.AddOperation,
-                new {operation.AccountId,
-                    operation.Amount},
-                commandType: CommandType.StoredProcedure).FirstOrDefault();
+                var tmp = await _connection.QueryAsync<long>(StoredProcedures.AddOperation,
+                new
+                {
+                    operation.AccountId,
+                    operation.Amount
+                },
+                commandType: CommandType.StoredProcedure);
+                result.Data = tmp.FirstOrDefault();
                 result.IsOk = true;
             }
             catch (Exception e)
@@ -36,12 +41,13 @@ namespace CRM.Data
             return result;
         }
 
-        public DataWrapper<OperationDto> GetOperationById(long Id)
+        public async ValueTask<DataWrapper<OperationDto>> GetOperationById(long Id)
         {
             var result = new DataWrapper<OperationDto>();
             try
             {
-                result.Data = _connection.Query<OperationDto>(StoredProcedures.GetOperationById, new { Id }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+                var tmp = await _connection.QueryAsync<OperationDto>(StoredProcedures.GetOperationById, new { Id }, commandType: CommandType.StoredProcedure);
+                result.Data = tmp.FirstOrDefault();
                 result.IsOk = true;
             }
             catch (Exception e)
@@ -51,9 +57,9 @@ namespace CRM.Data
             return result;
         }
 
-        public void CompletedOperation(long id)
+        public async ValueTask CompletedOperation(long id)
         {
-            _connection.Execute(StoredProcedures.CompletedOperation, new { id }, commandType: CommandType.StoredProcedure);
+            var tmp = await _connection.ExecuteAsync(StoredProcedures.CompletedOperation, new { id }, commandType: CommandType.StoredProcedure);
         }
     }
 }
