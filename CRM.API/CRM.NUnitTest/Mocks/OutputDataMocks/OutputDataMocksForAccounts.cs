@@ -400,7 +400,6 @@ namespace CRM.NUnitTest
                 },
                 23 => "Choose currency",
                 _ => -1,
-
             };
         }
     }

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using CRM.API.Models.Input;
-using Microsoft.AspNetCore.Mvc;
-using TransactionStore.API.Models.Input;
 
 namespace CRM.API.Controllers
 {
@@ -48,7 +45,5 @@ namespace CRM.API.Controllers
             if (!string.IsNullOrWhiteSpace(validationResult)) return validationResult;
             return "";
         }
-
-       
     }
 }

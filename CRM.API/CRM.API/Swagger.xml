@@ -4,70 +4,57 @@
         <name>CRM.API</name>
     </assembly>
     <members>
-        <member name="T:CRM.API.Controllers.LeadController">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:CRM.API.Controllers.LeadController.#ctor(CRM.Data.ILeadRepository,AutoMapper.IMapper,CRM.API.Controllers.ResponseWrapper)">
-            <summary>
-            
-            </summary>
-            <param name="repo"></param>
-            <param name="mapper"></param>
-            <param name="wrapper"></param>
-        </member>
         <member name="M:CRM.API.Controllers.LeadController.GetLeadById(System.Int64)">
             <summary>
-            gets the lead by Id with all information
+            Gets the lead by Id with all information
             </summary>
             <param name="leadId"></param>       
         </member>
         <member name="M:CRM.API.Controllers.LeadController.CreateLead(CRM.API.Models.Input.LeadInputModel)">
             <summary>
-            creates a new lead
+            Creates a new lead
             </summary>
             <param name="leadModel"></param>       
         </member>
         <member name="M:CRM.API.Controllers.LeadController.UpdateLead(CRM.API.Models.Input.LeadInputModel)">
             <summary>
-            edits lead's information by leadId
+            Edits lead's information by leadId
             </summary>
             <param name="leadModel"></param>        
         </member>
         <member name="M:CRM.API.Controllers.LeadController.DeleteLeadById(System.Int64)">
             <summary>
-            deletes the lead by Id
+            Deletes the lead by Id
             </summary>
             <param name="leadId"></param>        
         </member>
         <member name="M:CRM.API.Controllers.LeadController.UpdatePassword(CRM.API.Models.Input.PasswordInputModel)">
             <summary>
-            updates password for lead
+            Updates password for lead
             </summary>
             <param name="passwordModel"></param>       
         </member>
         <member name="M:CRM.API.Controllers.LeadController.UpdateEmailByLeadId(CRM.API.Models.Input.EmailInputModel)">
             <summary>
-            edits lead's email by leadId 
+            Edits lead's email by leadId 
             </summary>
             <param name="emailModel"></param>        
         </member>
         <member name="M:CRM.API.Controllers.LeadController.SearchLead(CRM.API.Models.Input.SearchParametersInputModel)">
             <summary>
-            searches leads by different parameters
+            Searches leads by different parameters
             </summary>
             <param name="searchparameters"></param>        
         </member>
         <member name="M:CRM.API.Controllers.LeadController.GetAccountById(System.Int64)">
             <summary>
-            gets the account by Id with all information
+            Gets the account by Id with all information
             </summary>
-            <param name="id"></param>       
+            <param name="id"></param>  
         </member>
         <member name="M:CRM.API.Controllers.LeadController.GetAccountsByLeadId(System.Int64)">
              <summary>
-             
+             Gets the account by LeadId with all information
             withdrawing invoices by id lead
              </summary>
              <param name="leadId"></param>
@@ -75,7 +62,7 @@
         </member>
         <member name="M:CRM.API.Controllers.LeadController.CreateAccount(CRM.API.Models.Input.AccountInputModel)">
              <summary>
-             
+             Creates new account
             creating an invoice for lead in the required currency
              </summary>
              <param name="account"></param>
@@ -83,15 +70,10 @@
         </member>
         <member name="M:CRM.API.Controllers.LeadController.UpdateAccount(CRM.API.Models.Input.AccountInputModel)">
             <summary>
-            change of account currency
+            Changes account's currency
             </summary>
             <param name="account"></param>
             <returns></returns>
-        </member>
-        <member name="T:CRM.API.Controllers.LoginController">
-            <summary>
-            LoginController
-            </summary>
         </member>
         <member name="M:CRM.API.Controllers.LoginController.Authorization(CRM.API.Models.Input.AuthorizeInputModel)">
             <summary>
@@ -100,83 +82,80 @@
             <param name="auth"></param>
             <returns></returns>
         </member>
+        <member name="M:CRM.API.Controllers.PayPalController.GetPayPalToken">
+            <summary>
+            Gets token
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CRM.API.Controllers.PayPalController.CreatePayPalPayment(CRM.API.Models.Input.PaypalInputModel)">
+            <summary>
+            Creates PayPal Payment
+            </summary>
+            <param name="payPalInputModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CRM.API.Controllers.PayPalController.ExecutePayPalPayment(CRM.API.Models.Input.ExecuteInputModel,System.Int64)">
+            <summary>
+            Executes payment, which we created
+            </summary>
+            <param name="executeInputModel"></param>
+            <param name="accountId"></param>
+            <returns></returns>
+        </member>
         <member name="M:CRM.API.Controllers.TransactionController.CreateTransferTransaction(TransactionStore.API.Models.Input.TransferInputModel)">
             <summary>
-            refers to TransactionStore to create a transfer transaction
+            Refers to TransactionStore to create a transfer transaction
             </summary>
             <param name="transactionModel"></param>
             <returns></returns>
         </member>
-        <member name="M:CRM.API.Controllers.TransactionController.CreateWithdrawTransaction1(TransactionStore.API.Models.Input.TransactionInputModel)">
+        <member name="M:CRM.API.Controllers.TransactionController.CreateWithdrawTransactionStepOne(TransactionStore.API.Models.Input.TransactionInputModel)">
             <summary>
-            
+            Refers to TransactionStore to create a withdraw transaction before authentification
             </summary>
             <param name="transactionModel"></param>
             <returns></returns>
         </member>
         <member name="M:CRM.API.Controllers.TransactionController.CreateWithdrawTransaction2(CRM.API.Models.Input.AuthInputModel)">
             <summary>
-            
+            Refers to TransactionStore to create a withdraw transaction after authentification
             </summary>
-            <param name="authModel"></param>
+            <param name="authInput"></param>
             <returns></returns>
         </member>
         <member name="M:CRM.API.Controllers.TransactionController.CreateDepositTransaction(TransactionStore.API.Models.Input.TransactionInputModel)">
             <summary>
-            refers to TransactionStore to create a deposit transaction
+            Refers to TransactionStore to create a deposit transaction
             </summary>
             <param name="transactionModel"></param>
             <returns></returns>
         </member>
         <member name="M:CRM.API.Controllers.TransactionController.GetTransactionsByAccountId(System.Int64)">
             <summary>
-            refers to TransactionStore to get all lead's transactions by leadId
+            Refers to TransactionStore to get lead's transactions by accountId
             </summary>
             <param name="accountId"></param>
             <returns></returns>
         </member>
         <member name="M:CRM.API.Controllers.TransactionController.GetTransactionById(System.Int64)">
             <summary>
-            refers to TransactionStore to get transaction by Id
+            Refers to TransactionStore to get transaction by Id
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
         <member name="M:CRM.API.Controllers.TransactionController.DeleteAllTransaction">
             <summary>
-            delete all transaction
-            </summary>
-            <param name=""></param>
-            <returns></returns>
+            Delete all transaction (for tests)
+            </summary>        
         </member>
-        <member name="M:CRM.API.Controllers.TransactionController.GetBalanceByAccountIdInCurrency(System.Int64)">
+        <member name="M:CRM.API.Controllers.TransactionController.GetBalanceByAccountId(System.Int64)">
             <summary>
-            refers to TransactionStore to get balance by leadId and currencyId
+            Refers to TransactionStore to get balance by accountId
             </summary>
             <param name="accountId"></param>
             <returns></returns>
-        </member>
-        <member name="T:CRM.API.Startup">
-            <summary>
-            Startup
-            </summary>
-        </member>
-        <member name="P:CRM.API.Startup.Configuration">
-            <summary>
-            Configuration
-            </summary>
-        </member>
-        <member name="M:CRM.API.Startup.#ctor(Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
-            <summary>
-            Startup
-            </summary>
-            <param name="env"></param>
-        </member>
-        <member name="M:CRM.API.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
-            <summary>
-            ConfigureServices
-            </summary>
-            <param name="services"></param>
         </member>
     </members>
 </doc>

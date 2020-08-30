@@ -2,7 +2,6 @@
 using CRM.Data;
 using System.Text.RegularExpressions;
 using CRM.API.Encryptor;
-using TransactionStore.API.Models.Input;
 using System.Threading.Tasks;
 
 namespace CRM.API

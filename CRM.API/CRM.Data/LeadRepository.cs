@@ -64,7 +64,6 @@ namespace CRM.Data
                 result.ExceptionMessage = e.Message;
             }
             return result;
-
         }
 
         public async ValueTask<DataWrapper<LeadDto>> AddOrUpdateLead(LeadDto leadDto)
@@ -148,7 +147,7 @@ namespace CRM.Data
 
         public async ValueTask Delete(long id)
         {
-           var tmp = await _connection.ExecuteAsync(StoredProcedures.LeadDelete, new { id }, commandType: CommandType.StoredProcedure);
+           await _connection.ExecuteAsync(StoredProcedures.LeadDelete, new { id }, commandType: CommandType.StoredProcedure);
         }
 
         public async ValueTask<DataWrapper<LeadDto>> GetById(long leadId)
@@ -321,7 +320,7 @@ namespace CRM.Data
 
         public async ValueTask UpdatePassword(PasswordDto passwordDto)
         {
-           var tmp = await _connection.ExecuteAsync("UpdatePassword", new { passwordDto.Id, passwordDto.Password },commandType: CommandType.StoredProcedure);
+           await _connection.ExecuteAsync("UpdatePassword", new { passwordDto.Id, passwordDto.Password },commandType: CommandType.StoredProcedure);
         }
 
         public async ValueTask<DataWrapper<int>> AccountFindById(long accountId)

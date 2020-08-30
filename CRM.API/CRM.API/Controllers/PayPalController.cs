@@ -9,8 +9,6 @@ using CRM.API.Models;
 using CRM.API.Models.Input;
 using System;
 using RestSharp.Authenticators;
-using PayPal.Api;
-using APIContext = PayPal.Api.APIContext;
 using System.Globalization;
 using TransactionStore.API.Models.Input;
 using NLog;
@@ -35,11 +33,15 @@ namespace CRM.API.Controllers
             _transaction = transaction;         
         }
 
-        public static class Payment  //надо убрать статичный класс
+        public static class Payment  
         {
             public static string paymentId;
         }
 
+        /// <summary>
+        /// Gets token
+        /// </summary>
+        /// <returns></returns>
         [HttpPost("token")]
         public ActionResult<string> GetPayPalToken()
         {
@@ -50,6 +52,13 @@ namespace CRM.API.Controllers
             return token.Access_Token;
         }
 
+
+
+        /// <summary>
+        /// Creates PayPal Payment
+        /// </summary>
+        /// <param name="payPalInputModel"></param>
+        /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost(_paymentUrl)]
@@ -59,7 +68,8 @@ namespace CRM.API.Controllers
             _payPalClient.AddDefaultHeader("Authorization", $"Bearer {token}");
             var restRequest = new RestRequest(_paymentUrl, Method.POST, DataFormat.Json);
             restRequest.AddJsonBody(payPalInputModel);
-            var payPalOutputModel = _payPalClient.Execute<PayPalOutputModel>(restRequest).Data;
+            var tmp = await _payPalClient.ExecuteAsync<PayPalOutputModel>(restRequest);
+            var payPalOutputModel = tmp.Data;
             try
             {
                 Response.Redirect(payPalOutputModel.links[1].href);
@@ -74,6 +84,12 @@ namespace CRM.API.Controllers
             return Ok("Confirm your payment now");
         }
 
+        /// <summary>
+        /// Executes payment, which we created
+        /// </summary>
+        /// <param name="executeInputModel"></param>
+        /// <param name="accountId"></param>
+        /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpPost(_paymentUrl + "/execute/{accountId}")]
         public async Task<ActionResult<string>> ExecutePayPalPayment([FromBody] ExecuteInputModel executeInputModel, long accountId)
@@ -86,18 +102,13 @@ namespace CRM.API.Controllers
             if ((int) executeOutputModel.StatusCode == 200)
             {                
                 var totalAmount = Decimal.Parse(executeOutputModel.Data.transactions[0].amount.total, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture);
-                TransactionInputModel transactionModel = new TransactionInputModel();
+                var transactionModel = new TransactionInputModel();
                 transactionModel.AccountId = accountId;
                 transactionModel.Amount = totalAmount;
                 var result = await _transaction.CreateDepositTransaction(transactionModel);
                 if (result.Value != 0) return Ok(result);
                 else
                 {
-                    //RefundRequest refund = new RefundRequest();   либо вот это для рефанда???
-                    //var apiContext = new APIContext(token);
-                    //string saleId = executeOutputModel.Data.transactions[0].related_resources[0].sale.id;
-                    //Refund refundforreal = Sale.Refund(apiContext, saleId, refund);
-
                     var refund = new RestRequest($"payments/sale/{executeOutputModel.Data.transactions[0].related_resources[0].sale.id}/refund", Method.POST, DataFormat.Json);
                     var refundId = _payPalClient.Execute<RefundOutputModel>(refund).Data.id;
                     _logger.Info($"Payment was refund with RefundId [{refundId}]");
@@ -106,19 +117,6 @@ namespace CRM.API.Controllers
             }
             _logger.Info($"418.все печально(((");
             return BadRequest("418.все печально(((");
-        }                
-
-        //private ActionResult<T> MakeResponse<T>(IRestResponse<T> result)  пока не нужен
-        //{
-        //    if (result.StatusCode == 0)
-        //    {
-        //        return Problem(result.ErrorException.InnerException?.Message ?? result.ErrorException.Message, statusCode: 503);
-        //    }
-        //    if ((int)result.StatusCode == 418)
-        //    {
-        //        return Problem("Not enough money on the account", statusCode: 520);
-        //    }
-        //    return Ok(result.Data);
-        //}
+        }   
     }    
 }

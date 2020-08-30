@@ -6,6 +6,5 @@ namespace CRM.API.Models
     {
         public decimal Balance { get; set; }
         public DateTime Timestamp { get; set; }
-
     }
 }
