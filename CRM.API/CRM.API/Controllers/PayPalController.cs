@@ -13,6 +13,7 @@ using PayPal.Api;
 using APIContext = PayPal.Api.APIContext;
 using System.Globalization;
 using TransactionStore.API.Models.Input;
+using NLog;
 
 namespace CRM.API.Controllers
 {
@@ -21,7 +22,8 @@ namespace CRM.API.Controllers
     public class PayPalController: Controller
     {
         private RestClient _payPalClient;
-        private readonly TransactionController _transaction;      
+        private readonly TransactionController _transaction;
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private const string _paymentUrl = "payments/payment";
         private const string _createToken = "oauth2/token";
         private const string userName = "AUQVTtwW6FAGCRUZNVcFU9BffNtzw-ukYIQmW1pk-uODKcB_Y3Ei6NfE25lC8VPwqjFcCMS3pokeQCy_";
@@ -44,6 +46,7 @@ namespace CRM.API.Controllers
             _payPalClient.Authenticator = new HttpBasicAuthenticator(userName, password);
             var restRequest = new RestRequest($"{_createToken}?grant_type=client_credentials", Method.POST, DataFormat.Json);
             var token = _payPalClient.Execute<Token>(restRequest).Data;
+            _logger.Info($"Get PayPal Token");
             return token.Access_Token;
         }
 
@@ -63,9 +66,11 @@ namespace CRM.API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.Debug(ex.Message);
                 return BadRequest(ex.Message);
             }
             Payment.paymentId = payPalOutputModel.id;
+            _logger.Info($"Wait to confirm Payment [{Payment.paymentId}]");
             return Ok("Confirm your payment now");
         }
 
@@ -95,9 +100,11 @@ namespace CRM.API.Controllers
 
                     var refund = new RestRequest($"payments/sale/{executeOutputModel.Data.transactions[0].related_resources[0].sale.id}/refund", Method.POST, DataFormat.Json);
                     var refundId = _payPalClient.Execute<RefundOutputModel>(refund).Data.id;
+                    _logger.Info($"Payment was refund with RefundId [{refundId}]");
                     return BadRequest($"Payment was refund, refundId: {refundId}");
                 }
             }
+            _logger.Info($"418.все печально(((");
             return BadRequest("418.все печально(((");
         }                
 

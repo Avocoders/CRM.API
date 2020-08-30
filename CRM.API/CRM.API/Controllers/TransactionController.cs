@@ -12,7 +12,8 @@ using CRM.API.Models;
 using AutoMapper;
 using CRM.Data.DTO;
 using CRM.API.Models.Input;
-
+using NLog;
+using System;
 
 namespace CRM.API.Controllers
 {
@@ -23,6 +24,7 @@ namespace CRM.API.Controllers
         private readonly RestClient _restClient;
         private readonly ILeadRepository _repo;
         private readonly IOperationRepository _operation;
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         private readonly GoogleAuthentication _authentication;
         private readonly IMapper _mapper;
@@ -54,9 +56,9 @@ namespace CRM.API.Controllers
             transactionModel.ReceiverCurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountIdReceiver).Data;
             var restRequest = new RestRequest("transaction/transfer", Method.POST, DataFormat.Json);
             restRequest.AddJsonBody(transactionModel);
-            //string code = Convert.ToString((CurrenciesCode)transactionModel.CurrencyId.Value);
-            //_logger.LogInformation($"Create new TransferTransaction from Account {transactionModel.AccountId} to Account {transactionModel.AccountIdReceiver}: " +
-            //                       $"{transactionModel.Amount} {code}");
+            string code = Convert.ToString((CurrenciesCode)transactionModel.CurrencyId.Value);
+            _logger.Info($"Create new TransferTransaction from Account {transactionModel.AccountId} to Account {transactionModel.AccountIdReceiver}: " +
+                                  $"{transactionModel.Amount} {code}");
             var result = _restClient.Execute<List<long>>(restRequest);
             return MakeResponse(result);
 
@@ -77,8 +79,7 @@ namespace CRM.API.Controllers
             //var validateInputModel = new ValidatorOfTransactionModel();
             //validateInputModel.ValidateTransactionInputModel(transactionModel);                         
             _authentication.GenerateTwoFactorAuthentication();
-            var model = _mapper.Map<OperationDto>(transactionModel);
-            AuthOutputModel auth = new AuthOutputModel();
+            var auth = new AuthOutputModel();
             auth.Id = _operation.AddOperation(_mapper.Map<OperationDto>(transactionModel)).Data;
             auth.AuthenticationManualCode = _authentication.AuthenticationManualCode;
             return auth;
@@ -106,6 +107,9 @@ namespace CRM.API.Controllers
                     var restRequest = new RestRequest("transaction/withdraw", Method.POST, DataFormat.Json);
                     restRequest.AddJsonBody(transactionModel);
                     var result = _restClient.Execute<long>(restRequest);
+                    string code = Convert.ToString((CurrenciesCode)transactionModel.CurrencyId.Value);
+                    _logger.Info($"Create new WithdrawTransaction for Account [{transactionModel.AccountId}] " +
+                                  $"{transactionModel.Amount} {code}");
                     return MakeResponse(result);
                 }
                 return Ok("The operation was performed");
@@ -129,13 +133,11 @@ namespace CRM.API.Controllers
                 transactionModel.CurrencyId = _repo.GetCurrencyByAccountId(transactionModel.AccountId).Data;
                 var restRequest = new RestRequest("transaction/deposit", Method.POST, DataFormat.Json);
                 restRequest.AddJsonBody(transactionModel);
-                //string code = Convert.ToString((CurrenciesCode)transactionModel.CurrencyId.Value);
-                //_logger.LogInformation($"Create new DepositTransaction for Account {transactionModel.AccountId}: " +
-                //                       $"{transactionModel.Amount} {code}");
                 var result = _restClient.Execute<long>(restRequest);
-                return MakeResponse(result);
-         
-
+                string code = Convert.ToString((CurrenciesCode)transactionModel.CurrencyId.Value);
+                _logger.Info($"Create new DepositTransaction for Account [{transactionModel.AccountId}] " +
+                          $"{transactionModel.Amount} {code}");
+            return MakeResponse(result);
         }
 
         /// <summary>
