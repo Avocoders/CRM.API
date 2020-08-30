@@ -204,12 +204,12 @@ namespace CRM.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("{accountId}/balance")]
-        public async ValueTask<ActionResult<decimal>> GetBalanceByAccountIdInCurrency(long accountId)
+        public async ValueTask<ActionResult<BalanceOutputModel>> GetBalanceByAccountIdInCurrency(long accountId)
         {
             DataWrapper<int> dataWrapper = await _repo.AccountFindById(accountId);
             if (dataWrapper.Data == 0) return BadRequest("The account is not found or was deleted");
             var restRequest = new RestRequest($"transaction/{accountId}/balance", Method.GET, DataFormat.Json);
-            var result = await _restClient.ExecuteAsync<decimal>(restRequest);
+            var result = await _restClient.ExecuteAsync<BalanceOutputModel>(restRequest);
             return  MakeResponse(result);
         }
         
