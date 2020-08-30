@@ -192,7 +192,7 @@ namespace CRM.API.Controllers
         [HttpDelete]
         public async ValueTask DeleteAllTransaction()
         {
-            var restRequest = new RestRequest($"transaction/delete", Method.DELETE, DataFormat.Json);
+            var restRequest = new RestRequest($"transaction", Method.DELETE, DataFormat.Json);
             await _restClient.ExecuteAsync(restRequest);
         }
 

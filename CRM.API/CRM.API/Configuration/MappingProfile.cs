@@ -66,6 +66,7 @@ namespace CRM.API.Configuration
                  .ForPath(dest => dest.AccountId, o => o.MapFrom(src => src.AccountId))
                  .ForPath(dest => dest.Amount, o => o.MapFrom(src => src.Amount));
                  
+
         }
     }
 }
