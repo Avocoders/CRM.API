@@ -259,11 +259,10 @@ namespace CRM.NUnitTest
         [TestCase(4)]
         [TestCase(5)]
         [TestCase(256)]
-        public async Task GetBalanceByAccountIdTest(int num)  //надо менять моки
+        public async Task GetBalanceByAccountIdTest(int num) 
         {           
             var expected = _outputDataForTransaction.GetBalanceMockByAccountId(num);
             var response = await _client.GetStringAsync($"{_crmUrl}{EndpointUrl.transactionUrl}{num}{EndpointUrl.balanceUrl}");
-            var x = 1;
             var actual = JsonConvert.DeserializeObject<decimal>(response);
             Assert.AreEqual(expected, actual);
         }
@@ -372,7 +371,7 @@ namespace CRM.NUnitTest
         public void Teardown()
         {
             _client.DeleteAsync($"{_transactionStoreAPIUrl}");
-            //_connection.Execute(Queries.clearTestBase);
+            _connection.Execute(Queries.clearTestBase);
             _server.Dispose();
             _client.Dispose();
         }
