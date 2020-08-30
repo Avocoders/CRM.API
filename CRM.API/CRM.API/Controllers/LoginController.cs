@@ -12,9 +12,6 @@ using System.Threading.Tasks;
 
 namespace CRM.API.Controllers
 {
-    /// <summary>
-    /// LoginController
-    /// </summary>
     [Route("[controller]")]
     [ApiController]
     public class LoginController : Controller

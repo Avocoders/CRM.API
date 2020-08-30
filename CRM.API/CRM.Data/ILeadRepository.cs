@@ -17,6 +17,6 @@ namespace CRM.Data
         ValueTask<DataWrapper<string>> UpdateEmailByLeadId(EmailDto emailDto);
         ValueTask<DataWrapper<AccountDto>> AddOrUpdateAccount(AccountDto accountDto);
         ValueTask<DataWrapper<byte>> GetCurrencyByAccountId(long accountId);
-        ValueTask<DataWrapper<int>> AccountFindById(long accountId);        ValueTask<DataWrapper<AccountDto>> GetAccountById(long Id);        ValueTask<DataWrapper<List<AccountDto>>> GetAccountsByLeadId(long leadId);
+        ValueTask<DataWrapper<int>> AccountFindById(long accountId);        ValueTask<DataWrapper<AccountDto>> GetAccountById(long Id);        ValueTask<DataWrapper<List<AccountDto>>> GetAccountsByLeadId(long leadId);
     }
 }

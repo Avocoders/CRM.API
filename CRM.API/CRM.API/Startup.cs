@@ -11,25 +11,14 @@ using Microsoft.OpenApi.Models;
 using AutoMapper;
 using CRM.Core;
 using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Http;
-using System.IO;
+using System;
 
 namespace CRM.API
-{
-    /// <summary>
-    /// Startup
-    /// </summary>
+{  
     public class Startup
     {
-        /// <summary>
-        /// Configuration
-        /// </summary>
         private IConfiguration Configuration { get; set; }
-        
-        /// <summary>
-        /// Startup
-        /// </summary>
-        /// <param name="env"></param>
+
         public Startup(IWebHostEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -43,11 +32,6 @@ namespace CRM.API
             Configuration = builder.Build();            
         }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        /// <summary>
-        /// ConfigureServices
-        /// </summary>
-        /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
@@ -77,7 +61,7 @@ namespace CRM.API
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc(name: "v1", new OpenApiInfo { Title = "CRM.API", Version = "v1" });
-                //c.IncludeXmlComments(String.Format(@"{0}\Swagger.XML", AppDomain.CurrentDomain.BaseDirectory));
+                c.IncludeXmlComments(String.Format(@"{0}\Swagger.XML", AppDomain.CurrentDomain.BaseDirectory));
             }
         );
             var mappingConfig = new MapperConfiguration(mc =>
@@ -90,20 +74,16 @@ namespace CRM.API
 
         protected virtual void ConfigureDependencies(IServiceCollection services)
         { }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            // Enable middleware to serve generated Swagger as a JSON endpoint.
+                       
             app.UseSwagger();
 
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
-            // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");

@@ -29,7 +29,6 @@ namespace CRM.API.Controllers
         private readonly GoogleAuthentication _authentication;
         private readonly IMapper _mapper;
 
-
         public TransactionController(ILeadRepository repo, IOperationRepository operation, IOptions<UrlOptions> options, IMapper mapper)
         {                        
             _repo = repo;            
@@ -40,7 +39,7 @@ namespace CRM.API.Controllers
         }
 
         /// <summary>
-        /// refers to TransactionStore to create a transfer transaction
+        /// Refers to TransactionStore to create a transfer transaction
         /// </summary>
         /// <param name="transactionModel"></param>
         /// <returns></returns>
@@ -65,18 +64,17 @@ namespace CRM.API.Controllers
             _logger.Info($"Create new TransferTransaction from Account {transactionModel.AccountId} to Account {transactionModel.AccountIdReceiver}: " +
                                   $"{transactionModel.Amount} {code}");
             return MakeResponse(result);
-
         }
 
         /// <summary>
-        /// 
+        /// Refers to TransactionStore to create a withdraw transaction before authentification
         /// </summary>
         /// <param name="transactionModel"></param>
         /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]      
         [HttpPost("withdraw/authentication")]
-        public async ValueTask<ActionResult<AuthOutputModel>> CreateWithdrawTransaction1([FromBody] TransactionInputModel transactionModel)
+        public async ValueTask<ActionResult<AuthOutputModel>> CreateWithdrawTransactionStepOne([FromBody] TransactionInputModel transactionModel)
         {
             var checkingAccountId = await _repo.GetAccountById(transactionModel.AccountId);
             if (checkingAccountId.Data is null) return BadRequest("The account is not found");
@@ -86,29 +84,25 @@ namespace CRM.API.Controllers
             var tmp = await _operation.AddOperation(_mapper.Map<OperationDto>(transactionModel));
             auth.Id = tmp.Data;
             auth.AuthenticationManualCode = _authentication.AuthenticationManualCode;
-           
             return auth;
         }
 
         /// <summary>
-        /// 
+        /// Refers to TransactionStore to create a withdraw transaction after authentification
         /// </summary>
-        /// <param name="authModel"></param>
+        /// <param name="authInput"></param>
         /// <returns></returns>
-        
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost("withdraw")]
         public async ValueTask<ActionResult<long>> CreateWithdrawTransaction2([FromBody] AuthInputModel authInput )
         {
-
             if (authInput.Pin.Length != 6) BadRequest("PIN not entered or incorrect number of characters entered");
             var tmp = await _operation.GetOperationById(authInput.Id);
             var operationModel = tmp.Data;
             var accountId = operationModel.AccountId;
             if (_authentication.ValidateTwoFactorPIN(accountId,authInput.Pin) == true)
             {
-
                 if (operationModel.IsCompleted == false) 
                 {
                    await _operation.CompletedOperation(authInput.Id);
@@ -126,11 +120,10 @@ namespace CRM.API.Controllers
                 return Ok("The operation was performed");
             }
             return BadRequest("Incorrect PIN entered");
-        }
-      
+        }      
 
         /// <summary>
-        /// refers to TransactionStore to create a deposit transaction
+        /// Refers to TransactionStore to create a deposit transaction
         /// </summary>
         /// <param name="transactionModel"></param>
         /// <returns></returns>
@@ -151,7 +144,7 @@ namespace CRM.API.Controllers
         }
 
         /// <summary>
-        /// refers to TransactionStore to get all lead's transactions by leadId
+        /// Refers to TransactionStore to get lead's transactions by accountId
         /// </summary>
         /// <param name="accountId"></param>
         /// <returns></returns>
@@ -168,12 +161,11 @@ namespace CRM.API.Controllers
         }
 
         /// <summary>
-        /// refers to TransactionStore to get transaction by Id
+        /// Refers to TransactionStore to get transaction by Id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]        
         [HttpGet("{id}")]
         public async ValueTask<ActionResult<List<TransactionOutputModel>>> GetTransactionById(long id)
         {                   
@@ -183,10 +175,8 @@ namespace CRM.API.Controllers
         }
 
         /// <summary>
-        /// delete all transaction
-        /// </summary>
-        /// <param name=""></param>
-        /// <returns></returns>
+        /// Delete all transaction (for tests)
+        /// </summary>        
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpDelete]
@@ -197,14 +187,14 @@ namespace CRM.API.Controllers
         }
 
         /// <summary>
-        /// refers to TransactionStore to get balance by leadId and currencyId
+        /// Refers to TransactionStore to get balance by accountId
         /// </summary>
         /// <param name="accountId"></param>
         /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("{accountId}/balance")]
-        public async ValueTask<ActionResult<BalanceOutputModel>> GetBalanceByAccountIdInCurrency(long accountId)
+        public async ValueTask<ActionResult<BalanceOutputModel>> GetBalanceByAccountId(long accountId)
         {
             DataWrapper<int> dataWrapper = await _repo.AccountFindById(accountId);
             if (dataWrapper.Data == 0) return BadRequest("The account is not found or was deleted");

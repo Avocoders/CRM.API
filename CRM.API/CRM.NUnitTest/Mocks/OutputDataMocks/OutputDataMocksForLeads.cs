@@ -1,5 +1,4 @@
 ﻿using CRM.API.Models.Output;
-using CRM.Data.DTO;
 using System.Collections.Generic;
 
 namespace CRM.NUnitTest

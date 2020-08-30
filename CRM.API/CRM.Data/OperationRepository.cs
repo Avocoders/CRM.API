@@ -59,7 +59,7 @@ namespace CRM.Data
 
         public async ValueTask CompletedOperation(long id)
         {
-            var tmp = await _connection.ExecuteAsync(StoredProcedures.CompletedOperation, new { id }, commandType: CommandType.StoredProcedure);
+            await _connection.ExecuteAsync(StoredProcedures.CompletedOperation, new { id }, commandType: CommandType.StoredProcedure);
         }
     }
 }

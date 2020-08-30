@@ -125,7 +125,7 @@ namespace CRM.NUnitTest
         [TestCase(4)]
         [TestCase(5)]
         [TestCase(6)]
-        public async Task CreateDepositTest(int num)    //надо менять моки
+        public async Task CreateDepositTest(int num) 
         {           
             var expected = _outputDataForTransaction.GetIdDepositMock(num);            
             var inputModel = _inputDataForTransaction.GetDepositInputModelMock(num);
@@ -152,7 +152,7 @@ namespace CRM.NUnitTest
         [TestCase(4)]
         [TestCase(5)]
         [TestCase(6)]
-        public async Task CreateTransferTest(int num)    // надо менять моки
+        public async Task CreateTransferTest(int num)   
         {         
             var expected = _outputDataForTransaction.GetIdsTransferMock(num);          
             var inputModel = _inputDataForTransaction.GetTransferInputModelMock(num);
@@ -189,7 +189,7 @@ namespace CRM.NUnitTest
         [TestCase(4)]
         [TestCase(5)]
         [TestCase(6)]
-        public async Task FindLeadsBySearchParametersTest(int num)   // сам контроллер не правильно выводит значения (дублирует)
+        public async Task FindLeadsBySearchParametersTest(int num)   
         {           
             var inputmodel = _inputDataForLead.SearchInputMock(num);
             var jsonContent = new StringContent(JsonConvert.SerializeObject(inputmodel), Encoding.UTF8, "application/json");
@@ -281,7 +281,7 @@ namespace CRM.NUnitTest
         [TestCase(3)]
         [TestCase(6)]
         [TestCase(4)]
-        public async Task GetTransactionsByAccountIdTest(int num)   //надо менять моки
+        public async Task GetTransactionsByAccountIdTest(int num)   
         {            
             var expected = _outputDataForTransaction.GetTransactionsMockByAccountId(num);
             var response = await _client.GetStringAsync($"{_crmUrl}{EndpointUrl.transactionByAccountIdUrl}{num}");
