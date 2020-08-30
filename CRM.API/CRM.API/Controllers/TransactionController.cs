@@ -37,10 +37,6 @@ namespace CRM.API.Controllers
             _operation = operation;
         }
 
-        public TransactionController()
-        {
-        }
-
         /// <summary>
         /// refers to TransactionStore to create a transfer transaction
         /// </summary>
