@@ -6,12 +6,12 @@ IF @currentDBVersion <> '1.1'
 create table [dbo].[Currency] (
     Id   tinyint  unique      NOT NULL,
     [Name] nvarchar (30) NOT NULL,
-    Code nvarchar (3) unique NOT NULL,
+    [Code] nvarchar (3) unique NOT NULL,
 	primary key (Id),
 );
 go
 create table dbo.[Account](
-		Id bigint Identity, 
+		Id bigint Identity(1,1) not null, 
 		LeadId bigint not null,		
 		CurrencyId tinyint null,
 		IsDeleted bit default (0),  
@@ -22,18 +22,23 @@ go
 create procedure [dbo].[Account_GetById]
 	@Id bigint
 	as
-	begin
-		select  
-		        l.Id  ,
+		begin
+		select  a.Id,
+				a.IsDeleted ,
+				a.CurrencyId,	
+		        l.Id,
 				l.FirstName, 
-				l.LastName, 
+				l.LastName,
+				l.Patronymic,
 				l.BirthDate,
-		        a.Id, 
-				a.IsDeleted,
-				c.Id CurrencyId
+				l.Phone,
+				l.[Address],
+				ct.Id,
+				ct.[Name]		
 				from dbo.[Account] a
 		inner join [Lead] l on l.Id=a.LeadId
 		inner join [Currency] c on c.Id=a.CurrencyId
+		inner join [City] ct on ct.Id=l.CityId
 		where a.Id=@Id 
 	end
 go
@@ -76,18 +81,13 @@ create procedure Account_GetByLeadId
 		@leadId bigint
 		as
 		begin
-			select  l.Id ,
-					l.FirstName, 
-					l.LastName, 
-					l.BirthDate, 			
-		        	a.Id, 
+			select  a.Id, 
 					a.IsDeleted, 
 					c.Id CurrencyId
-					 from dbo.[Account] a
+					from dbo.[Account] a
 			inner join [Lead] l on l.Id=a.LeadId
 			inner join [Currency] c on c.Id=a.CurrencyId
 			where a.LeadId=@leadId and l.IsDeleted=0
-
 		end
 go
 alter procedure Lead_Search
@@ -138,12 +138,12 @@ as
 			c.Id,
 			c.[Name],
 			a.Id,
-			cr.Id CurrencyId
+			a.CurrencyId,
+			a.IsDeleted 
 		from dbo.[Lead] as l
 		inner join [Role] as r on r.Id=l.RoleId
 		inner join City as c on c.Id=l.CityId
-		inner join Account as a on a.LeadId=l.Id
-		inner join Currency cr on cr.Id=a.CurrencyId
+		inner join Account as a on a.LeadId=l.Id		
 		where 1=1'
 
 		if @roleId>0
@@ -163,7 +163,7 @@ as
 
 		if @firstNameSearchMode=@startValue
 		begin
-			set @resultSql = @resultSql + ' and l.FirstName lile ''' + @firstName + '%'''
+			set @resultSql = @resultSql + ' and l.FirstName like ''' + @firstName + '%'''
 		end
 
 		if @lastNameSearchMode=@exactValue
@@ -178,7 +178,7 @@ as
 
 		if @lastNameSearchMode=@startValue
 		begin
-			set @resultSql = @resultSql + ' and l.LastName lile ''' + @lastName + '%'''
+			set @resultSql = @resultSql + ' and l.LastName like ''' + @lastName + '%'''
 		end
 
 		if @patronymicSearchMode=@exactValue
@@ -193,7 +193,7 @@ as
 
 		if @patronymicSearchMode=@startValue
 		begin
-			set @resultSql = @resultSql + ' and l.Patronymic lile ''' + @patronymic + '%'''
+			set @resultSql = @resultSql + ' and l.Patronymic like ''' + @patronymic + '%'''
 		end
 
 		if @loginSearchMode=@exactValue
@@ -208,7 +208,7 @@ as
 
 		if @loginSearchMode=@startValue
 		begin
-			set @resultSql = @resultSql + ' and l.Login lile ''' + @login + '%'''
+			set @resultSql = @resultSql + ' and l.Login like ''' + @login + '%'''
 		end
 
 		if @phoneSearchMode=@exactValue
@@ -223,7 +223,7 @@ as
 
 		if @phoneSearchMode=@startValue
 		begin
-			set @resultSql = @resultSql + ' and l.Phone lile ''' + @phone + '%'''
+			set @resultSql = @resultSql + ' and l.Phone like ''' + @phone + '%'''
 		end
 
 		if @emailSearchMode=@exactValue
@@ -238,7 +238,7 @@ as
 
 		if @emailSearchMode=@startValue
 		begin
-			set @resultSql = @resultSql + 'and l.Email lile ''' + @email + '%'''
+			set @resultSql = @resultSql + 'and l.Email like ''' + @email + '%'''
 		end
 
 		if @cityId>0
@@ -258,7 +258,7 @@ as
 
 		if @addressSearchMode=@startValue
 		begin
-			set @resultSql = @resultSql + ' and l.Address lile ''' + @address + '%'''
+			set @resultSql = @resultSql + ' and l.Address like ''' + @address + '%'''
 		end
 
 		if @birthDateBegin is not null
@@ -288,7 +288,7 @@ as
 
 		if @currencyId is not null
 		begin
-			set @resultSql = @resultSql + ' and cr.Id = ''' + convert(nvarchar(3),@currencyId) + ''''
+			set @resultSql = @resultSql + ' and a.CurrencyId = ''' + convert(nvarchar(3),@currencyId) + ''''
 		end
 
 		if @includeDeleted is not null
@@ -301,7 +301,7 @@ as
 	end
 go
 alter procedure [dbo].[Lead_GetById]
-@leadid bigint
+@leadId bigint
 as
 begin
 	select  l.Id, 
@@ -325,10 +325,8 @@ begin
 			from dbo.[Lead] l
 	inner join [Role] r on r.Id=l.RoleId
 	inner join City c on c.Id=l.CityId
-	inner join Account a on a.LeadId=l.Id
-	
-
-	where l.Id=@leadid and l.IsDeleted=0
+	left join Account a on a.LeadId=l.Id
+	where l.Id=@leadId and l.IsDeleted=0
 end
 go
 create procedure CreateStrings_Account
