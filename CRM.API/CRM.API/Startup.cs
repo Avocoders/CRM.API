@@ -11,7 +11,6 @@ using Microsoft.OpenApi.Models;
 using AutoMapper;
 using CRM.Core;
 using Microsoft.Extensions.Logging;
-using System;
 
 namespace CRM.API
 {  

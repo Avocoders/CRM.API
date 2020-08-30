@@ -95,8 +95,8 @@ namespace CRM.API.Controllers
                 var transactionModel = new TransactionInputModel();
                 transactionModel.AccountId = accountId;
                 transactionModel.Amount = totalAmount;
-                var result = await _transaction.CreateDepositTransaction(transactionModel);
-                if (result.Value != 0) return Ok(result);
+                var result = await _transaction.CreateDepositTransaction(transactionModel);                
+                if (result.Value == 0) return Ok("Операция выполнена");
                 else
                 {
                     var refund = new RestRequest($"payments/sale/{executeOutputModel.Data.transactions[0].related_resources[0].sale.id}/refund", Method.POST, DataFormat.Json);
