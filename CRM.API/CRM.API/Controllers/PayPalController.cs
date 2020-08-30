@@ -12,6 +12,7 @@ using RestSharp.Authenticators;
 using System.Globalization;
 using TransactionStore.API.Models.Input;
 using NLog;
+using CRM.API.Options;
 
 namespace CRM.API.Controllers
 {
@@ -21,21 +22,12 @@ namespace CRM.API.Controllers
     {
         private RestClient _payPalClient;
         private readonly TransactionController _transaction;
-        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private const string _paymentUrl = "payments/payment";
-        private const string _createToken = "oauth2/token";
-        private const string userName = "AUQVTtwW6FAGCRUZNVcFU9BffNtzw-ukYIQmW1pk-uODKcB_Y3Ei6NfE25lC8VPwqjFcCMS3pokeQCy_";
-        private const string password = "EEGtuAyQIHSYEgmV9VfA7I_7XqaKrY566l1NIJytW8z19Vbp-LiLxxYwNlrpF7Ga-4sLCY7BbX5T9Du1";
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();        
 
         public PayPalController(IOptions<UrlOptions> options, TransactionController transaction)
         {
             _payPalClient = new RestClient(options.Value.PayPalUrl);
             _transaction = transaction;         
-        }
-
-        public static class Payment  
-        {
-            public static string paymentId;
         }
 
         /// <summary>
@@ -45,14 +37,12 @@ namespace CRM.API.Controllers
         [HttpPost("token")]
         public ActionResult<string> GetPayPalToken()
         {
-            _payPalClient.Authenticator = new HttpBasicAuthenticator(userName, password);
-            var restRequest = new RestRequest($"{_createToken}?grant_type=client_credentials", Method.POST, DataFormat.Json);
+            _payPalClient.Authenticator = new HttpBasicAuthenticator(PaypalOptions.userName, PaypalOptions.password);
+            var restRequest = new RestRequest($"{PaypalOptions.createToken}?grant_type=client_credentials", Method.POST, DataFormat.Json);
             var token = _payPalClient.Execute<Token>(restRequest).Data;
             _logger.Info($"Get PayPal Token");
             return token.Access_Token;
         }
-
-
 
         /// <summary>
         /// Creates PayPal Payment
@@ -61,12 +51,12 @@ namespace CRM.API.Controllers
         /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [HttpPost(_paymentUrl)]
+        [HttpPost(PaypalOptions.paymentUrl)]
         public async Task<ActionResult<string>> CreatePayPalPayment([FromBody] PaypalInputModel payPalInputModel)
         {
             var token = GetPayPalToken().Value;
             _payPalClient.AddDefaultHeader("Authorization", $"Bearer {token}");
-            var restRequest = new RestRequest(_paymentUrl, Method.POST, DataFormat.Json);
+            var restRequest = new RestRequest(PaypalOptions.paymentUrl, Method.POST, DataFormat.Json);
             restRequest.AddJsonBody(payPalInputModel);
             var tmp = await _payPalClient.ExecuteAsync<PayPalOutputModel>(restRequest);
             var payPalOutputModel = tmp.Data;
@@ -79,8 +69,8 @@ namespace CRM.API.Controllers
                 _logger.Debug(ex.Message);
                 return BadRequest(ex.Message);
             }
-            Payment.paymentId = payPalOutputModel.id;
-            _logger.Info($"Wait to confirm Payment [{Payment.paymentId}]");
+            PaypalOptions.paymentId = payPalOutputModel.id;
+            _logger.Info($"Wait to confirm Payment [{PaypalOptions.paymentId}]");
             return Ok("Confirm your payment now");
         }
 
@@ -91,12 +81,12 @@ namespace CRM.API.Controllers
         /// <param name="accountId"></param>
         /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [HttpPost(_paymentUrl + "/execute/{accountId}")]
+        [HttpPost(PaypalOptions.paymentUrl + "/execute/{accountId}")]
         public async Task<ActionResult<string>> ExecutePayPalPayment([FromBody] ExecuteInputModel executeInputModel, long accountId)
         {
             var token = GetPayPalToken().Value;
             _payPalClient.AddDefaultHeader("Authorization", $"Bearer {token}");
-            var restRequest = new RestRequest($"{_paymentUrl}/{Payment.paymentId}/execute/", Method.POST, DataFormat.Json);            
+            var restRequest = new RestRequest($"{PaypalOptions.paymentUrl}/{PaypalOptions.paymentId}/execute/", Method.POST, DataFormat.Json);            
             restRequest.AddJsonBody(new { payer_id = executeInputModel.payerId });
             var executeOutputModel = _payPalClient.Execute<ExecuteOutputModel>(restRequest);
             if ((int) executeOutputModel.StatusCode == 200)
