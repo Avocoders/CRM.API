@@ -81,12 +81,12 @@ namespace CRM.API.Controllers
             var checkingAccountId = await _repo.GetAccountById(transactionModel.AccountId);
             if (checkingAccountId.Data is null) return BadRequest("The account is not found");
             if (transactionModel.Amount <= 0) return BadRequest("The amount is missing");                    
-            _authentication.GenerateTwoFactorAuthentication();
-            var model = _mapper.Map<OperationDto>(transactionModel);
+            _authentication.GenerateTwoFactorAuthentication(transactionModel.AccountId);
             AuthOutputModel auth = new AuthOutputModel();
             var tmp = await _operation.AddOperation(_mapper.Map<OperationDto>(transactionModel));
             auth.Id = tmp.Data;
             auth.AuthenticationManualCode = _authentication.AuthenticationManualCode;
+           
             return auth;
         }
 
@@ -95,19 +95,23 @@ namespace CRM.API.Controllers
         /// </summary>
         /// <param name="authModel"></param>
         /// <returns></returns>
+        
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost("withdraw")]
         public async ValueTask<ActionResult<long>> CreateWithdrawTransaction2([FromBody] AuthInputModel authInput )
         {
+
             if (authInput.Pin.Length != 6) BadRequest("PIN not entered or incorrect number of characters entered");
-            if (_authentication.ValidateTwoFactorPIN(authInput.Pin) == true)
+            var tmp = await _operation.GetOperationById(authInput.Id);
+            var operationModel = tmp.Data;
+            var accountId = operationModel.AccountId;
+            if (_authentication.ValidateTwoFactorPIN(accountId,authInput.Pin) == true)
             {
-                var tmp = await _operation.GetOperationById(authInput.Id);
-                var operationModel = tmp.Data;
+
                 if (operationModel.IsCompleted == false) 
                 {
-                    _operation.CompletedOperation(authInput.Id);
+                   await _operation.CompletedOperation(authInput.Id);
                     var transactionModel = _mapper.Map<TransactionInputModel>(operationModel);
                     var currencyId = await _repo.GetCurrencyByAccountId(transactionModel.AccountId);
                     transactionModel.CurrencyId = currencyId.Data;
@@ -143,10 +147,7 @@ namespace CRM.API.Controllers
                 var restRequest = new RestRequest("transaction/deposit", Method.POST, DataFormat.Json);
                 restRequest.AddJsonBody(transactionModel);
                 var result = await _restClient.ExecuteAsync<long>(restRequest);
-                string code = Convert.ToString((CurrenciesCode)transactionModel.CurrencyId.Value);
-                _logger.Info($"Create new DepositTransaction for Account [{transactionModel.AccountId}] " +
-                          $"{transactionModel.Amount} {code}");
-            return MakeResponse(result);
+                return MakeResponse(result);
         }
 
         /// <summary>

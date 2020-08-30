@@ -10,24 +10,22 @@ namespace CRM.API
 {
     public class GoogleAuthentication 
     {
-        public static string AuthenticationCode { get; set; }
-        public string AuthenticationTitle { get { return "Ankush"; } }   
+        public string AuthenticationTitle { get { return "UltraBack"; } }   
         public string AuthenticationBarCodeImage { get; set;}
         public string AuthenticationManualCode { get; set; }  
         
-        public bool ValidateTwoFactorPIN(string pin)
+        public bool ValidateTwoFactorPIN(long accountId,string pin)
         {
+            var authenticationCode = accountId.ToString() + "ULTRABACK";
             TwoFactorAuthenticator authenticator = new TwoFactorAuthenticator();
-            return authenticator.ValidateTwoFactorPIN(AuthenticationCode, pin);
+            return authenticator.ValidateTwoFactorPIN(authenticationCode, pin);
         }
 
-        public bool GenerateTwoFactorAuthentication()
+        public bool GenerateTwoFactorAuthentication(long accountId)
         {
-            Guid guid = Guid.NewGuid();
-            string uniqueUserKey = Convert.ToString(guid).Replace("-", "").Substring(0, 10);
-            AuthenticationCode = uniqueUserKey;          
+            var authenticationCode = accountId.ToString()+"ULTRABACK";  
             TwoFactorAuthenticator authenticator = new TwoFactorAuthenticator();
-            var setupInfo = authenticator.GenerateSetupCode("Complio", AuthenticationTitle, AuthenticationCode, false, 300);
+            var setupInfo = authenticator.GenerateSetupCode("Complio", AuthenticationTitle, authenticationCode, false, 300);
             if (setupInfo != null)
             {
                 AuthenticationBarCodeImage = setupInfo.QrCodeSetupImageUrl;
