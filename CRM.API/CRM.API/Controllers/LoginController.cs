@@ -61,7 +61,7 @@ namespace CRM.API.Controllers
             DataWrapper<AuthorizationDto> authorizationDto = await _repo.GetByLogin(login);
             PasswordEncryptor encryptor = new PasswordEncryptor();
 
-            if (authorizationDto != null)
+            if (authorizationDto.Data != null)
             {
                 if (encryptor.CheckPassword(authorizationDto.Data.Password, password))
                 {
