@@ -18,6 +18,7 @@ using Autofac;
 using CRM.NUnitTest.Mocks.OutputModelMocks;
 using System.Net;
 using System.Linq;
+using CRM.API.Models;
 
 namespace CRM.NUnitTest
 {
@@ -182,33 +183,6 @@ namespace CRM.NUnitTest
         }
 
 
-        //[TestCase(1)]
-        //[TestCase(2)]
-        //[TestCase(3)]
-        //[TestCase(4)]
-        //[TestCase(5)]
-        //[TestCase(6)]
-        //public async Task CreateWithdrawTest(int num)   //надо менять моки
-        //{            
-        //    var expected = _outputDataForTransaction.GetIdWithdrawMock(num);          
-        //    var inputModel = _inputDataForTransaction.GetWithdrawInputModelMock(num);
-        //    var jsonContent = new StringContent(JsonConvert.SerializeObject(inputModel), Encoding.UTF8, "application/json");
-        //    var response = await _client.PostAsync($"{_crmUrl}{EndpointUrl.creationWithdrawUrl}", jsonContent);
-        //    var result = await response.Content.ReadAsStringAsync();
-        //    int[] failedResults = new int[] { 4, 5, 6 };
-        //    if (failedResults.Contains(num))
-        //    {
-        //        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
-        //        Assert.AreEqual(expected, result);
-        //    }
-        //    else
-        //    {
-        //        var actual = JsonConvert.DeserializeObject<int>(result);
-        //        Assert.AreEqual(expected, actual);                
-        //    }
-        //}
-
-
         [TestCase(1)]
         [TestCase(2)]
         [TestCase(3)]
@@ -263,8 +237,15 @@ namespace CRM.NUnitTest
         {           
             var expected = _outputDataForTransaction.GetBalanceMockByAccountId(num);
             var response = await _client.GetStringAsync($"{_crmUrl}{EndpointUrl.transactionUrl}{num}{EndpointUrl.balanceUrl}");
-            var actual = JsonConvert.DeserializeObject<decimal>(response);
-            Assert.AreEqual(expected, actual);
+            var actual = JsonConvert.DeserializeObject<BalanceOutputModel>(response);
+            int failedResult = 256;
+            if (num == failedResult)
+            {
+                Assert.AreEqual(response, Is.EqualTo(HttpStatusCode.BadRequest));
+                
+            }
+            else
+            Assert.AreEqual(expected, actual.Balance);
         }
 
 
@@ -370,7 +351,7 @@ namespace CRM.NUnitTest
         [OneTimeTearDown]
         public void Teardown()
         {
-            _client.DeleteAsync($"{_transactionStoreAPIUrl}");
+            _client.DeleteAsync($"{_crmUrl}{EndpointUrl.transactionUrl}");
             _connection.Execute(Queries.clearTestBase);
             _server.Dispose();
             _client.Dispose();
