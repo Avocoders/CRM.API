@@ -182,6 +182,20 @@ namespace CRM.API.Controllers
         }
 
         /// <summary>
+        /// delete all transaction
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpDelete]
+        public async ValueTask DeleteAllTransaction()
+        {
+            var restRequest = new RestRequest($"transaction/delete", Method.DELETE, DataFormat.Json);
+            await _restClient.ExecuteAsync(restRequest);
+        }
+
+        /// <summary>
         /// refers to TransactionStore to get balance by leadId and currencyId
         /// </summary>
         /// <param name="accountId"></param>
