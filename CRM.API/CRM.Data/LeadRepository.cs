@@ -196,7 +196,6 @@ namespace CRM.Data
                     (lead, role) =>
                     {
                         AuthorizationDto leadEntry;
-
                         leadEntry = lead;
                         leadEntry.Role = role;
                         return leadEntry;

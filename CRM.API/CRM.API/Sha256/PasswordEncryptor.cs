@@ -27,22 +27,22 @@ namespace CRM.API.Sha256
         {
             Random random = new Random();
             int index = random.Next(0, salts.Count);
-            byte[] data = new UTF8Encoding().GetBytes(password+secretCode+salts[index]);
+            byte[] data = new UTF8Encoding().GetBytes(password + secretCode + salts[index]);
             byte[] result;
             SHA256 converter = new SHA256Managed();
             result = converter.ComputeHash(data);
             return BitConverter.ToString(result).Replace("-", "").ToLower();
         }
 
-        public bool CheckPassword(string passwordDb,string password)
+        public bool CheckPassword(string passwordDb, string password)
         {
-            for(int i=0; i < salts.Count; i++)
+            for (int i = 0; i < salts.Count; i++)
             {
-            byte[] data = new UTF8Encoding().GetBytes(password + secretCode + salts[i]);
-            byte[] result;
-            SHA256 converter = new SHA256Managed();
-            result = converter.ComputeHash(data);
-            string convertedPassword = BitConverter.ToString(result).Replace("-", "").ToLower();
+                byte[] data = new UTF8Encoding().GetBytes(password + secretCode + salts[i]);
+                byte[] result;
+                SHA256 converter = new SHA256Managed();
+                result = converter.ComputeHash(data);
+                string convertedPassword = BitConverter.ToString(result).Replace("-", "").ToLower();
                 if (passwordDb.Equals(convertedPassword))
                 {
                     return true;
