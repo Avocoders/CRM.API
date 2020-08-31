@@ -133,38 +133,19 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
             switch (num)
             {
                 case 1:
+                    return new List<TransactionOutputModel>()
                     {
-                        return new List<TransactionOutputModel>()
-                        {
-                            new TransactionOutputModel()
-                            {
+                         new TransactionOutputModel()
+                         {
                                 Id = 1,
                                 AccountId = 1,
                                 Type = "Deposit",
                                 Amount = 800000,
                                 Timestamp = DateTime.Now.ToString("dd:MMMM:yyyy"),
                                 AccountIdReceiver = null,
-                            },
-                            new TransactionOutputModel()
-                            {
-                                Id = 4,
-                                AccountId = 1,
-                                Type = "Transfer",
-                                Amount = -500000,
-                                Timestamp = DateTime.Now.ToString("dd:MMMM:yyyy"),
-                                AccountIdReceiver = 6,
-                            },
-                            new TransactionOutputModel()
-                            {
-                                Id = 6,
-                                AccountId = 1,
-                                Type = "Transfer",
-                                Amount = -300000,
-                                Timestamp = DateTime.Now.ToString("dd:MMMM:yyyy"),
-                                AccountIdReceiver = 4,
-                            }
-                        };
-                    }
+                         }
+
+                    };
                 case 2:
                     {
                         return new List<TransactionOutputModel>()
@@ -217,24 +198,7 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
                         return new List<TransactionOutputModel>()
                         {
                            
-                            new TransactionOutputModel()
-                            {
-                                Id = 6,
-                                AccountId = 1,
-                                Type = "Transfer",
-                                Amount = -300000,
-                                Timestamp = DateTime.Now.ToString("dd:MMMM:yyyy"),
-                                AccountIdReceiver = 4,
-                            },
-                            new TransactionOutputModel()
-                            {
-                                Id = 8,
-                                AccountId = 4,
-                                Type = "Transfer",
-                                Amount = -500,
-                                Timestamp = DateTime.Now.ToString("dd:MMMM:yyyy"),
-                                AccountIdReceiver = 5,
-                            }
+                          
                         };
                     }
             }
