@@ -1,0 +1,161 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CRM.API</name>
+    </assembly>
+    <members>
+        <member name="M:CRM.API.Controllers.LeadController.GetLeadById(System.Int64)">
+            <summary>
+            Gets the lead by Id with all information
+            </summary>
+            <param name="leadId"></param>       
+        </member>
+        <member name="M:CRM.API.Controllers.LeadController.CreateLead(CRM.API.Models.Input.LeadInputModel)">
+            <summary>
+            Creates a new lead
+            </summary>
+            <param name="leadModel"></param>       
+        </member>
+        <member name="M:CRM.API.Controllers.LeadController.UpdateLead(CRM.API.Models.Input.LeadInputModel)">
+            <summary>
+            Edits lead's information by leadId
+            </summary>
+            <param name="leadModel"></param>        
+        </member>
+        <member name="M:CRM.API.Controllers.LeadController.DeleteLeadById(System.Int64)">
+            <summary>
+            Deletes the lead by Id
+            </summary>
+            <param name="leadId"></param>        
+        </member>
+        <member name="M:CRM.API.Controllers.LeadController.UpdatePassword(CRM.API.Models.Input.PasswordInputModel)">
+            <summary>
+            Updates password for lead
+            </summary>
+            <param name="passwordModel"></param>       
+        </member>
+        <member name="M:CRM.API.Controllers.LeadController.UpdateEmailByLeadId(CRM.API.Models.Input.EmailInputModel)">
+            <summary>
+            Edits lead's email by leadId 
+            </summary>
+            <param name="emailModel"></param>        
+        </member>
+        <member name="M:CRM.API.Controllers.LeadController.SearchLead(CRM.API.Models.Input.SearchParametersInputModel)">
+            <summary>
+            Searches leads by different parameters
+            </summary>
+            <param name="searchparameters"></param>        
+        </member>
+        <member name="M:CRM.API.Controllers.LeadController.GetAccountById(System.Int64)">
+            <summary>
+            Gets the account by Id with all information
+            </summary>
+            <param name="id"></param>  
+        </member>
+        <member name="M:CRM.API.Controllers.LeadController.GetAccountsByLeadId(System.Int64)">
+             <summary>
+             Gets the account by LeadId with all information
+            withdrawing invoices by id lead
+             </summary>
+             <param name="leadId"></param>
+             <returns></returns>
+        </member>
+        <member name="M:CRM.API.Controllers.LeadController.CreateAccount(CRM.API.Models.Input.AccountInputModel)">
+             <summary>
+             Creates new account
+            creating an invoice for lead in the required currency
+             </summary>
+             <param name="account"></param>
+             <returns></returns>
+        </member>
+        <member name="M:CRM.API.Controllers.LeadController.UpdateAccount(CRM.API.Models.Input.AccountInputModel)">
+            <summary>
+            Changes account's currency
+            </summary>
+            <param name="account"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CRM.API.Controllers.LoginController.Authorization(CRM.API.Models.Input.AuthorizeInputModel)">
+            <summary>
+            Authorization
+            </summary>
+            <param name="auth"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CRM.API.Controllers.PayPalController.GetPayPalToken">
+            <summary>
+            Gets token
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CRM.API.Controllers.PayPalController.CreatePayPalPayment(CRM.API.Models.Input.PaypalInputModel)">
+            <summary>
+            Creates PayPal Payment
+            </summary>
+            <param name="payPalInputModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CRM.API.Controllers.PayPalController.ExecutePayPalPayment(CRM.API.Models.Input.ExecuteInputModel,System.Int64)">
+            <summary>
+            Executes payment, which we created
+            </summary>
+            <param name="executeInputModel"></param>
+            <param name="accountId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CRM.API.Controllers.TransactionController.CreateTransferTransaction(TransactionStore.API.Models.Input.TransferInputModel)">
+            <summary>
+            Refers to TransactionStore to create a transfer transaction
+            </summary>
+            <param name="transactionModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CRM.API.Controllers.TransactionController.CreateWithdrawTransactionStepOne(TransactionStore.API.Models.Input.TransactionInputModel)">
+            <summary>
+            Refers to TransactionStore to create a withdraw transaction before authentification
+            </summary>
+            <param name="transactionModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CRM.API.Controllers.TransactionController.CreateWithdrawTransaction2(CRM.API.Models.Input.AuthInputModel)">
+            <summary>
+            Refers to TransactionStore to create a withdraw transaction after authentification
+            </summary>
+            <param name="authInput"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CRM.API.Controllers.TransactionController.CreateDepositTransaction(TransactionStore.API.Models.Input.TransactionInputModel)">
+            <summary>
+            Refers to TransactionStore to create a deposit transaction
+            </summary>
+            <param name="transactionModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CRM.API.Controllers.TransactionController.GetTransactionsByAccountId(System.Int64)">
+            <summary>
+            Refers to TransactionStore to get lead's transactions by accountId
+            </summary>
+            <param name="accountId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CRM.API.Controllers.TransactionController.GetTransactionById(System.Int64)">
+            <summary>
+            Refers to TransactionStore to get transaction by Id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CRM.API.Controllers.TransactionController.DeleteAllTransaction">
+            <summary>
+            Delete all transaction (for tests)
+            </summary>        
+        </member>
+        <member name="M:CRM.API.Controllers.TransactionController.GetBalanceByAccountId(System.Int64)">
+            <summary>
+            Refers to TransactionStore to get balance by accountId
+            </summary>
+            <param name="accountId"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
