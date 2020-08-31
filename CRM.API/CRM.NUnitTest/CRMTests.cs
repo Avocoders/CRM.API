@@ -349,7 +349,7 @@ namespace CRM.NUnitTest
         [OneTimeTearDown]
         public void Teardown()
         {
-           // _client.DeleteAsync($"{_crmUrl}{EndpointUrl.transactionUrl}");
+            _client.DeleteAsync($"{_crmUrl}{EndpointUrl.transactionUrl}");
             _connection.Execute(Queries.clearTestBase);
             _server.Dispose();
             _client.Dispose();
