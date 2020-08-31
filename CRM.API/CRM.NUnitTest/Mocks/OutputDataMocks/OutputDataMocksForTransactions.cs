@@ -6,7 +6,7 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
 {
     public class OutputDataMocksForTransactions
     {
-        public dynamic GetIdDepositMock(int num) 
+        public dynamic GetIdDepositMock(int num)
         {
             return num switch
             {
@@ -19,7 +19,7 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
                 _ => -1,
             };
         }
-        public dynamic GetIdsTransferMock(int num)  
+        public dynamic GetIdsTransferMock(int num)
         {
             return num switch
             {
@@ -28,12 +28,12 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
                 3 => new List<int>() { 8, 9 },
                 4 => "The account of receiver is not found",
                 5 => "The amount is missing",
-                6 => 520,               
+                6 => 520,
                 _ => new List<int>(),
             };
-        }                                              
+        }
 
-        public dynamic GetIdWithdrawMock(int num)   
+        public dynamic GetIdWithdrawMock(int num)
         {
             return num switch
             {
@@ -41,13 +41,13 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
                 2 => 14,
                 3 => 15,
                 4 => "The amount is missing",
-                5 => "0",         
+                5 => "0",
                 6 => "The account is not found",
                 _ => -1,
             };
         }
 
-        public dynamic GetBalanceMockByAccountId(int num)  
+        public dynamic GetBalanceMockByAccountId(int num)
         {
             return num switch
             {
@@ -60,11 +60,11 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
             };
         }
 
-        public dynamic GetTransactionMockById(int num) 
+        public dynamic GetTransactionMockById(int num)
         {
-            switch (num) 
+            switch (num)
             {
-                case 1: 
+                case 1:
                     {
                         return new List<TransactionOutputModel>()
                         {
@@ -123,48 +123,16 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
                                 AccountIdReceiver = 5,
                             }
                         };
-                    }                            
+                    }
             };
             return new List<TransactionOutputModel>();
         }
 
-        public dynamic GetTransactionsMockByAccountId(int num)  
+        public dynamic GetTransactionsMockByAccountId(int num)
         {
             switch (num)
             {
-                case 1:
-                    {
-                        return new List<TransactionOutputModel>()
-                        {
-                            new TransactionOutputModel()
-                            {
-                                Id = 1,
-                                AccountId = 1,
-                                Type = "Deposit",
-                                Amount = 800000,
-                                Timestamp = DateTime.Now.ToString("dd:MMMM:yyyy"),
-                                AccountIdReceiver = null,
-                            },
-                            new TransactionOutputModel()
-                            {
-                                Id = 4,
-                                AccountId = 1,
-                                Type = "Transfer",
-                                Amount = -500000,
-                                Timestamp = DateTime.Now.ToString("dd:MMMM:yyyy"),
-                                AccountIdReceiver = 6,
-                            },
-                            new TransactionOutputModel()
-                            {
-                                Id = 6,
-                                AccountId = 1,
-                                Type = "Transfer",
-                                Amount = -300000,
-                                Timestamp = DateTime.Now.ToString("dd:MMMM:yyyy"),
-                                AccountIdReceiver = 4,
-                            }
-                        };
-                    }
+                
                 case 2:
                     {
                         return new List<TransactionOutputModel>()
@@ -178,7 +146,7 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
                                 Timestamp = DateTime.Now.ToString("dd:MMMM:yyyy"),
                                 AccountIdReceiver = null,
                             },
-                           
+
                         };
                     }
                 case 3:
@@ -194,7 +162,7 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
                                 Timestamp = DateTime.Now.ToString("dd:MMMM:yyyy"),
                                 AccountIdReceiver = null,
                             },
-                         
+
                         };
                     }
                 case 6:
@@ -212,31 +180,8 @@ namespace CRM.NUnitTest.Mocks.OutputModelMocks
                             }
                         };
                     }
-                case 4:
-                    {
-                        return new List<TransactionOutputModel>()
-                        {
-                           
-                            new TransactionOutputModel()
-                            {
-                                Id = 6,
-                                AccountId = 1,
-                                Type = "Transfer",
-                                Amount = -300000,
-                                Timestamp = DateTime.Now.ToString("dd:MMMM:yyyy"),
-                                AccountIdReceiver = 4,
-                            },
-                            new TransactionOutputModel()
-                            {
-                                Id = 8,
-                                AccountId = 4,
-                                Type = "Transfer",
-                                Amount = -500,
-                                Timestamp = DateTime.Now.ToString("dd:MMMM:yyyy"),
-                                AccountIdReceiver = 5,
-                            }
-                        };
-                    }
+               
+                  
             }
             return new List<TransactionOutputModel>();
         }
