@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using AutoMapper;
 using NLog;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CRM.API.Controllers
 {
@@ -32,7 +33,7 @@ namespace CRM.API.Controllers
         /// Gets the lead by Id with all information
         /// </summary>
         /// <param name="leadId"></param>       
-        //[Authorize()]
+        [Authorize()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet("{leadId}")]
         public async ValueTask<ActionResult<LeadOutputModel>> GetLeadById(long leadId)
@@ -46,7 +47,7 @@ namespace CRM.API.Controllers
         /// Creates a new lead
         /// </summary>
         /// <param name="leadModel"></param>       
-        //[Authorize()]
+        [Authorize()]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost]
@@ -68,7 +69,7 @@ namespace CRM.API.Controllers
         /// Edits lead's information by leadId
         /// </summary>
         /// <param name="leadModel"></param>        
-        //[Authorize()]
+        [Authorize()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPut]
@@ -90,7 +91,7 @@ namespace CRM.API.Controllers
         /// Deletes the lead by Id
         /// </summary>
         /// <param name="leadId"></param>        
-        //[Authorize()]
+        [Authorize()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpDelete("{leadId}")]
@@ -107,7 +108,7 @@ namespace CRM.API.Controllers
         /// Updates password for lead
         /// </summary>
         /// <param name="passwordModel"></param>       
-        //[Authorize()]
+        [Authorize()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPut("change-password")]
@@ -129,7 +130,7 @@ namespace CRM.API.Controllers
         /// Edits lead's email by leadId 
         /// </summary>
         /// <param name="emailModel"></param>        
-        //[Authorize()]
+        [Authorize()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost("email")]
@@ -150,7 +151,7 @@ namespace CRM.API.Controllers
         /// Searches leads by different parameters
         /// </summary>
         /// <param name="searchparameters"></param>        
-        //[Authorize()]
+        [Authorize()]
         [ProducesResponseType(StatusCodes.Status200OK)]        
         [HttpPost("search")]
         public async ValueTask<ActionResult<List<LeadOutputModel>>> SearchLead(SearchParametersInputModel searchparameters)

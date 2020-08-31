@@ -14,6 +14,7 @@ using CRM.Data.DTO;
 using CRM.API.Models.Input;
 using NLog;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CRM.API.Controllers
 {
@@ -43,6 +44,7 @@ namespace CRM.API.Controllers
         /// </summary>
         /// <param name="transactionModel"></param>
         /// <returns></returns>
+        [Authorize()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost("transfer")]
@@ -71,6 +73,7 @@ namespace CRM.API.Controllers
         /// </summary>
         /// <param name="transactionModel"></param>
         /// <returns></returns>
+        [Authorize()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]      
         [HttpPost("withdraw/authentication")]
@@ -92,6 +95,7 @@ namespace CRM.API.Controllers
         /// </summary>
         /// <param name="authInput"></param>
         /// <returns></returns>
+        [Authorize()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost("withdraw")]
@@ -120,13 +124,14 @@ namespace CRM.API.Controllers
                 return Ok("The operation was performed");
             }
             return BadRequest("Incorrect PIN entered");
-        }      
+        }
 
         /// <summary>
         /// Refers to TransactionStore to create a deposit transaction
         /// </summary>
         /// <param name="transactionModel"></param>
         /// <returns></returns>
+        [Authorize()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost("deposit")]
@@ -148,6 +153,7 @@ namespace CRM.API.Controllers
         /// </summary>
         /// <param name="accountId"></param>
         /// <returns></returns>
+        [Authorize()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("by-account-id/{accountId}")]
@@ -165,6 +171,7 @@ namespace CRM.API.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        [Authorize()]
         [ProducesResponseType(StatusCodes.Status200OK)]        
         [HttpGet("{id}")]
         public async ValueTask<ActionResult<List<TransactionOutputModel>>> GetTransactionById(long id)
@@ -177,6 +184,7 @@ namespace CRM.API.Controllers
         /// <summary>
         /// Delete all transaction (for tests)
         /// </summary>        
+        [Authorize()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpDelete]
@@ -191,6 +199,7 @@ namespace CRM.API.Controllers
         /// </summary>
         /// <param name="accountId"></param>
         /// <returns></returns>
+        [Authorize()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("{accountId}/balance")]
