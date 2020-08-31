@@ -563,7 +563,7 @@ namespace CRM.NUnitTest
                 2 => "E-mail was updated",
                 3 => "E-mail was updated",
                 5 => "E-mail was updated",
-                6 => "User with this email already exists",
+                6 => "E-mail was updated",
                 7 => "Enter the email",
                 8 => "The Email is incorrect",                
                 _ => "error",
