@@ -232,7 +232,6 @@ namespace CRM.NUnitTest
         [TestCase(3)]
         [TestCase(4)]
         [TestCase(5)]
-        [TestCase(256)]
         public async Task GetBalanceByAccountIdTest(int num) 
         {           
             var expected = _outputDataForTransaction.GetBalanceMockByAccountId(num);
@@ -242,7 +241,6 @@ namespace CRM.NUnitTest
             if (num == failedResult)
             {
                 Assert.AreEqual(response, Is.EqualTo(HttpStatusCode.BadRequest));
-                
             }
             else
             Assert.AreEqual(expected, actual.Balance);
@@ -352,7 +350,7 @@ namespace CRM.NUnitTest
         public void Teardown()
         {
             _client.DeleteAsync($"{_crmUrl}{EndpointUrl.transactionUrl}");
-            //_connection.Execute(Queries.clearTestBase);
+            _connection.Execute(Queries.clearTestBase);
             _server.Dispose();
             _client.Dispose();
         }
